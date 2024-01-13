@@ -1,5 +1,5 @@
 :root {
-    --le_colors_primary: blue;
-    --le_colors_secondary: blue;
-    --le_colors_third: blue;
+    --primary_color: #2e318e;
+    --secondary_color: #6ea559;
+    --tertiary_color: #2e318e;
   }
