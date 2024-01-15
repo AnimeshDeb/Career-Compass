@@ -23,7 +23,7 @@ export default function UserSeeker() {
     <>
       <Navbar />
       {userData && (
-        <section className="intro-sec">
+        <section className="sec intro-sec">
           <div className="profile">
             <img src={userData.pictureURL} alt="User" />
             <h3>{userData.username}</h3>
@@ -42,24 +42,54 @@ export default function UserSeeker() {
       )}
 
       {userData && (
-        <section className="skills-sec">
+        <section className="sec skills-sec">
           <h2>Skills</h2>
+          {userData.skills.map((skill, index) => (
+            <div key={index}>
+              <video controls>
+                <source src={skill.videoURL} type="video/mp4" />
+                Your browser does not support the video tag.
+              </video>
+            </div>
+          ))}
         </section>
       )}
 
       {userData && (
-        <section className="middle">
-          <section className="challenges-sec">
-            <h2>Challenges</h2>
+          <section className="middle">
+              <div className="middle-container">
+                  <section className="sec challenges-sec">
+                      <h2>Challenges</h2>
+                      {userData.challenges.map((challenge, index) => (
+                          <div key={index}>
+                              <video controls>
+                                  <source src={challenge.videoURL} type="video/mp4" />
+                                  Your browser does not support the video tag.
+                              </video>
+                          </div>
+                      ))}
+                  </section>
+                  <aside className="Maybolin-AI">
+                    <p>"Keep on looking. You will find it!" - Maybolin AI</p>
+                  </aside>
+              </div>
           </section>
-          <aside className="Maybolin-AI">
-          </aside>
-        </section>
       )}
 
       {userData && (
-        <section className="references-sec">
+        <section className="sec references-sec">
           <h2>References</h2>
+          {userData.references.map((reference, index) => (
+            <div className="reference-item" key={index}>
+              <div className="top-company">
+                <h3 className="company-name">{reference.name}, {reference.company},</h3>
+                <h3 className="company-email">{reference.email}</h3>
+              </div>
+              <p>
+                {reference.desc}
+              </p>
+            </div>
+          ))}
         </section>
       )}
     </>

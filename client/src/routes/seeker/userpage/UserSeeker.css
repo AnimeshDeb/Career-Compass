@@ -1,7 +1,16 @@
 @import url('../../../constants/colors/colors.css');
+
 body{
     margin: 0;
+    font-family: 'Ultra';
 }
+h2{
+    font-weight: 300;
+}
+h3{
+    font-weight: 250;
+}
+
 .intro-sec h2,
 .skills-sec h2,
 .challenges-sec h2,
@@ -13,6 +22,16 @@ body{
     padding-right: 80px;
     margin: 0;
     text-align: center;
+    width: 100%;
+    box-sizing: border-box;
+}
+.sec{
+    margin-bottom: 50px;
+}
+.skills-sec, .challenges-sec {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
 }
 .intro-sec{
     display: flex;
@@ -27,11 +46,54 @@ body{
 }
 .profile{
     text-align: center;
+    margin-top: 40px;
 }
 .intro-vid{
     align-self: center;
 }
-.intro-vid video{
-    width: 350px;
+video{
+    width: 300px;
     margin: 10px;
+    margin-top: 20px;
+}
+.company-name{
+    color: var(--primary_color);
+    margin-bottom: 0px;
+    margin: 0;
+}
+.reference-item{
+    margin: 10px;
+}
+.company-email{
+    color: var(--secondary_color);
+    margin: 0;
+    padding: 5px;
+    margin-bottom: 0px;
+}
+.top-company{
+    display: flex;
+    align-items: center;
+    margin-top: 30px;
+    margin-bottom: 1px;
+}
+.references-sec p{
+    margin-top: 1px;
+    margin-bottom: 40px;
+}
+.middle-container {
+    display: flex;
+    align-items: flex-start;
+    margin-bottom: 50px;
+}
+
+.Maybolin-AI {
+    background-color: var(--primary_color);
+    color: white;
+    border: 100px;
+    border-bottom-left-radius: 10px;
+    padding: 150px;
+    width: 50%;
+}
+.challenges-sec{
+    width: 50%;
 }
