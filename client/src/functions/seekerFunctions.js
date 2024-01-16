@@ -20,11 +20,16 @@ const getUserById = async (userId) => {
         const skillsSnapshot = await getDocs(skillsCollectionRef);
         const skillsData = skillsSnapshot.docs.map(doc => doc.data());
   
+        const educationCollectionRef = collection(userDocRef, 'education');
+        const educationSnapshot = await getDocs(educationCollectionRef);
+        const educationData = educationSnapshot.docs.map(doc => doc.data());
+  
         const combinedData = {
           ...userData,
           challenges: challengesData,
           references: referencesData,
           skills: skillsData,
+          education: educationData,
         };
   
         return combinedData;

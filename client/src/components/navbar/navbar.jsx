@@ -1,4 +1,4 @@
-import medImage from "../../images/logos/med_v2.png";
+import medImage from "../../images/logos/large_v2.png";
 import "./navbar.css"
 
 export default function Navbar() {

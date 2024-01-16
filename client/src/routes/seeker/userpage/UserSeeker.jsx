@@ -2,7 +2,7 @@ import "./UserSeeker.css";
 import Navbar from "../../../components/navbar/navbar.jsx"
 import { useEffect, useState } from 'react';
 import { getUserById } from '../../../functions/seekerFunctions';
-
+import Footer from "../../../components/footer/footer.jsx"
 export default function UserSeeker() {
   const [userData, setUserData] = useState(null);
   useEffect(() => {
@@ -21,58 +21,66 @@ export default function UserSeeker() {
   }, []);
   return (
     <>
+    <div className="main">
       <Navbar />
       {userData && (
-        <section className="sec intro-sec">
-          <div className="profile">
-            <img src={userData.pictureURL} alt="User" />
-            <h3>{userData.username}</h3>
-          </div>
-          <div className="intro-vid">
-            <h2>Introduction</h2>
-            <video controls>
-              <source src={userData.introduction} type="video/mp4" />
-              Your browser does not support the video tag.
-            </video>
-          </div>
-          <div className="education">
-            <h2>Education</h2>
+        <section className="sec top-sec">
+          <div className="banner-container">
+            <img className="banner" src={userData.banner} alt="banner" />
+            <div className="profile">
+              <img src={userData.pictureURL} alt="User" />
+              <h3>{userData.name}</h3>
+            </div>
           </div>
         </section>
       )}
-
       {userData && (
-        <section className="sec skills-sec">
-          <h2>Skills</h2>
-          {userData.skills.map((skill, index) => (
-            <div key={index}>
+        <section className="sec intro-sec">
+          <div className="intro-vid">
+            <h2>Introduction</h2>
               <video controls>
-                <source src={skill.videoURL} type="video/mp4" />
+                <source src={userData.introduction} type="video/mp4" />
                 Your browser does not support the video tag.
               </video>
-            </div>
-          ))}
+          </div>
+          <div className="education">
+            <h2>Education</h2>
+            {userData.education.map((education, index) => (
+              <div className="education-text" key={index}>
+                <h4>{education.level}</h4>
+                <h4>{education.name}</h4>
+                <h4>{education.score}</h4>
+              </div>
+            ))}
+          </div>
+          <div className="skill-vid">
+            <h2>Skills</h2>
+            {userData.skills.map((skill, index) => (
+                <video key= {index} controls>
+                  <source src={skill.videoURL} type="video/mp4" />
+                  Your browser does not support the video tag.
+                </video>
+            ))}
+          </div>
         </section>
       )}
 
       {userData && (
           <section className="middle">
-              <div className="middle-container">
-                  <section className="sec challenges-sec">
-                      <h2>Challenges</h2>
-                      {userData.challenges.map((challenge, index) => (
-                          <div key={index}>
-                              <video controls>
-                                  <source src={challenge.videoURL} type="video/mp4" />
-                                  Your browser does not support the video tag.
-                              </video>
-                          </div>
-                      ))}
-                  </section>
+              <section className="middle-container">
+                  <div className="sec challenges-sec">
+                    <h2>Challenges</h2>
+                    {userData.challenges.map((challenge, index) => (
+                      <video key={index} controls>
+                          <source src={challenge.videoURL} type="video/mp4" />
+                          Your browser does not support the video tag.
+                      </video>
+                    ))}
+                  </div>
                   <aside className="Maybolin-AI">
                     <p>"Keep on looking. You will find it!" - Maybolin AI</p>
                   </aside>
-              </div>
+              </section>
           </section>
       )}
 
@@ -92,6 +100,8 @@ export default function UserSeeker() {
           ))}
         </section>
       )}
+    </div>
+    <Footer/>
     </>
   );
 }

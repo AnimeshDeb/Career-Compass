@@ -2,7 +2,7 @@
 
 body{
     margin: 0;
-    font-family: 'Ultra';
+    background-color: var(--primary_color);
 }
 h2{
     font-weight: 300;
@@ -10,12 +10,54 @@ h2{
 h3{
     font-weight: 250;
 }
+.main {
+    background-color: white;
+    max-width: 1400px;
+    margin: 0 auto;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+.top-sec .banner-container {
+    position: relative;
+    max-width: 1400px;
+    min-width: 950px;
+    margin: 0 auto;
+    justify-content: center;
+    align-items: center;
+}
+  
+.top-sec .banner {
+  width: 100%;
+}
 
+.top-sec .profile {
+  text-align: center;
+  margin-top: -232px;
+  position: relative;
+}
+
+.top-sec h3 {
+  background-color: var(--tertiary_color);
+  font-family: 'Ultra';
+  color: white;
+  padding: 10px;
+  width: 15%;
+  border-radius: 10px;
+  margin: 10px auto;
+  position: relative;
+  z-index: 1;
+}
+video{
+    min-width: 350px;
+    max-width: 470px;
+    margin: 20px;
+}
 .intro-sec h2,
 .skills-sec h2,
 .challenges-sec h2,
 .references-sec h2 {
-    background-color: var(--primary_color);
+    font-family: 'Ultra';
+    background-color: var(--tertiary_color);
     color: white;
     padding: 8px;
     padding-left: 80px;
@@ -25,46 +67,57 @@ h3{
     width: 100%;
     box-sizing: border-box;
 }
-.sec{
-    margin-bottom: 50px;
-}
-.skills-sec, .challenges-sec {
+.skill-vid, .intro-vid {
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
+    width: 33.33%;
+    min-width: 330px;
 }
+.education{
+    width: 33.33%;
+    min-width: 300px;
+    display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.education-text {
+    text-align: center;
+    width: 100%;
+    padding-top: 10%;
+}
+.education-text h4{
+    font-family: 'Ultra';
+    font-weight: 550;
+    font-size: x-large;
+}
+
 .intro-sec{
     display: flex;
-    margin: 0;
-    padding: 0;
+    width: 100%;
 }
 
 .profile img {
     width: 150px;
-    margin-right: 25px;
-    margin-left: 25px;
+    border-radius: 40px;
+    border-color: var(--tertiary_color);
+    border-style: solid;
 }
-.profile{
-    text-align: center;
-    margin-top: 40px;
-}
-.intro-vid{
-    align-self: center;
-}
-video{
-    width: 300px;
-    margin: 10px;
-    margin-top: 20px;
-}
+
 .company-name{
-    color: var(--primary_color);
+    font-family: 'Ultra';
+    color: var(--tertiary_color);
     margin-bottom: 0px;
     margin: 0;
 }
 .reference-item{
     margin: 10px;
+    max-width: 1200px;
+    min-width: 700px;
+    margin-bottom: 15px;
 }
 .company-email{
+    font-family: 'Ultra';
     color: var(--secondary_color);
     margin: 0;
     padding: 5px;
@@ -73,27 +126,87 @@ video{
 .top-company{
     display: flex;
     align-items: center;
-    margin-top: 30px;
     margin-bottom: 1px;
 }
 .references-sec p{
     margin-top: 1px;
-    margin-bottom: 40px;
+    margin-bottom: 0px;
+    font-weight: 200;
+    font-size: larger;
 }
 .middle-container {
     display: flex;
     align-items: flex-start;
-    margin-bottom: 50px;
 }
 
 .Maybolin-AI {
-    background-color: var(--primary_color);
+    background-color: var(--tertiary_color);
     color: white;
     border: 100px;
     border-bottom-left-radius: 10px;
-    padding: 150px;
-    width: 50%;
+    padding: 185px;
+    width: 40%;
+    min-width: 400px;
 }
 .challenges-sec{
     width: 50%;
+    min-width: 400px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+.references-sec{
+    margin-bottom: 10px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+@media only screen and (max-width: 550px) {
+    .main{
+        background-color: white;
+        max-width: 100%;
+        margin: 0 auto;
+        flex-wrap: none;
+        justify-content: none;
+    }
+    .banner{
+        width: 10px;
+    }
+    video{
+        width: 10px;
+    }
+    .skill-vid, .intro-vid {
+        width: 10px;
+    }
+    .references-sec{
+        
+    }
+    .challenges-sec{
+
+    }
+    .Maybolin-AI{
+        padding: 10px;
+    }
+    .middle-container {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+    .top-sec .banner-container {
+        position: relative;
+        width: 50%;
+        margin: 0 auto;
+        justify-content: center;
+        align-items: center;
+    }
+      
+    .top-sec .banner {
+      width: 40%;
+    }
+    .profile img {
+        width: 50px;
+        border-radius: 40px;
+        border-color: var(--tertiary_color);
+        border-style: solid;
+    }
 }
