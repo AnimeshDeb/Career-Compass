@@ -74,6 +74,13 @@ video{
     width: 33.33%;
     min-width: 330px;
 }
+.top-sec h3{
+    font-size: x-small;
+    height: 10px;
+    padding-top: 0;
+    margin-top: 0;
+    margin-bottom: 0;
+}
 .education{
     width: 33.33%;
     min-width: 300px;
@@ -161,7 +168,7 @@ video{
     flex-wrap: wrap;
     justify-content: center;
 }
-@media only screen and (max-width: 550px) {
+@media only screen and (max-width: 768px) {
     .main{
         background-color: white;
         max-width: 100%;
@@ -170,43 +177,111 @@ video{
         justify-content: none;
     }
     .banner{
-        width: 10px;
+        width: 100%;
+        min-width: 500px;
+    }
+    .sec{
+        width: 100%;
+    }
+    .sec.challenges-sec {
+        width: 100%;
+        order: 1; 
     }
     video{
         width: 10px;
+        min-width:300px;
     }
     .skill-vid, .intro-vid {
-        width: 10px;
+        display:grid;
+        flex-wrap: none;
+        justify-content: none;
+        width: 100%;
+        min-width: 10px;
+        max-width: 600px;
     }
-    .references-sec{
-        
+    .education{
+        width: 100%;
     }
-    .challenges-sec{
-
+    .intro-sec{
+        display: grid;
+        width: 100%;
+    }
+    .reference-item{
+        margin: 10px;
+        max-width: 800px;
+        min-width: 0px;
+        margin-bottom: 15px;
+    }
+    .intro-sec h2,
+    .skills-sec h2,
+    .challenges-sec h2,
+    .references-sec h2 {
+        font-family: 'Ultra';
+        background-color: var(--tertiary_color);
+        color: white;
+        padding: 4px;
+        padding-left: 0px;
+        padding-right: 0px;
+        margin: 0;
+        text-align: center;
+        width: 100%;
+        box-sizing: border-box;
+        font-size: medium;
     }
     .Maybolin-AI{
         padding: 10px;
+        min-width: 0px;
+        max-width: 100%;
+        width: 100%;
+        order: 2;
+        border-bottom-left-radius: 0;
+        padding-left: 50%;
+        padding-right: 0%;
+    }
+    .Maybolin-AI p{
+        font-size: medium;
+        width: 200px;
     }
     .middle-container {
         display: flex;
         flex-wrap: wrap;
         justify-content: center;
     }
-    .top-sec .banner-container {
-        position: relative;
-        width: 50%;
-        margin: 0 auto;
-        justify-content: center;
-        align-items: center;
+    .top-sec .banner-container{
+        position: none;
+        min-width: 0px;
+        margin: 0;
+        justify-content: none;
+        align-items: none;
     }
       
     .top-sec .banner {
-      width: 40%;
+      max-width: 100%;
+      min-width: 0;
+    }
+    .profile{
+        width: 100%;
     }
     .profile img {
         width: 50px;
-        border-radius: 40px;
+        border-radius: 20px;
         border-color: var(--tertiary_color);
         border-style: solid;
+        margin: 0px;
+    }
+    
+    .top-sec .profile {
+        text-align: center;
+        margin-top: -90px;
+        position: relative;
+      }
+    .education-text h4{
+        font-size: medium;
+        margin-top: 5px;
+        margin-bottom: 5px;
+    }
+    .education-text{
+        padding-top: 10px;
+        padding-bottom: 10px;
     }
 }

@@ -22,7 +22,7 @@ export default function UserSeeker() {
   return (
     <>
     <div className="main">
-      <Navbar />
+      <Navbar className="nav"/>
       {userData && (
         <section className="sec top-sec">
           <div className="banner-container">
