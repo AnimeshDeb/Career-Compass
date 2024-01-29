@@ -1,7 +1,7 @@
 import { getDoc, doc, collection, getDocs } from 'firebase/firestore';
 import { db } from '../firebase';
 
-const getUserById = async (userId) => {
+const getSeekerById = async (userId) => {
     try {
       const userDocRef = doc(db, 'Seekers', userId);
       const userDocSnapshot = await getDoc(userDocRef);
@@ -42,4 +42,4 @@ const getUserById = async (userId) => {
     }
   };
 
-export { getUserById };
+export { getSeekerById };

@@ -1,7 +1,7 @@
 import "./UserSeeker.css";
 import Navbar from "../../../components/navbar/navbar.jsx"
 import { useEffect, useState } from 'react';
-import { getUserById } from '../../../functions/seekerFunctions';
+import { getSeekerById } from '../../../functions/seekerFunctions';
 import Footer from "../../../components/footer/footer.jsx"
 export default function UserSeeker() {
   const [userData, setUserData] = useState(null);
@@ -9,7 +9,7 @@ export default function UserSeeker() {
     const fetchData = async () => {
       try {
         const userId = 'i0xxrmCRV1bG9i6rAt4Xgprtmy83';
-        const fetchedUserData = await getUserById(userId);
+        const fetchedUserData = await getSeekerById(userId);
         console.log(fetchedUserData)
         setUserData(fetchedUserData);
       } catch (error) {
@@ -78,7 +78,7 @@ export default function UserSeeker() {
                     ))}
                   </div>
                   <aside className="Maybolin-AI">
-                    <p>"Keep on looking. You will find it!" - Maybolin AI</p>
+                    <p>"Keep on looking. You will find it." - Maybolin AI</p>
                   </aside>
               </section>
           </section>
