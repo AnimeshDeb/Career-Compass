@@ -1,10 +1,10 @@
-import "./UserCompany.css";
+import "./UserMentor.css";
 import Navbar from "../../../components/navbar/navbar.jsx"
 import { useEffect, useState } from 'react';
-import { getCompanyById } from '../../../functions/companyFunctions';
+import { getCompanyById } from '../../../functions/companyFunctions.js';
 import Footer from "../../../components/footer/footer.jsx"
 
-export default function UserCompany() {
+export default function UserMentor() {
   const [userData, setUserData] = useState(null);
   useEffect(() => {
     const fetchData = async () => {
@@ -22,31 +22,35 @@ export default function UserCompany() {
   }, []);
   return (
     <>
+      <div className="main">
         <Navbar/>
-    
         {userData && (
             <section className="sec top-sec">
             <div className="banner-container">
                 <img className="banner" src={userData.banner} alt="banner" />
                 <div className="profile">
                 <img src={userData.logo} alt="User" />
-                <h3>{userData.name}</h3>
+                <h3>{userData.displayName}</h3>
                 </div>
             </div>
             </section>
         )}
         {userData && (
-            <section className="sec intro-sec">
-                <h3>Introduction</h3>
-                <div>{userData.intro_text}</div>
+          <section className="sec intro-sec">
+            <h3>Introduction</h3>
+            <p>{userData.intro_text}</p>
+          </section>
+        )}
+        {userData && (
+            <section className="sec video-sec">
                 <video controls>
                 <source src={userData.intro_video} type="video/mp4" />
                 Your browser does not support the video tag.
               </video>
             </section>
         )}
-        
-        <Footer/>
+      </div>  
+      <Footer/>
     </>
   );
 }

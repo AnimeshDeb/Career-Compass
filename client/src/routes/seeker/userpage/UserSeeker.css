@@ -176,6 +176,9 @@ video{
     font-size: large;
 }
 @media only screen and (max-width: 768px) {
+    .profile h3{
+        font-size:small;
+    }
     .main{
         background-color: white;
         max-width: 100%;
@@ -279,7 +282,7 @@ video{
     
     .top-sec .profile {
         text-align: center;
-        margin-top: -90px;
+        margin-top: -120px;
         position: relative;
       }
     .education-text h4{
