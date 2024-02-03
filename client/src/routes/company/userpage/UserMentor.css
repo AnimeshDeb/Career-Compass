@@ -1,33 +1,12 @@
 @import url('../../../constants/colors/colors.css');
-h3 {
-    font-family: 'Ultra';
-    color:white;
-    width: 100%;
-    background-color: var(--primary_color);
+
+.men-profile h3{
+    color: var(--white);
+    background-color: var(--secondary_color);
 }
-body {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    height: 100vh; /* Ensure full height of the viewport */
-    margin: 0;
-}
-.main{
-    display:list-item;
-    justify-content: center;
-    align-items: center;
-}
-.intro-sec, .video-sec {
-    text-align: center;
-    flex-wrap: wrap;
-    max-width: 600px; /* Adjust as needed */
-    margin-top: 20px; /* Adjust as needed */
-}
-.video-sec video {
-    margin-top: 20px; /* Adjust as needed */
-}
-.intro-sec h3,
-.intro-sec p,
-.intro-sec video {
-    margin-top: 20px; /* Adjust as needed */
+.men-profile img {
+    width: 150px;
+    border-radius: 40px;
+    border-color: var(--tertiary_color);
+    border-style: solid;
 }

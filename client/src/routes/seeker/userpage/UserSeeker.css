@@ -11,8 +11,9 @@ h3{
     font-weight: 250;
 }
 .main {
-    background-color: white;
+    background-color: var(--white);
     max-width: 1400px;
+    min-width: 1200px;
     margin: 0 auto;
     flex-wrap: wrap;
     justify-content: center;
@@ -40,7 +41,7 @@ h3{
   background-color: var(--tertiary_color);
   font-family: 'Ultra';
   font-size: x-large;
-  color: white;
+  color: var(--white);
   padding: 20px;
   width: 15%;
   border-radius: 10px;
@@ -60,7 +61,7 @@ video{
 .references-sec h2 {
     font-family: 'Ultra';
     background-color: var(--tertiary_color);
-    color: white;
+    color: var(--white);
     padding: 8px;
     padding-left: 80px;
     padding-right: 80px;
@@ -150,7 +151,7 @@ video{
 
 .Maybolin-AI {
     background-color: var(--tertiary_color);
-    color: white;
+    color: var(--white);
     border: 100px;
     border-bottom-left-radius: 10px;
     padding: 185px;
@@ -177,15 +178,18 @@ video{
 }
 @media only screen and (max-width: 768px) {
     .profile h3{
-        font-size:small;
+        font-size:x-small;
+        padding-bottom: 20px;
+        margin-bottom: 10px;
     }
-    .main{
-        background-color: white;
-        max-width: 100%;
+    .main {
+        background-color: var(--white);
+        max-width: 900px;
+        min-width: 400px;
         margin: 0 auto;
-        flex-wrap: none;
-        justify-content: none;
-    }
+        flex-wrap: wrap;
+        justify-content: center;
+      }
     .banner{
         width: 100%;
         min-width: 500px;
@@ -202,12 +206,7 @@ video{
         min-width:300px;
     }
     .skill-vid, .intro-vid {
-        display:grid;
-        flex-wrap: none;
-        justify-content: none;
         width: 100%;
-        min-width: 10px;
-        max-width: 600px;
     }
     .education{
         width: 100%;
@@ -228,7 +227,7 @@ video{
     .references-sec h2 {
         font-family: 'Ultra';
         background-color: var(--tertiary_color);
-        color: white;
+        color: var(--white);
         padding: 4px;
         padding-left: 0px;
         padding-right: 0px;
@@ -243,10 +242,9 @@ video{
         min-width: 0px;
         max-width: 100%;
         width: 100%;
-        order: 2;
         border-bottom-left-radius: 0;
-        padding-left: 50%;
-        padding-right: 0%;
+        text-align: center;
+        padding-left: 30%;
     }
     .Maybolin-AI p{
         font-size: medium;
@@ -273,11 +271,12 @@ video{
         width: 100%;
     }
     .profile img {
-        width: 50px;
+        width: 30px;
         border-radius: 20px;
         border-color: var(--tertiary_color);
         border-style: solid;
-        margin: 0px;
+        margin: 5px;
+        margin-top: 30px;
     }
     
     .top-sec .profile {

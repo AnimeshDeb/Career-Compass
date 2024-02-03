@@ -1,7 +1,7 @@
 import "./UserMentor.css";
 import Navbar from "../../../components/navbar/navbar.jsx"
 import { useEffect, useState } from 'react';
-import { getCompanyById } from '../../../functions/companyFunctions.js';
+import { getCompanyById } from '../../../functions/mentorFunctions.js';
 import Footer from "../../../components/footer/footer.jsx"
 
 export default function UserMentor() {
@@ -28,7 +28,7 @@ export default function UserMentor() {
             <section className="sec top-sec">
             <div className="banner-container">
                 <img className="banner" src={userData.banner} alt="banner" />
-                <div className="profile">
+                <div className="men-profile">
                 <img src={userData.logo} alt="User" />
                 <h3>{userData.displayName}</h3>
                 </div>
@@ -48,6 +48,16 @@ export default function UserMentor() {
                 Your browser does not support the video tag.
               </video>
             </section>
+        )}
+        {userData && (
+          <section className="sec gallery-sec">
+            <h2>Gallery</h2>
+            {userData.gallery.map((reference, index) => (
+              <div className="gallery-item" key={index}>
+                Hello
+              </div>
+            ))}
+          </section>
         )}
       </div>  
       <Footer/>
