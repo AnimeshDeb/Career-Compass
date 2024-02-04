@@ -1,7 +1,7 @@
 import "./UserMentor.css";
 import Navbar from "../../../components/navbar/navbar.jsx"
 import { useEffect, useState } from 'react';
-import { getCompanyById } from '../../../functions/mentorFunctions.js';
+import { getMentorById } from '../../../functions/mentorFunctions.js';
 import Footer from "../../../components/footer/footer.jsx"
 
 export default function UserMentor() {
@@ -9,8 +9,8 @@ export default function UserMentor() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const userId = 'N5wtfaCiNSe1Yh85tr8hjA4ygsO2';
-        const fetchedUserData = await getCompanyById(userId);
+        const userId = '42Aw4GuY4bsANuED2UEY';
+        const fetchedUserData = await getMentorById(userId);
         console.log(fetchedUserData)
         setUserData(fetchedUserData);
       } catch (error) {
@@ -29,7 +29,7 @@ export default function UserMentor() {
             <div className="banner-container">
                 <img className="banner" src={userData.banner} alt="banner" />
                 <div className="men-profile">
-                <img src={userData.logo} alt="User" />
+                <img src={userData.pictureURL} alt="User" />
                 <h3>{userData.displayName}</h3>
                 </div>
             </div>
@@ -52,9 +52,9 @@ export default function UserMentor() {
         {userData && (
           <section className="sec gallery-sec">
             <h2>Gallery</h2>
-            {userData.gallery.map((reference, index) => (
+            {userData.gallery.map((image, index) => (
               <div className="gallery-item" key={index}>
-                Hello
+                <img  src={image.imageURL} alt="Picture" />
               </div>
             ))}
           </section>

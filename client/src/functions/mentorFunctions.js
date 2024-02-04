@@ -1,17 +1,21 @@
 import { getDoc, doc, collection, getDocs } from 'firebase/firestore';
 import { db } from '../firebase';
 
-const getCompanyById = async (userId) => {
+const getMentorById = async (userId) => {
     try {
       const userDocRef = doc(db, 'Mentors', userId);
       const userDocSnapshot = await getDoc(userDocRef);
   
       if (userDocSnapshot.exists()) {
         const userData = userDocSnapshot.data();
+        const galleryCollectionRef = collection(userDocRef, 'gallery');
+        const gallerySnapshot = await getDocs(galleryCollectionRef);
+        const galleryData = gallerySnapshot.docs.map(doc => doc.data());
         const combinedData = {
           ...userData,
+          gallery: galleryData,
         };
-        console.log(combinedData)
+  
         return combinedData;
       } else {
         return null;
@@ -22,4 +26,4 @@ const getCompanyById = async (userId) => {
     }
   };
 
-export { getCompanyById };
+export { getMentorById };
