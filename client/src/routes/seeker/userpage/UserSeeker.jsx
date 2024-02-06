@@ -101,7 +101,7 @@ export default function UserSeeker() {
         </section>
       )}
     </div>
-    <Footer/>
+    <Footer className="seek-footer"/>
     </>
   );
 }

@@ -77,6 +77,10 @@ video{
     width: 33.33%;
     min-width: 330px;
 }
+.gallery-sec{
+    margin-bottom: 0px;
+    padding-bottom: 0px;
+}
 .top-sec h3{
     font-size: x-small;
     height: 10px;
@@ -175,6 +179,9 @@ video{
     margin-bottom: 20px;
     padding-top: 5px;
     font-size: large;
+}
+.seek-footer{
+    background-color: var(--primary_color);
 }
 @media only screen and (max-width: 768px) {
     .profile h3{

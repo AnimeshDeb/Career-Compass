@@ -3,6 +3,26 @@ import Navbar from "../../../components/navbar/navbar.jsx"
 import { useEffect, useState } from 'react';
 import { getMentorById } from '../../../functions/mentorFunctions.js';
 import Footer from "../../../components/footer/footer.jsx"
+import Carousel from "react-multi-carousel"
+import 'react-multi-carousel/lib/styles.css'
+const responsive = {
+  superLargeDesktop: {
+    breakpoint: { max: 4000, min: 3000 },
+    items: 5
+  },
+  desktop: {
+    breakpoint: { max: 3000, min: 1024 },
+    items: 3
+  },
+  tablet: {
+    breakpoint: { max: 1024, min: 464 },
+    items: 2
+  },
+  mobile: {
+    breakpoint: { max: 464, min: 0 },
+    items: 1
+  }
+};
 
 export default function UserMentor() {
   const [userData, setUserData] = useState(null);
@@ -25,7 +45,7 @@ export default function UserMentor() {
       <div className="main">
         <Navbar/>
         {userData && (
-            <section className="sec top-sec">
+            <section className="men-sec top-sec">
             <div className="banner-container">
                 <img className="banner" src={userData.banner} alt="banner" />
                 <div className="men-profile">
@@ -36,31 +56,35 @@ export default function UserMentor() {
             </section>
         )}
         {userData && (
-          <section className="sec intro-sec">
-            <h3>Introduction</h3>
+          <section className="men-sec men-intro-sec">
+            <h2>Introduction</h2>
             <p>{userData.intro_text}</p>
           </section>
         )}
         {userData && (
-            <section className="sec video-sec">
+            <section className="men-sec men-video-sec">
                 <video controls>
                 <source src={userData.intro_video} type="video/mp4" />
                 Your browser does not support the video tag.
               </video>
             </section>
         )}
-        {userData && (
-          <section className="sec gallery-sec">
+          <section className="men-sec gallery-sec">
             <h2>Gallery</h2>
-            {userData.gallery.map((image, index) => (
-              <div className="gallery-item" key={index}>
-                <img  src={image.imageURL} alt="Picture" />
-              </div>
-            ))}
+              {userData && (
+                <Carousel responsive={responsive} autoPlay={true} autoPlaySpeed={3000}>
+                  {userData.gallery.map((image, index) => (
+                    <div className="gallery-item" key={index}>
+                      <img  src={image.imageURL} alt="Picture" />
+                    </div>
+                  ))}
+                </Carousel>
+              )}
           </section>
-        )}
       </div>  
-      <Footer/>
+      <div className="men-footer">
+        <Footer className="men-footer"/>
+      </div>
     </>
   );
 }

@@ -1,0 +1,147 @@
+@import url('../../../constants/colors/colors.css');
+body{
+    margin: 0;
+    background-color: var(--primary_color);
+}
+h2{
+    font-weight: 300;
+}
+h3{
+    font-weight: 250;
+}
+.top-intro {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start; /* Aligns items to the start of the container */
+    gap: 20px; /* This adds some space between your text and video */
+}
+.men-intro-sec p{
+    font-weight: 100;
+    font-size: medium;
+    text-indent: 2em;
+    line-height: 2;
+    padding-left: 10%;
+    padding-right: 10%;
+    text-align: justify;
+    font-family: 'Ultra';
+}
+.top-sec .men-profile {
+    text-align: center;
+    margin-top: -240px;
+    position: relative;
+    margin-bottom: 30px;
+}
+.top-intro{
+
+}
+.gallery-item img {
+    max-width: 90%;
+    display: flex;
+    height: 90%;
+    padding-bottom: 0px;
+    margin-bottom: 0px;
+    margin: 0 auto;
+    border-radius: 10px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+  }
+.men-sec h2 {
+    font-family: 'Ultra';
+    background-color: var(--secondary_color);
+    color: var(--white);
+    padding: 8px;
+    padding-left: 80px;
+    padding-right: 80px;
+    margin: 0;
+    text-align: center;
+    width: 100%;
+    box-sizing: border-box;
+    font-size: large;
+}
+.men-profile h3{
+    color: var(--white);
+    background-color: var(--secondary_color);
+    font-size: large;
+    margin-top: 10px;
+    padding-top: 5px;
+}
+.men-profile img {
+    width: 150px;
+    border-radius: 40px;
+    border-color: var(--secondary_color);
+    border-style: solid;
+}
+
+.men-footer{
+    background-color: var(--secondary_color);
+    padding: 5px;
+    padding-top: 15px;
+    margin-bottom: 0px;
+    margin-top: 0px;
+    padding-left: 0px;
+    padding-right: 0px;
+}
+.men-video-sec{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+}
+.men-video-sec video{
+    max-width: 100%;
+    height: auto;
+}
+video{
+    border-radius: 10px;
+}
+
+
+@media only screen and (max-width: 768px) {
+    .men-profile img {
+        width: 90px;
+        margin-top: 15px;
+    }   
+    .top-sec .men-profile {
+        margin-top: -196px;
+        margin-bottom: 9px;
+    }
+    .men-profile h3{
+        font-size: medium;
+        padding-bottom: 5%;
+    }
+    .men-intro-sec p{
+        font-size: small;
+        padding-left: 5%;
+        padding-right: 5%;
+    }
+    
+}
+@media only screen and (max-width: 400px) {
+    .men-profile img {
+        width: 40px;
+        margin-bottom: 0px;
+        margin-top: 70px;
+        padding-bottom: 0px;
+    }   
+    .top-sec .men-profile {
+        margin-top: -165px;
+        margin-bottom: 8px;
+    }
+    .men-profile{
+        padding-top: 0px;
+        padding-bottom: 0px;
+        margin-top: 0px;
+    }
+    .men-profile h3{
+        margin-top: 0px;
+        font-size: x-small;
+        padding-bottom: 5%;
+        margin-bottom: 0px;
+    }
+    .men-intro-sec p{
+        font-size: small;
+        padding-left: 5%;
+        padding-right: 5%;
+    }
+    
+}

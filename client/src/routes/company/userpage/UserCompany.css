@@ -1,0 +1,20 @@
+@import url('../../../constants/colors/colors.css');
+.com-sec h2 {
+    font-family: 'Ultra';
+    background-color: var(--primary_color);
+    color: var(--white);
+    padding: 8px;
+    padding-left: 80px;
+    padding-right: 80px;
+    margin: 0;
+    text-align: center;
+    width: 100%;
+    box-sizing: border-box;
+    font-size: large;
+}
+.com-footer{
+    background-color: var(--primary_color);
+}
+.com-sec h3{
+    background-color: var(--primary_color);
+}
