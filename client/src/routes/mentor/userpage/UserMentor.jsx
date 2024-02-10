@@ -5,7 +5,7 @@ import { getMentorById } from '../../../functions/mentorFunctions.js';
 import Footer from "../../../components/footer/footer.jsx"
 import Carousel from "react-multi-carousel"
 import 'react-multi-carousel/lib/styles.css'
-import Audio_Btn from "../../../components/btn_audio/audio_btn.jsx";
+import Audio_Btn from "../../../components/Buttons/btn_audio/audio_btn.jsx";
 
 const responsive = {
   superLargeDesktop: {

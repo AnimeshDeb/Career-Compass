@@ -5,7 +5,8 @@ import { getCompanyById } from '../../../functions/companyFunctions.js';
 import Footer from "../../../components/footer/footer.jsx"
 import Carousel from "react-multi-carousel"
 import 'react-multi-carousel/lib/styles.css'
-import Audio_Btn from "../../../components/btn_audio/audio_btn.jsx";
+import Audio_Btn from "../../../components/Buttons/btn_audio/audio_btn.jsx";
+import Edit_Btn from "../../../components/Buttons/edit_btn/edit_btn.jsx";
 
 const responsive = {
   superLargeDesktop: {
@@ -28,6 +29,8 @@ const responsive = {
 
 export default function UserCompany() {
   const [userData, setUserData] = useState(null);
+  const [isEditing, setIsEditing] = useState(false);
+
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -49,11 +52,12 @@ export default function UserCompany() {
         {userData && (
             <section className="com-sec top-sec">
             <div className="banner-container">
-                <img className="banner" src={userData.banner} alt="banner" />
-                <div className="com-profile">
-                <img src={userData.logo} alt="User" />
-                <h3>{userData.displayName}</h3>
-                </div>
+              <Edit_Btn onClick={() => setIsEditing(!isEditing)}/>
+              <img className="banner" src={userData.banner} alt="banner" />
+              <div className="com-profile">
+              <img src={userData.logo} alt="User" />
+              <h3>{userData.displayName}</h3>
+              </div>
             </div>
             </section>
         )}

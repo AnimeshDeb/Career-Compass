@@ -12,8 +12,8 @@ h3{
 .top-intro {
     display: flex;
     justify-content: center;
-    align-items: flex-start; /* Aligns items to the start of the container */
-    gap: 20px; /* This adds some space between your text and video */
+    align-items: flex-start;
+    gap: 20px;
 }
 .com-intro-sec p{
     font-weight: 100;
