@@ -8,12 +8,12 @@ const getCompanyById = async (userId) => {
   
       if (userDocSnapshot.exists()) {
         const userData = userDocSnapshot.data();
-        const galleryCollectionRef = collection(userDocRef, 'gallery');
+        const galleryCollectionRef = collection(userDocRef, 'CompanyLife');
         const gallerySnapshot = await getDocs(galleryCollectionRef);
         const galleryData = gallerySnapshot.docs.map(doc => doc.data());
         const combinedData = {
           ...userData,
-          gallery: galleryData,
+          CompanyLife: galleryData,
         };
   
         return combinedData;

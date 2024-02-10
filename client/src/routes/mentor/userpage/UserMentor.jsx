@@ -5,6 +5,8 @@ import { getMentorById } from '../../../functions/mentorFunctions.js';
 import Footer from "../../../components/footer/footer.jsx"
 import Carousel from "react-multi-carousel"
 import 'react-multi-carousel/lib/styles.css'
+import Audio_Btn from "../../../components/btn_audio/audio_btn.jsx";
+
 const responsive = {
   superLargeDesktop: {
     breakpoint: { max: 4000, min: 3000 },
@@ -58,7 +60,10 @@ export default function UserMentor() {
         {userData && (
           <section className="men-sec men-intro-sec">
             <h2>Introduction</h2>
-            <p>{userData.intro_text}</p>
+            <div className="men-intro-content">
+              <p>{userData.intro_text}</p>
+              <Audio_Btn className="audio-btn" audioSrc={userData.intro_audio}></Audio_Btn>
+            </div>
           </section>
         )}
         {userData && (

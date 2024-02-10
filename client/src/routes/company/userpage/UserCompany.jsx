@@ -5,6 +5,8 @@ import { getCompanyById } from '../../../functions/companyFunctions.js';
 import Footer from "../../../components/footer/footer.jsx"
 import Carousel from "react-multi-carousel"
 import 'react-multi-carousel/lib/styles.css'
+import Audio_Btn from "../../../components/btn_audio/audio_btn.jsx";
+
 const responsive = {
   superLargeDesktop: {
     breakpoint: { max: 4000, min: 3000 },
@@ -48,7 +50,7 @@ export default function UserCompany() {
             <section className="com-sec top-sec">
             <div className="banner-container">
                 <img className="banner" src={userData.banner} alt="banner" />
-                <div className="men-profile">
+                <div className="com-profile">
                 <img src={userData.logo} alt="User" />
                 <h3>{userData.displayName}</h3>
                 </div>
@@ -56,13 +58,14 @@ export default function UserCompany() {
             </section>
         )}
         {userData && (
-          <section className="com-sec intro-sec">
+          <section className="com-sec com-intro-sec">
             <h2>Introduction</h2>
             <p>{userData.intro_text}</p>
+            <Audio_Btn className="audio-btn" audioSrc={userData.intro_audio}></Audio_Btn>
           </section>
         )}
         {userData && (
-            <section className="com-sec video-sec">
+            <section className="com-sec com-video-sec">
                 <video controls>
                 <source src={userData.intro_video} type="video/mp4" />
                 Your browser does not support the video tag.
@@ -73,7 +76,7 @@ export default function UserCompany() {
             <h2>Company Life</h2>
               {userData && (
                 <Carousel responsive={responsive} autoPlay={true} autoPlaySpeed={3000}>
-                  {userData.gallery.map((image, index) => (
+                  {userData.CompanyLife.map((image, index) => (
                     <div className="gallery-item" key={index}>
                       <img  src={image.imageURL} alt="Picture" />
                     </div>
@@ -82,7 +85,9 @@ export default function UserCompany() {
               )}
           </section>
       </div>  
-      <Footer className="com-footer"/>
+      <div className="com-footer">
+        <Footer className="com-footer"/>
+      </div>
     </>
   );
 }
