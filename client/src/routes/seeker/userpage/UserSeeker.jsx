@@ -3,6 +3,7 @@ import Navbar from "../../../components/navbar/navbar.jsx"
 import { useEffect, useState } from 'react';
 import { getSeekerById } from '../../../functions/seekerFunctions';
 import Footer from "../../../components/footer/footer.jsx"
+import UserBanner from "../../../components/UserBanner/UserBanner.jsx";
 export default function UserSeeker() {
   const [userData, setUserData] = useState(null);
   useEffect(() => {
@@ -24,15 +25,7 @@ export default function UserSeeker() {
     <div className="main">
       <Navbar className="nav"/>
       {userData && (
-        <section className="sec top-sec">
-          <div className="banner-container">
-            <img className="banner" src={userData.banner} alt="banner" />
-            <div className="profile">
-              <img src={userData.pictureURL} alt="User" />
-              <h3>{userData.name}</h3>
-            </div>
-          </div>
-        </section>
+          <UserBanner banner={userData.banner} picture={userData.pictureURL} name={userData.displayName}/>
       )}
       {userData && (
         <section className="sec intro-sec">

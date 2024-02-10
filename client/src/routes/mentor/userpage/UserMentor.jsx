@@ -5,8 +5,8 @@ import { getMentorById } from '../../../functions/mentorFunctions.js';
 import Footer from "../../../components/footer/footer.jsx"
 import Carousel from "react-multi-carousel"
 import 'react-multi-carousel/lib/styles.css'
-import Audio_Btn from "../../../components/Buttons/btn_audio/audio_btn.jsx";
-
+import Audio_Btn from "../../../components/Buttons/audio__btn/audio_btn.jsx";
+import UserBanner from "../../../components/UserBanner/UserBanner.jsx";
 const responsive = {
   superLargeDesktop: {
     breakpoint: { max: 4000, min: 3000 },
@@ -47,15 +47,7 @@ export default function UserMentor() {
       <div className="main">
         <Navbar/>
         {userData && (
-            <section className="men-sec top-sec">
-            <div className="banner-container">
-                <img className="banner" src={userData.banner} alt="banner" />
-                <div className="men-profile">
-                <img src={userData.pictureURL} alt="User" />
-                <h3>{userData.displayName}</h3>
-                </div>
-            </div>
-            </section>
+          <UserBanner banner={userData.banner} picture={userData.pictureURL} name={userData.displayName}/>
         )}
         {userData && (
           <section className="men-sec men-intro-sec">

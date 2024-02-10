@@ -1,0 +1,16 @@
+.banner{
+    width: 100%;
+    min-width: 500px;
+}
+.profile-picture{
+    width: 180px;
+    border-radius: 200px;
+    border-color: var(--primary_color);
+    border-style: solid;
+}
+.username{
+    font-family: 'Ultra';
+    font-size: medium;
+    color: red;
+}
+

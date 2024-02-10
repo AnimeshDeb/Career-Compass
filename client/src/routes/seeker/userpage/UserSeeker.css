@@ -18,38 +18,7 @@ h3{
     flex-wrap: wrap;
     justify-content: center;
   }
-.top-sec .banner-container {
-    position: relative;
-    max-width: 1400px;
-    min-width: 950px;
-    margin: 0 auto;
-    justify-content: center;
-    align-items: center;
-}
-  
-.top-sec .banner {
-  width: 100%;
-}
 
-.top-sec .profile {
-  text-align: center;
-  margin-top: -220px;
-  position: relative;
-}
-
-.top-sec h3 {
-  background-color: var(--tertiary_color);
-  font-family: 'Ultra';
-  font-size: x-large;
-  color: var(--white);
-  padding: 20px;
-  width: 15%;
-  border-radius: 10px;
-  margin: 50px auto;
-  margin-bottom: 20px;
-  position: relative;
-  z-index: 1;
-}
 video{
     min-width: 350px;
     max-width: 470px;
@@ -81,13 +50,6 @@ video{
     margin-bottom: 0px;
     padding-bottom: 0px;
 }
-.top-sec h3{
-    font-size: x-small;
-    height: 10px;
-    padding-top: 0;
-    margin-top: 0;
-    margin-bottom: 0;
-}
 .education{
     width: 33.33%;
     min-width: 300px;
@@ -104,18 +66,6 @@ video{
     font-family: 'Ultra';
     font-weight: 550;
     font-size: x-large;
-}
-
-.intro-sec{
-    display: flex;
-    width: 100%;
-}
-
-.profile img {
-    width: 150px;
-    border-radius: 40px;
-    border-color: var(--tertiary_color);
-    border-style: solid;
 }
 
 .company-name{
@@ -175,20 +125,14 @@ video{
     flex-wrap: wrap;
     justify-content: center;
 }
-.profile h3{
-    margin-bottom: 20px;
-    padding-top: 5px;
-    font-size: large;
-}
 .seek-footer{
     background-color: var(--primary_color);
 }
+@media only screen and (max-width: 400px) {
+
+}
 @media only screen and (max-width: 768px) {
-    .profile h3{
-        font-size:x-small;
-        padding-bottom: 20px;
-        margin-bottom: 10px;
-    }
+
     .main {
         background-color: var(--white);
         max-width: 900px;
@@ -197,10 +141,6 @@ video{
         flex-wrap: wrap;
         justify-content: center;
       }
-    .banner{
-        width: 100%;
-        min-width: 500px;
-    }
     .sec{
         width: 100%;
     }
@@ -216,10 +156,6 @@ video{
         width: 100%;
     }
     .education{
-        width: 100%;
-    }
-    .intro-sec{
-        display: grid;
         width: 100%;
     }
     .reference-item{
@@ -262,35 +198,6 @@ video{
         flex-wrap: wrap;
         justify-content: center;
     }
-    .top-sec .banner-container{
-        position: none;
-        min-width: 0px;
-        margin: 0;
-        justify-content: none;
-        align-items: none;
-    }
-      
-    .top-sec .banner {
-      max-width: 100%;
-      min-width: 0;
-    }
-    .profile{
-        width: 100%;
-    }
-    .profile img {
-        width: 30px;
-        border-radius: 20px;
-        border-color: var(--tertiary_color);
-        border-style: solid;
-        margin: 5px;
-        margin-top: 30px;
-    }
-    
-    .top-sec .profile {
-        text-align: center;
-        margin-top: -120px;
-        position: relative;
-      }
     .education-text h4{
         font-size: medium;
         margin-top: 5px;

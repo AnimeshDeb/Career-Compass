@@ -5,8 +5,9 @@ import { getCompanyById } from '../../../functions/companyFunctions.js';
 import Footer from "../../../components/footer/footer.jsx"
 import Carousel from "react-multi-carousel"
 import 'react-multi-carousel/lib/styles.css'
-import Audio_Btn from "../../../components/Buttons/btn_audio/audio_btn.jsx";
+import Audio_Btn from "../../../components/Buttons/audio__btn/audio_btn.jsx";
 import Edit_Btn from "../../../components/Buttons/edit_btn/edit_btn.jsx";
+import UserBanner from "../../../components/UserBanner/UserBanner.jsx";
 
 const responsive = {
   superLargeDesktop: {
@@ -50,16 +51,7 @@ export default function UserCompany() {
       <div className="main">
         <Navbar/>
         {userData && (
-            <section className="com-sec top-sec">
-            <div className="banner-container">
-              <Edit_Btn onClick={() => setIsEditing(!isEditing)}/>
-              <img className="banner" src={userData.banner} alt="banner" />
-              <div className="com-profile">
-              <img src={userData.logo} alt="User" />
-              <h3>{userData.displayName}</h3>
-              </div>
-            </div>
-            </section>
+          <UserBanner banner={userData.banner} picture={userData.logo} name={userData.displayName}/>
         )}
         {userData && (
           <section className="com-sec com-intro-sec">
