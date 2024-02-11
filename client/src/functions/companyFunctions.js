@@ -1,4 +1,4 @@
-import { getDoc, doc, collection, getDocs } from 'firebase/firestore';
+import { getDoc, doc, collection,getDocs } from 'firebase/firestore';
 import { db } from '../firebase';
 
 const getCompanyById = async (userId) => {

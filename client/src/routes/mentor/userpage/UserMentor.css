@@ -59,6 +59,9 @@ h3{
     padding-left: 0px;
     padding-right: 0px;
 }
+.men-navbar{
+    background-color: var(--secondary_color);
+}
 .men-video-sec{
     display: flex;
     flex-direction: column;

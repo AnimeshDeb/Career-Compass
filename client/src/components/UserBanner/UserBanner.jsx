@@ -5,12 +5,14 @@ export default function UserBanner({banner, picture, name}) {
 
 
     return(
-        <>
+        <div className="banner-container">
             <Edit_Btn/>
             <img className="banner" src={banner} alt="banner" />
-            <img src={picture} className= "profile-picture" alt="User" />
-            <h3 className="username">{name}</h3>
-        </>
+            <div className="banner-content">
+                <img src={picture} className= "profile-picture" alt="User" />
+                <h3 className="username">{name}</h3>
+            </div>
+        </div>
     )
 }
 UserBanner.propTypes = {

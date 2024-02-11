@@ -6,7 +6,6 @@ import Footer from "../../../components/footer/footer.jsx"
 import Carousel from "react-multi-carousel"
 import 'react-multi-carousel/lib/styles.css'
 import Audio_Btn from "../../../components/Buttons/audio__btn/audio_btn.jsx";
-import Edit_Btn from "../../../components/Buttons/edit_btn/edit_btn.jsx";
 import UserBanner from "../../../components/UserBanner/UserBanner.jsx";
 
 const responsive = {
@@ -30,7 +29,6 @@ const responsive = {
 
 export default function UserCompany() {
   const [userData, setUserData] = useState(null);
-  const [isEditing, setIsEditing] = useState(false);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -46,6 +44,7 @@ export default function UserCompany() {
 
     fetchData();
   }, []);
+  
   return (
     <>
       <div className="main">

@@ -45,7 +45,9 @@ export default function UserMentor() {
   return (
     <>
       <div className="main">
-        <Navbar/>
+        <div className="men-navbar">
+          <Navbar className="men-navbar"/>
+        </div>
         {userData && (
           <UserBanner banner={userData.banner} picture={userData.pictureURL} name={userData.displayName}/>
         )}
@@ -80,7 +82,7 @@ export default function UserMentor() {
           </section>
       </div>  
       <div className="men-footer">
-        <Footer className="men-footer"/>
+        <Footer/>
       </div>
     </>
   );

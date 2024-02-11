@@ -1,11 +1,14 @@
 .navbar {
     display: flex;
-    align-items: flex-start;
+    align-items: center;
     width: 100%;
+    background-color: var(--primary_color);
+    padding: 10px 0;
 }
 
 .navbar-image {
-    width: 200px;  
+    width: 200px;
     margin: 10px;
-    height: auto; 
+    height: auto;
+    filter: invert(100%) brightness(200%) contrast(200%);
 }
