@@ -4,7 +4,7 @@ import { faHeadphones } from '@fortawesome/free-solid-svg-icons';
 import PropTypes from "prop-types";
 import { useRef, useState, useEffect } from "react";
 
-export default function Audio_Btn({ className, audioSrc }) {
+export default function Audio_Btn({ className, audioSrc, iconSize }) {
     const audio = useRef(new Audio(audioSrc));
     const [isPlaying, setIsPlaying] = useState(false);
 
@@ -37,7 +37,7 @@ export default function Audio_Btn({ className, audioSrc }) {
 
     return (
         <button className={className} onClick={playAudio} style={buttonStyles}>
-            <FontAwesomeIcon icon={faHeadphones} size="2x" />
+            <FontAwesomeIcon icon={faHeadphones} size={iconSize} />
         </button>
     );
 }
@@ -45,4 +45,5 @@ export default function Audio_Btn({ className, audioSrc }) {
 Audio_Btn.propTypes = {
     audioSrc: PropTypes.string.isRequired,
     className: PropTypes.string,
+    iconSize: PropTypes.string
   };

@@ -128,11 +128,13 @@ video{
 .seek-footer{
     background-color: var(--primary_color);
 }
-@media only screen and (max-width: 400px) {
-
+.intro-sec{
+    display: flex;
 }
 @media only screen and (max-width: 768px) {
-
+    .intro-sec{
+        display: block;
+    }
     .main {
         background-color: var(--white);
         max-width: 900px;

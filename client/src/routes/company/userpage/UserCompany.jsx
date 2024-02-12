@@ -48,7 +48,7 @@ export default function UserCompany() {
   return (
     <>
       <div className="main">
-        <Navbar/>
+        <Navbar userType={"company"}/>
         {userData && (
           <UserBanner banner={userData.banner} picture={userData.logo} name={userData.displayName}/>
         )}

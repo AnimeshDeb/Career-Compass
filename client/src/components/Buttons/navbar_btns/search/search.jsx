@@ -1,11 +1,18 @@
-import { faArrowRightFromBracket } from "@fortawesome/free-solid-svg-icons"
+import { faMagnifyingGlass } from "@fortawesome/free-solid-svg-icons"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-export default function SearchButton() {
+import PropTypes from 'prop-types'
+
+export default function SearchButton({className, iconSize}) {
+
     return(
         <>
-            <button>
-            <FontAwesomeIcon icon={faArrowRightFromBracket} />
+            <button className={className}>
+            <FontAwesomeIcon icon={faMagnifyingGlass} size={iconSize}/>
             </button>
         </>
     )
+}
+SearchButton.propTypes = {
+    className: PropTypes.string,
+    iconSize: PropTypes.string,
 }

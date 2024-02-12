@@ -27,7 +27,7 @@
   }
   
   .banner-content {
-    margin-top: -240px;
+    margin-top: -245px;
     z-index: 10;
     margin-bottom: 10px;
     text-align: center;
@@ -36,7 +36,7 @@
 
 @media only screen and (max-width: 768px) {
     .banner-content {
-        margin-top: -150px;
+        margin-top: -151px;
         z-index: 10;
         margin-bottom: 10px;
         text-align: center;
@@ -48,12 +48,12 @@
         font-size: x-large;
       }
 }
-@media only screen and (max-width: 400px) {
+@media only screen and (max-width: 600px) {
     .banner{
         min-width: 100px;
     }
     .banner-content {
-        margin-top: -91px;
+        margin-top: -94px;
         z-index: 10;
         margin-bottom: 10px;
         text-align: center;

@@ -4,7 +4,32 @@ import { useEffect, useState } from 'react';
 import { getSeekerById } from '../../../functions/seekerFunctions';
 import Footer from "../../../components/footer/footer.jsx"
 import UserBanner from "../../../components/UserBanner/UserBanner.jsx";
+
 export default function UserSeeker() {
+  const [windowWidth, setWindowWidth] = useState(window.innerWidth);
+  const [iconSize, setIconSize] = useState("2x");
+
+  useEffect(() => {
+      function handleResize() {
+          setWindowWidth(window.innerWidth);
+      }
+
+      window.addEventListener('resize', handleResize);
+      handleResize();
+
+      return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
+  useEffect(() => {
+      if (windowWidth < 400) {
+          setIconSize("1x");
+      } else if (windowWidth < 769) {
+          setIconSize("2x");
+      } else {
+          setIconSize("4x");
+      }
+  }, [windowWidth]);
+
   const [userData, setUserData] = useState(null);
   useEffect(() => {
     const fetchData = async () => {
@@ -23,7 +48,7 @@ export default function UserSeeker() {
   return (
     <>
     <div className="main">
-      <Navbar className="nav"/>
+      <Navbar className="nav" userType={"seeker"} iconSize={iconSize}/>
       {userData && (
           <UserBanner banner={userData.banner} picture={userData.pictureURL} name={userData.displayName}/>
       )}

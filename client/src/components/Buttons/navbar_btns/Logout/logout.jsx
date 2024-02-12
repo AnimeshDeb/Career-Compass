@@ -1,11 +1,17 @@
-import { faMagnifyingGlass } from "@fortawesome/free-solid-svg-icons"
+import { faArrowRightFromBracket } from "@fortawesome/free-solid-svg-icons"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-export default function LogoutButton() {
+import PropTypes from 'prop-types'
+
+export default function LogoutButton({className, iconSize}) {
     return(
         <>
-            <button>
-                <FontAwesomeIcon icon={faMagnifyingGlass} />
+            <button className={className}>
+                <FontAwesomeIcon icon={faArrowRightFromBracket} size={iconSize}/>
             </button>
         </>
     )
+}
+LogoutButton.propTypes = {
+    className: PropTypes.string,
+    iconSize: PropTypes.string
 }

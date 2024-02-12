@@ -1,6 +1,7 @@
 .navbar {
     display: flex;
     align-items: center;
+    justify-content: space-between;
     width: 100%;
     background-color: var(--primary_color);
     padding: 10px 0;
@@ -11,4 +12,17 @@
     margin: 10px;
     height: auto;
     filter: invert(100%) brightness(200%) contrast(200%);
+}
+
+.nav-btns{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-right: 20px;
+}
+
+.one-btn{
+    background-color: var(--white);
+    color: var(--primary_color);
+    margin-right: 10px;
 }

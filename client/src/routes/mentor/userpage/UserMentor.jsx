@@ -27,6 +27,30 @@ const responsive = {
 };
 
 export default function UserMentor() {
+  const [windowWidth, setWindowWidth] = useState(window.innerWidth);
+  const [iconSize, setIconSize] = useState("2x");
+
+  useEffect(() => {
+      function handleResize() {
+          setWindowWidth(window.innerWidth);
+      }
+
+      window.addEventListener('resize', handleResize);
+      handleResize();
+
+      return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
+  useEffect(() => {
+      if (windowWidth < 400) {
+          setIconSize("xs");
+      } else if (windowWidth < 769) {
+          setIconSize("lg");
+      } else {
+          setIconSize("2x");
+      }
+  }, [windowWidth]);
+
   const [userData, setUserData] = useState(null);
   useEffect(() => {
     const fetchData = async () => {
@@ -46,17 +70,17 @@ export default function UserMentor() {
     <>
       <div className="main">
         <div className="men-navbar">
-          <Navbar className="men-navbar"/>
+          <Navbar className="men-navbar" userType={"mentor"} iconSize={iconSize}/>
         </div>
         {userData && (
-          <UserBanner banner={userData.banner} picture={userData.pictureURL} name={userData.displayName}/>
+          <UserBanner banner={userData.banner} iconSize={iconSize} picture={userData.pictureURL} name={userData.displayName}/>
         )}
         {userData && (
           <section className="men-sec men-intro-sec">
             <h2>Introduction</h2>
             <div className="men-intro-content">
               <p>{userData.intro_text}</p>
-              <Audio_Btn className="audio-btn" audioSrc={userData.intro_audio}></Audio_Btn>
+              <Audio_Btn className="audio-btn" audioSrc={userData.intro_audio} iconSize={iconSize}></Audio_Btn>
             </div>
           </section>
         )}
