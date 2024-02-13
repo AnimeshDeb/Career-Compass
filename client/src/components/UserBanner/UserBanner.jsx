@@ -2,10 +2,10 @@ import "./UserBanner.css";
 import PropTypes from "prop-types";
 import Edit_Btn from "../Buttons/edit_btn/edit_btn";
 
-export default function UserBanner({banner, picture, name, iconSize}) {
+export default function UserBanner({banner, picture, name, iconSize, onEdit}) {
     return(
         <div className="banner-container">
-            <Edit_Btn iconSize={iconSize}/>
+            <Edit_Btn onEdit={onEdit} iconSize={iconSize}/>
             <img className="banner" src={banner} alt="banner" />
             <div className="banner-content">
                 <img src={picture} className= "profile-picture" alt="User" />
@@ -19,5 +19,6 @@ UserBanner.propTypes = {
     picture: PropTypes.string.isRequired,
     name: PropTypes.string.isRequired,
     iconSize: PropTypes.string,
+    onEdit: PropTypes.func,
 };
     

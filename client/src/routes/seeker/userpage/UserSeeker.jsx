@@ -8,6 +8,11 @@ import UserBanner from "../../../components/UserBanner/UserBanner.jsx";
 export default function UserSeeker() {
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
   const [iconSize, setIconSize] = useState("2x");
+  const [editMode, setEditMode] = useState(false);
+  
+  const toggleEditMode = () => {
+    setEditMode(!editMode);
+  };
 
   useEffect(() => {
       function handleResize() {
@@ -22,11 +27,11 @@ export default function UserSeeker() {
 
   useEffect(() => {
       if (windowWidth < 400) {
-          setIconSize("1x");
+          setIconSize("xs");
       } else if (windowWidth < 769) {
-          setIconSize("2x");
+          setIconSize("lg");
       } else {
-          setIconSize("4x");
+          setIconSize("2x");
       }
   }, [windowWidth]);
 
@@ -45,12 +50,34 @@ export default function UserSeeker() {
 
     fetchData();
   }, []);
+  
+
   return (
     <>
     <div className="main">
+      { editMode ? 
+      (
+        <>
+          <Navbar className="nav" userType={"seeker"} iconSize={iconSize}/>
+          {userData && (
+          <UserBanner 
+           iconSize={iconSize} 
+           banner={userData.banner}
+           picture={userData.pictureURL}
+           name={userData.displayName}
+           onEdit={toggleEditMode}/>
+      )}
+        </>
+      ) : (
+      <>
       <Navbar className="nav" userType={"seeker"} iconSize={iconSize}/>
       {userData && (
-          <UserBanner banner={userData.banner} picture={userData.pictureURL} name={userData.displayName}/>
+          <UserBanner 
+           iconSize={iconSize} 
+           banner={userData.banner}
+           picture={userData.pictureURL}
+           name={userData.displayName}
+           onEdit={toggleEditMode}/>
       )}
       {userData && (
         <section className="sec intro-sec">
@@ -118,7 +145,9 @@ export default function UserSeeker() {
           ))}
         </section>
       )}
-    </div>
+    </>
+      )}
+  </div>
     <Footer className="seek-footer"/>
     </>
   );

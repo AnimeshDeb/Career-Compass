@@ -28,6 +28,29 @@ const responsive = {
 };
 
 export default function UserCompany() {
+  const [windowWidth, setWindowWidth] = useState(window.innerWidth);
+  const [iconSize, setIconSize] = useState("2x");
+
+  useEffect(() => {
+      function handleResize() {
+          setWindowWidth(window.innerWidth);
+      }
+
+      window.addEventListener('resize', handleResize);
+      handleResize();
+
+      return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
+  useEffect(() => {
+    if (windowWidth < 400) {
+        setIconSize("xs");
+    } else if (windowWidth < 769) {
+        setIconSize("lg");
+    } else {
+        setIconSize("2x");
+    }
+}, [windowWidth]);
   const [userData, setUserData] = useState(null);
 
   useEffect(() => {
@@ -48,15 +71,15 @@ export default function UserCompany() {
   return (
     <>
       <div className="main">
-        <Navbar userType={"company"}/>
+        <Navbar iconSize={iconSize} userType={"company"}/>
         {userData && (
-          <UserBanner banner={userData.banner} picture={userData.logo} name={userData.displayName}/>
+          <UserBanner iconSize={iconSize} banner={userData.banner} picture={userData.logo} name={userData.displayName}/>
         )}
         {userData && (
           <section className="com-sec com-intro-sec">
             <h2>Introduction</h2>
             <p>{userData.intro_text}</p>
-            <Audio_Btn className="audio-btn" audioSrc={userData.intro_audio}></Audio_Btn>
+            <Audio_Btn iconSize={iconSize} className="audio-btn" audioSrc={userData.intro_audio}></Audio_Btn>
           </section>
         )}
         {userData && (
