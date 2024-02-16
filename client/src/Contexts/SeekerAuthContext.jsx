@@ -3,6 +3,7 @@ import {auth, db} from '../config/firebase-config';
 import { createUserWithEmailAndPassword, sendPasswordResetEmail, signInWithEmailAndPassword, signOut, updateEmail, updatePassword as updatePasswordInAuth, updateProfile} from 'firebase/auth';
 import {collection, addDoc, getDocs, where, query, doc, setDoc} from 'firebase/firestore';
 import {getAuth, onAuthStateChanged} from "firebase/auth"
+import SeekerIntro from '../components/SeekerSignProcessIntro';
 
 const SeekerAuthContext=React.createContext()
 export function useAuth(){
@@ -26,12 +27,12 @@ export function SeekerAuthProvider({children}){
             
            
 
-
+            
             //in below three lines, we are instantiating variables to refer to user data, such as their uid that is generated in firebase, email, and password.
             const userCredential=await createUserWithEmailAndPassword(auth, email, password);
             const userId=userCredential.user.uid;
             const user=userCredential.user;
-
+            
 
 
 
@@ -41,16 +42,16 @@ export function SeekerAuthProvider({children}){
             const usersSnapshot=await getDocs(usersCollection);
             const userCount=usersSnapshot.size+1;
 
-            const userDocRef= doc(usersCollection, fullName );
+            const userDocRef= doc(usersCollection, fullName );//setting the document as fullName so that fullName can be used specifically to reference the documents
             //using setDoc, which is a firebase fnctionality, to display certain
             // fields in the firebase database, such as email, display name, password, and their user id.
             await setDoc(userDocRef, {
                 email:user.email,
-         
                 password: password,
                 UID: user.uid
 
             });
+           
 
          
 
@@ -64,6 +65,7 @@ export function SeekerAuthProvider({children}){
         }
     
     }
+    
 
     function login(email, password)
     {

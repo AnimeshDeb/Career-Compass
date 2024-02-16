@@ -34,6 +34,10 @@ import SeekerLogin from "./src/components/SeekerLogin.jsx";
 import SeekerSignup from "./src/components/SeekerSignup.jsx";
 import SeekerUser from "./src/components/SeekerUser.jsx";
 import SeekerUpdateProfile from "./src/components/SeekerUpdateProfile.jsx";
+import SeekerIntro from "./src/components/SeekerSignProcessIntro.jsx";
+import SeekerSkills from "./src/components/SeekerSignupProcessSkills.jsx";
+import SeekerChallenges from "./src/components/SeekerChallengers.jsx";
+import SeekerEducation from "./src/components/SeekerEducation.jsx";
 export const router = createBrowserRouter([
   // {
   //   path: "/user",
@@ -43,6 +47,38 @@ export const router = createBrowserRouter([
   //     </AuthProvider>
   //   ),
   // },
+  {
+    path:"/seekerEducation",
+    element:(
+      <SeekerAuthProvider>
+        <SeekerEducation/>
+      </SeekerAuthProvider>
+    )
+  },
+  {
+    path: "/seekerChallenges",
+    element:(
+      <SeekerAuthProvider>
+        <SeekerChallenges/>
+      </SeekerAuthProvider>
+    )
+  },
+  {
+    path: "/seekerSkills",
+    element:(
+      <SeekerAuthProvider>
+        <SeekerSkills/>
+      </SeekerAuthProvider>
+    )
+  },
+  {
+    path: "/seekerIntro",
+    element: (
+      <SeekerAuthProvider>
+        <SeekerIntro/>
+      </SeekerAuthProvider>
+    )
+  },
   {
     path: "/AdminUser",
     element: (

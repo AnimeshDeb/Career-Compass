@@ -18,7 +18,7 @@ export function AuthProvider({children}){
     const [currentUser, setCurrentUser]=useState()
     const [loading, setLoading]=useState(true)
     
-    async function signup(email, password, displayName){
+    async function signup(email, password){
         
        
         try{
@@ -37,7 +37,7 @@ export function AuthProvider({children}){
 
             // await updateProfile(userCredential.user);
 
-            const usersCollection=collection(db, 'Admin');
+            const usersCollection=collection(db, 'Mentors');
             const usersSnapshot=await getDocs(usersCollection);
             const userCount=usersSnapshot.size+1;
 
