@@ -38,6 +38,8 @@ import SeekerIntro from "./src/components/SeekerSignProcessIntro.jsx";
 import SeekerSkills from "./src/components/SeekerSignupProcessSkills.jsx";
 import SeekerChallenges from "./src/components/SeekerChallengers.jsx";
 import SeekerEducation from "./src/components/SeekerEducation.jsx";
+import SeekerJobs from "./src/components/SeekerJobs.jsx";
+import SeekerProfilepic from "./src/components/SeekerProfilepic.jsx";
 export const router = createBrowserRouter([
   // {
   //   path: "/user",
@@ -47,6 +49,18 @@ export const router = createBrowserRouter([
   //     </AuthProvider>
   //   ),
   // },
+  {
+    path:"/SeekerProfilepic",
+    element:(<SeekerAuthProvider>
+      <SeekerProfilepic/>
+    </SeekerAuthProvider>)
+  },
+  {
+    path: "/SeekerJobs", 
+    element:(<SeekerAuthProvider>
+      <SeekerJobs/>
+    </SeekerAuthProvider>)
+  },
   {
     path:"/seekerEducation",
     element:(

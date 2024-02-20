@@ -7,16 +7,14 @@ import {collection, addDoc, getDocs, where, query, doc, setDoc} from 'firebase/f
 
 function SeekerEducation()
 {
+    const navigate=useNavigate();
     const [seekerSchoolNameTxt, setSeekerSchoolNameTxt ]= useState(""); 
     const [seekerLocation, setSeekerLocation]= useState("");
     const [seekerEducationTypeTxt, setSeekerEducationTypeTxt]=useState("");
     const [seekerGrade, setSeekerGrade]=useState("");
     const location=useLocation();
     const name=location.state?.fullName;
-
-
-
-
+    
     const handleChangeSchool=(e)=>
     {
         setSeekerSchoolNameTxt(e.target.value);
@@ -35,14 +33,16 @@ function SeekerEducation()
         e.preventDefault();
         try{
             const usersCollection=collection(db, "Seekers");
-            const docRef=doc(usersCollection, name)
-            const seekerEducationData={
+            const docRef=doc(usersCollection, name);
+            const educationSubcollectionRef=collection(docRef, "Education");
+            await addDoc(educationSubcollectionRef,{
                 Seeker_School: seekerSchoolNameTxt,
                 Seeker_Location: seekerLocation,
                 Seeker_Education: seekerEducationTypeTxt,
-                Seeker_Grade: seekerGrade
-            };
-            await setDoc("docRef", seekerEducationData, {merge: true});
+                Seeker_Grade: seekerGrade,
+            });
+            // await setDoc(educationSubcollectionRef, seekerEducationData, {merge: true});
+            navigate("/SeekerJobs", {state: {fullName: name}});
         }
         catch(error){
             console.log("The error is: "+ error);
