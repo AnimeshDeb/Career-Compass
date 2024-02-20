@@ -17,6 +17,7 @@
     "firebase": "^10.7.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
+    "react-dropzone": "^14.2.3",
     "react-multi-carousel": "^2.8.4",
     "react-router-dom": "^6.21.1",
     "react-slick": "^0.30.1"

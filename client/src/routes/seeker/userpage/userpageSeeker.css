@@ -13,6 +13,7 @@ h3{
 .main {
     background-color: var(--white);
     max-width: 1400px;
+    width: 50%;
     min-width: 1200px;
     margin: 0 auto;
     flex-wrap: wrap;
@@ -108,7 +109,7 @@ video{
     color: var(--white);
     border: 100px;
     border-bottom-left-radius: 10px;
-    padding: 185px;
+    padding: 170px;
     width: 10%;
     min-width: 400px;
 }
@@ -137,6 +138,7 @@ video{
     }
     .main {
         background-color: var(--white);
+        width: 100%;
         max-width: 900px;
         min-width: 400px;
         margin: 0 auto;

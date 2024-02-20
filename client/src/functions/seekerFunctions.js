@@ -1,5 +1,44 @@
-import { getDoc, doc, collection, getDocs } from 'firebase/firestore';
-import { db } from '../firebase';
+import { getDoc, doc, collection, getDocs, updateDoc } from 'firebase/firestore';
+import { db, storage } from '../firebase';
+import { getDownloadURL, ref as storageRef, uploadBytes, listAll, deleteObject  } from 'firebase/storage';
+
+const deleteFilesInFolder = async (folderPath) => {
+  const folderRef = storageRef(storage, folderPath);
+
+  try {
+    const fileList = await listAll(folderRef);
+    const deletionPromises = fileList.items.map(fileRef => {
+      return deleteObject(fileRef);
+    });
+    await Promise.all(deletionPromises);
+    console.log('All files in folder deleted successfully');
+  } catch (error) {
+    console.error('Error deleting files in folder:', error);
+    throw error;
+  }
+};
+
+const uploadFileToStorage = async (file, path) => {
+  try {
+    const fileRef = storageRef(storage, path);
+    const snapshot = await uploadBytes(fileRef, file);
+    const downloadURL = await getDownloadURL(fileRef);
+    return downloadURL;
+  } catch (error) {
+    console.error('Error uploading file to storage:', error.message);
+    throw error;
+  }
+};
+
+const updateUserField = async(object,userId)=>{
+  try{
+    const userDocRef = doc(db, 'Seekers', userId);
+    await updateDoc(userDocRef, object)
+  } catch(error){
+    console.log("Error updating field:", error.message);
+    throw error;
+  }
+};
 
 const getSubcollectionData = async (parentDocRef, subcollectionName) => {
   const collectionRef = collection(parentDocRef, subcollectionName);
@@ -28,16 +67,12 @@ const getSeekerById = async (userId) => {
   
     if (userDocSnapshot.exists()) {
       const userData = userDocSnapshot.data();
-      const challengesData = await getSubcollectionData(userDocRef, 'challenges');
       const referencesData = await getSubcollectionData(userDocRef, 'references');
-      const skillsData = await getSubcollectionData(userDocRef, 'skills');
       const educationData = await getSubcollectionData(userDocRef, 'education');
   
       const combinedData = {
         ...userData,
-        challenges: challengesData,
         references: referencesData,
-        skills: skillsData,
         education: educationData,
       };
   
@@ -51,4 +86,4 @@ const getSeekerById = async (userId) => {
   }
 };
 
-export { getSeekerById, getSeekerJobsById };
+export { getSeekerById, updateUserField, deleteFilesInFolder, getSeekerJobsById, uploadFileToStorage};

@@ -1,0 +1,132 @@
+import Carousel from "react-multi-carousel"
+import 'react-multi-carousel/lib/styles.css'
+import Audio_Btn from "../../../../components/Buttons/audio__btn/audio_btn";
+import { deleteFilesInFolder, uploadFileToStorage, updateUserField } from "../../../../functions/mentorFunctions";
+const responsive = {
+    superLargeDesktop: {
+      breakpoint: { max: 4000, min: 3000 },
+      items: 5
+    },
+    desktop: {
+      breakpoint: { max: 3000, min: 1024 },
+      items: 3
+    },
+    tablet: {
+      breakpoint: { max: 1024, min: 464 },
+      items: 2
+    },
+    mobile: {
+      breakpoint: { max: 464, min: 0 },
+      items: 1
+    }
+  };
+
+export default function EditMode({userData, userId, pendingChanges, setPendingChanges}){
+  const renderEditableView = (dataType, data, field, index = null) => {
+    const pendingKey = `${field}`;
+    const pendingData = pendingChanges[pendingKey] ? pendingChanges[pendingKey].value : data;
+
+    switch (dataType) {
+      case 'text':
+        return (
+          <input
+            type="text"
+            onChange={(e) => handleChange(e, dataType, field, index)}
+          />
+        );
+      case 'image':
+      case 'video':
+        const inputId = `file-input-${field}-${index}`;
+        const fileUrl = dataType === 'video' && pendingData instanceof File ? URL.createObjectURL(pendingData) : pendingData;
+        return (
+          <div className={`media-container ${dataType}`}>
+            {dataType === 'video' ? (
+              <>
+                <video key={`${index}_${new Date().getTime()}`} controls>
+                  <source src={fileUrl} type="video/mp4" />
+                  Your browser does not support the video tag.
+                </video>
+                <label htmlFor={inputId}>Upload New Video</label>
+                <input
+                  id={inputId}
+                  type="file"
+                  onChange={(e) => handleChange(e, dataType, field, index)}
+                  accept="video/*"
+                />
+              </>
+            ) : (
+              <img src={fileUrl} alt={field} />
+            )}
+          </div>
+        );
+      default:
+        return null;
+    }
+  };
+  const handleChange = (event, type, field, index = null) => {
+    let newChange = event.target.files[0]; 
+    if (type === 'text') {
+      newChange = event.target.value; 
+    }
+  
+    setPendingChanges(prevChanges => ({
+      ...prevChanges,
+      [`${field}`]: { value: newChange, type },
+    }));
+  };
+  const saveChanges = async () => {
+    const updates = Object.entries(pendingChanges).map(async ([field, { value, type }]) => {
+    const updateObject = {};
+    if (type === 'text') {
+      updateObject[field] = value;
+    } else {
+      const deletePrevious = `Users/Mentors/${userData.displayName}/${field}/`;
+      await deleteFilesInFolder(deletePrevious);
+      const storeChange = `${deletePrevious}/${field}_${userData.displayName}`;
+      const newPath = await uploadFileToStorage(value, storeChange);
+      updateObject[field] = newPath;
+    }
+      console.log(updateObject)
+      updateUserField(updateObject, userId)
+    });
+
+    try {
+        await Promise.all(updates);
+        console.log('All changes saved successfully.');
+    } catch (error) {
+        console.error('Error saving changes:', error);
+    }
+    setPendingChanges({});
+  };
+  return (
+      <div>
+        <button onClick={saveChanges}>Save changes</button>
+      {userData && (
+      <section className="men-sec men-intro-sec">
+        <h2>Introduction</h2>
+        <div className="men-intro-content">
+          <p>{userData.intro_text}</p>
+          {renderEditableView('text', userData.intro_text, 'intro_text', "testmentor")}
+        </div>
+      </section>
+    )}
+    {userData && (
+        <section className="men-sec men-video-sec">
+          {renderEditableView('video', userData.intro_video, 'intro_video',"testmentor")}
+        </section>
+    )}
+      <section className="men-sec gallery-sec">
+        <h2>Gallery</h2>
+          {userData && (
+            <Carousel responsive={responsive} autoPlay={true} autoPlaySpeed={3000}>
+              {userData.gallery.map((image, index) => (
+                <div className="gallery-item" key={index}>
+                  <img  src={image.imageURL} alt="Picture" />
+                </div>
+              ))}
+            </Carousel>
+          )}
+      </section>
+  </div>
+  )
+}

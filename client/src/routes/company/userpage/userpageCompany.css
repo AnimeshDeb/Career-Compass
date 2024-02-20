@@ -1,7 +1,7 @@
 @import url('../../../constants/colors/colors.css');
 body{
     margin: 0;
-    background-color: var(--primary_color);
+    background-color: var(--white);
 }
 h2{
     font-weight: 300;
