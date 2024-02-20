@@ -93,7 +93,7 @@ function SeekerIntro() {
       const docRef = doc(usersCollection, name);
 
       const seekerIntroUpdatedData = {
-        Intro_txt: seekerTxtIntro,
+        introduction: seekerTxtIntro,
       };
       await setDoc(docRef, seekerIntroUpdatedData, { merge: true });
       navigate("/seekerSkills", { state: { NameFull: name } });

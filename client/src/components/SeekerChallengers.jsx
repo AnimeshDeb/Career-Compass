@@ -78,7 +78,7 @@ function SeekerChallenges()
             const docRef=doc(usersCollection, name);
 
             const seekerChallangeData={
-                Challenge_txt: seekerTxtChallenges,
+                challenges: seekerTxtChallenges,
             };
             await setDoc(docRef, seekerChallangeData, {merge: true});
             navigate("/seekerEducation", {state: {fullName:name}});
