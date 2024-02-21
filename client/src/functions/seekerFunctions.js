@@ -21,7 +21,7 @@ const deleteFilesInFolder = async (folderPath) => {
 const uploadFileToStorage = async (file, path) => {
   try {
     const fileRef = storageRef(storage, path);
-    const snapshot = await uploadBytes(fileRef, file);
+    await uploadBytes(fileRef, file);
     const downloadURL = await getDownloadURL(fileRef);
     return downloadURL;
   } catch (error) {
