@@ -1,0 +1,99 @@
+@import url('../../../constants/colors/colors.css');
+body{
+    margin: 0;
+    background-color: var(--white);
+}
+h2{
+    font-weight: 300;
+}
+h3{
+    font-weight: 250;
+}
+.top-intro {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    gap: 20px;
+}
+.com-intro-sec p{
+    font-weight: 100;
+    font-size: medium;
+    text-indent: 2em;
+    line-height: 2;
+    padding-left: 10%;
+    padding-right: 10%;
+    text-align: justify;
+    font-family: 'Ultra';
+}
+.gallery-item img {
+    max-width: 90%;
+    display: flex;
+    height: 90%;
+    padding-bottom: 0px;
+    margin-bottom: 0px;
+    margin: 0 auto;
+    border-radius: 10px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+  }
+.com-sec h2 {
+    font-family: 'Ultra';
+    background-color: var(--primary_color);
+    color: var(--white);
+    padding: 8px;
+    padding-left: 80px;
+    padding-right: 80px;
+    margin: 0;
+    text-align: center;
+    width: 100%;
+    box-sizing: border-box;
+    font-size: large;
+}
+.com-profile h3{
+    color: var(--white);
+    background-color: var(--primary_color);
+    font-size: large;
+    margin-top: 10px;
+    padding-top: 5px;
+}
+
+.com-footer{
+    background-color: var(--primary_color);
+    padding: 5px;
+    padding-top: 15px;
+    margin-bottom: 0px;
+    margin-top: 0px;
+    padding-left: 0px;
+    padding-right: 0px;
+}
+.com-video-sec{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+}
+.com-video-sec video{
+    max-width: 100%;
+    height: auto;
+}
+video{
+    border-radius: 10px;
+}
+
+
+@media only screen and (max-width: 768px) {
+    .com-intro-sec p{
+        font-size: small;
+        padding-left: 5%;
+        padding-right: 5%;
+    }
+    
+}
+@media only screen and (max-width: 400px) {
+    .com-intro-sec p{
+        font-size: small;
+        padding-left: 5%;
+        padding-right: 5%;
+    }
+    
+}

@@ -1,0 +1,214 @@
+@import url('../../../constants/colors/colors.css');
+
+body{
+    margin: 0;
+    background-color: var(--primary_color);
+}
+h2{
+    font-weight: 300;
+}
+h3{
+    font-weight: 250;
+}
+.main {
+    background-color: var(--white);
+    max-width: 1400px;
+    width: 50%;
+    min-width: 1200px;
+    margin: 0 auto;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+video{
+    min-width: 350px;
+    max-width: 470px;
+    margin: 20px;
+}
+.intro-sec h2,
+.skills-sec h2,
+.challenges-sec h2,
+.references-sec h2 {
+    font-family: 'Ultra';
+    background-color: var(--tertiary_color);
+    color: var(--white);
+    padding: 8px;
+    padding-left: 80px;
+    padding-right: 80px;
+    margin: 0;
+    text-align: center;
+    width: 100%;
+    box-sizing: border-box;
+}
+.skill-vid, .intro-vid {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    width: 33.33%;
+    min-width: 330px;
+}
+.gallery-sec{
+    margin-bottom: 0px;
+    padding-bottom: 0px;
+}
+.education{
+    width: 33.33%;
+    min-width: 300px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+.education-text {
+    text-align: center;
+    width: 100%;
+    padding-top: 10%;
+}
+.education-text h4{
+    font-family: 'Ultra';
+    font-weight: 550;
+    font-size: x-large;
+}
+
+.company-name{
+    font-family: 'Ultra';
+    color: var(--tertiary_color);
+    margin-bottom: 0px;
+    margin: 0;
+}
+.reference-item{
+    margin: 10px;
+    max-width: 1200px;
+    min-width: 700px;
+    margin-bottom: 15px;
+}
+.company-email{
+    font-family: 'Ultra';
+    color: var(--secondary_color);
+    margin: 0;
+    padding: 5px;
+    margin-bottom: 0px;
+}
+.top-company{
+    display: flex;
+    align-items: center;
+    margin-bottom: 1px;
+}
+.references-sec p{
+    margin-top: 1px;
+    margin-bottom: 0px;
+    font-weight: 200;
+    font-size: larger;
+}
+.middle-container {
+    display: flex;
+    align-items: flex-start;
+}
+
+.Maybolin-AI {
+    background-color: var(--tertiary_color);
+    color: var(--white);
+    border: 100px;
+    border-bottom-left-radius: 10px;
+    padding: 170px;
+    width: 10%;
+    min-width: 400px;
+}
+.challenges-sec{
+    width: 50%;
+    min-width: 400px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+.references-sec{
+    margin-bottom: 10px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+.seek-footer{
+    background-color: var(--primary_color);
+}
+.intro-sec{
+    display: flex;
+}
+@media only screen and (max-width: 768px) {
+    .intro-sec{
+        display: block;
+    }
+    .main {
+        background-color: var(--white);
+        width: 100%;
+        max-width: 900px;
+        min-width: 400px;
+        margin: 0 auto;
+        flex-wrap: wrap;
+        justify-content: center;
+      }
+    .sec{
+        width: 100%;
+    }
+    .sec.challenges-sec {
+        width: 100%;
+        order: 1; 
+    }
+    video{
+        width: 10px;
+        min-width:300px;
+    }
+    .skill-vid, .intro-vid {
+        width: 100%;
+    }
+    .education{
+        width: 100%;
+    }
+    .reference-item{
+        margin: 10px;
+        max-width: 800px;
+        min-width: 0px;
+        margin-bottom: 15px;
+    }
+    .intro-sec h2,
+    .skills-sec h2,
+    .challenges-sec h2,
+    .references-sec h2 {
+        font-family: 'Ultra';
+        background-color: var(--tertiary_color);
+        color: var(--white);
+        padding: 4px;
+        padding-left: 0px;
+        padding-right: 0px;
+        margin: 0;
+        text-align: center;
+        width: 100%;
+        box-sizing: border-box;
+        font-size: medium;
+    }
+    .Maybolin-AI{
+        padding: 10px;
+        min-width: 0px;
+        max-width: 100%;
+        width: 100%;
+        border-bottom-left-radius: 0;
+        text-align: center;
+        padding-left: 30%;
+    }
+    .Maybolin-AI p{
+        font-size: medium;
+        width: 200px;
+    }
+    .middle-container {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+    .education-text h4{
+        font-size: medium;
+        margin-top: 5px;
+        margin-bottom: 5px;
+    }
+    .education-text{
+        padding-top: 10px;
+        padding-bottom: 10px;
+    }
+}
