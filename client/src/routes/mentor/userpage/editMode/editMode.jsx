@@ -1,6 +1,6 @@
 import Carousel from "react-multi-carousel";
 import "react-multi-carousel/lib/styles.css";
-import Audio_Btn from "../../../../components/Buttons/audio__btn/audio_btn";
+import PropTypes from "prop-types";
 import {
   deleteFilesInFolder,
   uploadFileToStorage,
@@ -50,7 +50,7 @@ export default function EditMode({
           </>
         );
       case "image":
-      case "video":
+      case "video": {
         const inputId = `file-input-${field}-${index}`;
         const fileUrl =
           dataType === "video" && pendingData instanceof File
@@ -77,11 +77,12 @@ export default function EditMode({
             )}
           </div>
         );
+      }
       default:
         return null;
     }
   };
-  const handleChange = (event, type, field, index = null) => {
+  const handleChange = (event, type, field) => {
     let newChange;
     if (type === "text") {
       newChange = event.target.value;
@@ -156,3 +157,18 @@ export default function EditMode({
     </div>
   );
 }
+EditMode.propTypes = {
+  userData: PropTypes.shape({
+    intro_text: PropTypes.string,
+    intro_video: PropTypes.string,
+    displayName: PropTypes.string,
+    gallery: PropTypes.arrayOf(
+      PropTypes.shape({
+        imageURL: PropTypes.string.isRequired,
+      })
+    ),
+  }).isRequired,
+  userId: PropTypes.string.isRequired,
+  pendingChanges: PropTypes.object.isRequired,
+  setPendingChanges: PropTypes.func.isRequired,
+};
