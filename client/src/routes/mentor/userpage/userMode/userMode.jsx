@@ -1,6 +1,7 @@
 import Carousel from "react-multi-carousel";
 import "react-multi-carousel/lib/styles.css";
 import Audio_Btn from "../../../../components/Buttons/audio__btn/audio_btn";
+import PropTypes from "prop-types";
 const responsive = {
   superLargeDesktop: {
     breakpoint: { max: 4000, min: 3000 },
@@ -62,3 +63,17 @@ export default function UserMode({ userData, iconSize }) {
     </div>
   );
 }
+
+UserMode.propTypes = {
+  userData: PropTypes.shape({
+    intro_text: PropTypes.string,
+    intro_audio: PropTypes.string,
+    intro_video: PropTypes.string,
+    gallery: PropTypes.arrayOf(
+      PropTypes.shape({
+        imageURL: PropTypes.string.isRequired,
+      })
+    ),
+  }),
+  iconSize: PropTypes.string,
+};

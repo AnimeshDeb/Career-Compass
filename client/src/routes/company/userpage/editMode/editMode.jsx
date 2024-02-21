@@ -36,17 +36,19 @@ export default function EditMode({
     const pendingData = pendingChanges[pendingKey]
       ? pendingChanges[pendingKey].value
       : data;
-
     switch (dataType) {
       case "text":
         return (
-          <input
-            type="text"
-            onChange={(e) => handleChange(e, dataType, field, index)}
-          />
+          <>
+            <input
+              type="text"
+              value={pendingData}
+              onChange={(e) => handleChange(e, dataType, field, index)}
+            />
+          </>
         );
       case "image":
-      case "video":
+      case "video": {
         const inputId = `file-input-${field}-${index}`;
         const fileUrl =
           dataType === "video" && pendingData instanceof File
@@ -73,20 +75,24 @@ export default function EditMode({
             )}
           </div>
         );
+      }
       default:
         return null;
     }
   };
-  const handleChange = (event, type, field, index = null) => {
-    let newChange = event.target.files[0];
+  const handleChange = (event, type, field) => {
+    let newChange;
     if (type === "text") {
       newChange = event.target.value;
+    } else if (event.target.files && event.target.files.length > 0) {
+      newChange = event.target.files[0];
     }
-
-    setPendingChanges((prevChanges) => ({
-      ...prevChanges,
-      [`${field}`]: { value: newChange, type },
-    }));
+    if (newChange !== undefined) {
+      setPendingChanges((prevChanges) => ({
+        ...prevChanges,
+        [`${field}`]: { value: newChange, type },
+      }));
+    }
   };
   const saveChanges = async () => {
     const updates = Object.entries(pendingChanges).map(
@@ -120,13 +126,7 @@ export default function EditMode({
       {userData && (
         <section className="com-sec com-intro-sec">
           <h2>Introduction</h2>
-          <p>{userData.intro_text}</p>
-          {renderEditableView(
-            "text",
-            userData.intro_text,
-            "intro_text",
-            "testmentor"
-          )}
+          {renderEditableView("text", userData.intro_text, "intro_text")}
         </section>
       )}
       {userData && (
@@ -158,3 +158,18 @@ export default function EditMode({
     </>
   );
 }
+EditMode.propTypes = {
+  userData: PropTypes.shape({
+    intro_text: PropTypes.string,
+    intro_video: PropTypes.string,
+    displayName: PropTypes.string,
+    CompanyLife: PropTypes.arrayOf(
+      PropTypes.shape({
+        imageURL: PropTypes.string.isRequired,
+      })
+    ),
+  }).isRequired,
+  userId: PropTypes.string.isRequired,
+  pendingChanges: PropTypes.object.isRequired,
+  setPendingChanges: PropTypes.func.isRequired,
+};

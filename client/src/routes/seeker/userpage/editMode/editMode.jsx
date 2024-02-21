@@ -12,7 +12,7 @@ export default function EditMode({
   pendingChanges,
   setPendingChanges,
 }) {
-  const handleChange = (event, type, field, index = null) => {
+  const handleChange = (event, type, field) => {
     let newChange = event.target.files[0];
     if (type === "text") {
       newChange = event.target.value;
@@ -64,7 +64,7 @@ export default function EditMode({
           />
         );
       case "image":
-      case "video":
+      case "video": {
         const inputId = `file-input-${field}-${index}`;
         const fileUrl =
           dataType === "video" && pendingData instanceof File
@@ -91,6 +91,7 @@ export default function EditMode({
             )}
           </div>
         );
+      }
       default:
         return null;
     }
@@ -216,4 +217,6 @@ EditMode.propTypes = {
     displayName: PropTypes.string,
   }).isRequired,
   userId: PropTypes.string.isRequired,
+  pendingChanges: PropTypes.object.isRequired,
+  setPendingChanges: PropTypes.func.isRequired,
 };
