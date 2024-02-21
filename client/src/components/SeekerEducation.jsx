@@ -36,10 +36,9 @@ function SeekerEducation()
             const docRef=doc(usersCollection, name);
             const educationSubcollectionRef=collection(docRef, "Education");
             await addDoc(educationSubcollectionRef,{
-                Seeker_School: seekerSchoolNameTxt,
-                Seeker_Location: seekerLocation,
-                Seeker_Education: seekerEducationTypeTxt,
-                Seeker_Grade: seekerGrade,
+                name: seekerSchoolNameTxt,
+                level: seekerEducationTypeTxt,
+                score: seekerGrade,
             });
             // await setDoc(educationSubcollectionRef, seekerEducationData, {merge: true});
             navigate("/SeekerJobs", {state: {fullName: name}});
@@ -61,11 +60,7 @@ function SeekerEducation()
                 <Form onSubmit={handleSubmit}>
                     <Form.Group id="schoolName">
                         <Form.Label></Form.Label>
-                        <Form.Control type="text" placeholder="Type in your education... " value={seekerSchoolNameTxt} onChange={handleChangeSchool} required/>
-                    </Form.Group>
-                    <Form.Group id="location">
-                        <Form.Label></Form.Label>
-                        <Form.Control type="text" placeholder="Type in your location..." value={seekerLocation} onChange={handleChangeLocation} required />
+                        <Form.Control type="text" placeholder="Type in your school name... " value={seekerSchoolNameTxt} onChange={handleChangeSchool} required/>
                     </Form.Group>
                     <Form.Group id="educationType">
                         <Form.Label></Form.Label>
@@ -73,7 +68,7 @@ function SeekerEducation()
                     </Form.Group>
                     <Form.Group id="grade">
                         <Form.Label></Form.Label>
-                        <Form.Control type="text" placeholder="Type in your current grade..." value={seekerGrade} onChange={handleChangeGrade} required/>
+                        <Form.Control type="text" placeholder="Type in your grade..." value={seekerGrade} onChange={handleChangeGrade} required/>
                     </Form.Group>
                     <Button type="submit"> Next</Button>
                 </Form>

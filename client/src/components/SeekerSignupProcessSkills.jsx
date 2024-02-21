@@ -76,7 +76,7 @@ function SeekerSkills()
             const usersCollection=collection(db, "Seekers");
             const docRef=doc(usersCollection, name);
             const seekerSkillsUpdatedData={
-            Skills_txt: SeekTxtSkills,
+            skills: SeekTxtSkills,
         };
         await setDoc(docRef, seekerSkillsUpdatedData, {merge:true});
 
