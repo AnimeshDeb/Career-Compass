@@ -1,13 +1,13 @@
 import "./userpageSeeker.css";
-import Navbar from "../../../components/navbar/navbar.jsx"
-import { useEffect, useState } from 'react';
-import { getSeekerById } from '../../../functions/seekerFunctions.js';
-import Footer from "../../../components/footer/footer.jsx"
+import Navbar from "../../../components/navbar/navbar.jsx";
+import { useEffect, useState } from "react";
+import { getSeekerById } from "../../../functions/seekerFunctions.js";
+import Footer from "../../../components/footer/footer.jsx";
 import UserBanner from "../../../components/UserBanner/UserBanner.jsx";
 import UserMode from "./userMode/userMode.jsx";
 import EditMode from "./editMode/editMode.jsx";
 
-export default function UserSeeker() {
+export default function UserpageSeeker() {
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
   const [iconSize, setIconSize] = useState("2x");
   const [editMode, setEditMode] = useState(false);
@@ -15,11 +15,11 @@ export default function UserSeeker() {
   const [pendingChanges, setPendingChanges] = useState({});
 
   const handlePendingChange = (field, value, type) => {
-    setPendingChanges(prev => ({
+    setPendingChanges((prev) => ({
       ...prev,
       [field]: { value, type },
     }));
-    console.log(pendingChanges)
+    console.log(pendingChanges);
   };
   //Edit Mode
   const toggleEditMode = () => {
@@ -28,23 +28,23 @@ export default function UserSeeker() {
 
   //Icon Size
   useEffect(() => {
-      function handleResize() {
-          setWindowWidth(window.innerWidth);
-      }
+    function handleResize() {
+      setWindowWidth(window.innerWidth);
+    }
 
-      window.addEventListener('resize', handleResize);
-      handleResize();
+    window.addEventListener("resize", handleResize);
+    handleResize();
 
-      return () => window.removeEventListener('resize', handleResize);
+    return () => window.removeEventListener("resize", handleResize);
   }, []);
 
   useEffect(() => {
     if (windowWidth < 400) {
-        setIconSize("xs");
+      setIconSize("xs");
     } else if (windowWidth < 769) {
-        setIconSize("lg");
+      setIconSize("lg");
     } else {
-        setIconSize("2x");
+      setIconSize("2x");
     }
   }, [windowWidth]);
 
@@ -52,12 +52,12 @@ export default function UserSeeker() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const userId = 'i0xxrmCRV1bG9i6rAt4Xgprtmy83';
+        const userId = "i0xxrmCRV1bG9i6rAt4Xgprtmy83";
         const fetchedUserData = await getSeekerById(userId);
-        console.log(fetchedUserData)
+        console.log(fetchedUserData);
         setUserData(fetchedUserData);
       } catch (error) {
-        console.error('Error fetching user by ID:', error.message);
+        console.error("Error fetching user by ID:", error.message);
       }
     };
 
@@ -66,37 +66,38 @@ export default function UserSeeker() {
 
   return (
     <div className="main">
-      <Navbar className="nav" userType={"seeker"} iconSize={iconSize}/>
+      <Navbar className="nav" userType={"seeker"} iconSize={iconSize} />
       {userData && (
-            <UserBanner 
-             iconSize={iconSize} 
-             banner={userData.banner}
-             picture={userData.pictureURL}
-             name={userData.displayName}
-             onEdit={toggleEditMode}
-             editMode={editMode}
-             handlePendingChange={handlePendingChange}
-             pendingChanges={pendingChanges}/>
-        )}
+        <UserBanner
+          iconSize={iconSize}
+          banner={userData.banner}
+          picture={userData.pictureURL}
+          name={userData.displayName}
+          onEdit={toggleEditMode}
+          editMode={editMode}
+          handlePendingChange={handlePendingChange}
+          pendingChanges={pendingChanges}
+        />
+      )}
       {editMode ? (
         // Edit Mode
         <>
-          <EditMode 
-          pendingChanges={pendingChanges}
-          setPendingChanges={setPendingChanges} 
-          userId={'i0xxrmCRV1bG9i6rAt4Xgprtmy83'} 
-          iconSize={iconSize} userData={userData}/>
+          <EditMode
+            pendingChanges={pendingChanges}
+            setPendingChanges={setPendingChanges}
+            userId={"i0xxrmCRV1bG9i6rAt4Xgprtmy83"}
+            iconSize={iconSize}
+            userData={userData}
+          />
         </>
-      ):(
+      ) : (
         // Normal page
         <>
-          <UserMode iconSize={iconSize} userData={userData}/>
+          <UserMode iconSize={iconSize} userData={userData} />
         </>
       )}
-    
-    <Footer className="seek-footer"/>
+
+      <Footer className="seek-footer" />
     </div>
   );
 }
-
-

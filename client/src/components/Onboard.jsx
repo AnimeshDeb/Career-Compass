@@ -1,4 +1,3 @@
-import React from "react";
 import { Button, Container } from "react-bootstrap";
 import { Link } from "react-router-dom";
 
@@ -26,7 +25,7 @@ function Onboard() {
           fontSize: "1.5rem",
         }}
       >
-       <Link to="/SeekerLogin"> Seekers</Link>
+        <Link to="/SeekerLogin"> Seekers</Link>
       </Button>
       <Button
         variant="success"
@@ -36,7 +35,7 @@ function Onboard() {
           fontSize: "1.5rem",
         }}
       >
-       <Link to="/CompaniesLogin"> Companies</Link>
+        <Link to="/CompaniesLogin"> Companies</Link>
       </Button>
       <Button
         variant="danger"

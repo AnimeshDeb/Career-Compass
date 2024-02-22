@@ -7,7 +7,7 @@ import UserBanner from "../../../components/UserBanner/UserBanner.jsx";
 import EditMode from "./editMode/editMode.jsx";
 import UserMode from "./userMode/userMode.jsx";
 
-export default function UserCompany() {
+export default function UserpageCompany() {
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
   const [iconSize, setIconSize] = useState("2x");
   const [editMode, setEditMode] = useState(false);
