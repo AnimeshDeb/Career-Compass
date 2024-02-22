@@ -1,4 +1,4 @@
-button {
+.general-btn{
     background-color: var(--primary_color);
     color: #fff; 
     width: 50px; 
@@ -17,19 +17,19 @@ button {
     overflow: hidden; 
   }
   
-  button:hover {
+  .general-btn:hover {
     background-color: #fff;
   }
   
-  button:hover i, button:hover svg {
+  .general-btn:hover i, .general-btn:hover svg {
     color: var(--primary_color);
   }
   
-  button:active {
+  .general-btn:active {
     transform: translateY(4px);
   }
   
-  button::after {
+  .general-btn::after {
     content: '';
     position: absolute;
     top: 0;
@@ -43,7 +43,7 @@ button {
     transform: scale(0);
   }
   
-  button:hover::after {
+  .general-btn:hover::after {
     opacity: 1;
     transform: scale(1.2);
   }

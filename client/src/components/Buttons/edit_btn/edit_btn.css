@@ -12,7 +12,7 @@
   margin-left: 20px;
   transition: background-color 0.7s;
 }
-button:hover {
+.edit-btn:hover {
   background-color: #fff;
   color: var(--primary_color);
 }
