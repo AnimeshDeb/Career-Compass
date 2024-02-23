@@ -5,6 +5,7 @@ import {
   updateUserField,
 } from "../../../../functions/seekerFunctions";
 import PropTypes from "prop-types";
+import { useState } from "react";
 
 export default function EditMode({
   userData,
@@ -12,6 +13,15 @@ export default function EditMode({
   pendingChanges,
   setPendingChanges,
 }) {
+  const [markedForDeletion, setMarkedForDeletion] = useState([]);
+
+  const markForDeletion = (index) => {
+    setMarkedForDeletion((current) => [...current, index]);
+  };
+
+  const undoMarkForDeletion = (index) => {
+    setMarkedForDeletion((current) => current.filter((i) => i !== index));
+  };
   const handleChange = (event, type, field) => {
     let newChange = event.target.files[0];
     if (type === "text") {
@@ -23,6 +33,7 @@ export default function EditMode({
       [`${field}`]: { value: newChange, type },
     }));
   };
+
   const saveChanges = async () => {
     const updates = Object.entries(pendingChanges).map(
       async ([field, { value, type }]) => {
@@ -60,6 +71,7 @@ export default function EditMode({
         return (
           <input
             type="text"
+            value={pendingData}
             onChange={(e) => handleChange(e, dataType, field, index)}
           />
         );
@@ -92,6 +104,34 @@ export default function EditMode({
           </div>
         );
       }
+      case "reference": {
+        if (markedForDeletion.includes(index)) {
+          return (
+            <div className="reference-item" key={index}>
+              <button onClick={() => undoMarkForDeletion(index)}>Back</button>
+            </div>
+          );
+        }
+
+        return (
+          <div className="reference-item" key={index}>
+            <div className="top-company">
+              <h3 className="company-name">
+                {pendingData.name}, {pendingData.company}
+              </h3>
+              <h3 className="company-email">{pendingData.email}</h3>
+              <button
+                className="delete-reference"
+                onClick={() => markForDeletion(index)}
+              >
+                X
+              </button>
+            </div>
+            <p>{pendingData.desc}</p>
+          </div>
+        );
+      }
+
       default:
         return null;
     }
@@ -175,17 +215,15 @@ export default function EditMode({
       {userData && (
         <section className="sec references-sec">
           <h2>References</h2>
-          {userData.references.map((reference, index) => (
-            <div className="reference-item" key={index}>
-              <div className="top-company">
-                <h3 className="company-name">
-                  {reference.name}, {reference.company},
-                </h3>
-                <h3 className="company-email">{reference.email}</h3>
-              </div>
-              <p>{reference.desc}</p>
-            </div>
-          ))}
+          {userData.references.map((reference, index) =>
+            renderEditableView(
+              "reference",
+              reference,
+              "references",
+              "testseeker",
+              index
+            )
+          )}
         </section>
       )}
     </>
