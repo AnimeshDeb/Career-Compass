@@ -54,7 +54,6 @@ export default function UserpageSeeker() {
       try {
         const userId = "i0xxrmCRV1bG9i6rAt4Xgprtmy83";
         const fetchedUserData = await getSeekerById(userId);
-        console.log(fetchedUserData);
         setUserData(fetchedUserData);
       } catch (error) {
         console.error("Error fetching user by ID:", error.message);

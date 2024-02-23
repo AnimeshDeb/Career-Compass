@@ -3,6 +3,7 @@ import {
   uploadFileToStorage,
   deleteFilesInFolder,
   updateUserField,
+  deleteReference,
 } from "../../../../functions/seekerFunctions";
 import PropTypes from "prop-types";
 import { useState } from "react";
@@ -17,11 +18,34 @@ export default function EditMode({
 
   const markForDeletion = (index) => {
     setMarkedForDeletion((current) => [...current, index]);
+    const referenceToDelete = userData.references[index];
+    if (referenceToDelete) {
+      const identifier = referenceToDelete.email;
+      setPendingChanges((prevChanges) => ({
+        ...prevChanges,
+        [`delete_${identifier}`]: { type: "delete", value: referenceToDelete },
+      }));
+    } else {
+      console.error("Reference to delete not found at index:", index);
+    }
   };
 
-  const undoMarkForDeletion = (index) => {
-    setMarkedForDeletion((current) => current.filter((i) => i !== index));
-  };
+
+  const revertChange = (field) => {
+  if (field.startsWith("delete_")) {
+    const identifier = field.replace("delete_", "");
+    const referenceIndex = userData.references.findIndex(ref => ref.email === identifier); // Adjust based on your identifier
+    if (referenceIndex !== -1) {
+      setMarkedForDeletion(current => current.filter(index => index !== referenceIndex));
+    }
+  }
+
+  setPendingChanges((currentChanges) => {
+    const updatedChanges = { ...currentChanges };
+    delete updatedChanges[field];
+    return updatedChanges;
+  });
+};
   const handleChange = (event, type, field) => {
     let newChange = event.target.files[0];
     if (type === "text") {
@@ -35,8 +59,21 @@ export default function EditMode({
   };
 
   const saveChanges = async () => {
+    const updatedReferences = userData.references.filter((ref, index) => 
+    !markedForDeletion.includes(index));
+
+    try {
+      const deletionPromises = markedForDeletion.map(async (index) => {
+        const refFields = userData.references[index];
+        if (refFields) {
+          await deleteReference(userId, refFields);
+        } else {
+          console.error("Invalid reference fields:", refFields);
+        }
+      });
     const updates = Object.entries(pendingChanges).map(
       async ([field, { value, type }]) => {
+        console.log(field, value, type)
         const updateObject = {};
         if (type === "text") {
           updateObject[field] = value;
@@ -47,13 +84,12 @@ export default function EditMode({
           const newPath = await uploadFileToStorage(value, storeChange);
           updateObject[field] = newPath;
         }
-        console.log(updateObject);
         updateUserField(updateObject, userId);
       }
     );
 
-    try {
-      await Promise.all(updates);
+    await Promise.all([...deletionPromises, ...updates]);
+
       console.log("All changes saved successfully.");
       setPendingChanges({});
     } catch (error) {
@@ -105,27 +141,17 @@ export default function EditMode({
         );
       }
       case "reference": {
-        if (markedForDeletion.includes(index)) {
-          return (
-            <div className="reference-item" key={index}>
-              <button onClick={() => undoMarkForDeletion(index)}>Back</button>
-            </div>
-          );
+        const identifier = index; // Example, adjust based on your data
+        if (markedForDeletion.includes(identifier)) {
+          return null;
         }
-
+      
         return (
-          <div className="reference-item" key={index}>
+          <div className="reference-item" key={identifier}>
             <div className="top-company">
-              <h3 className="company-name">
-                {pendingData.name}, {pendingData.company}
-              </h3>
+              <h3 className="company-name">{pendingData.name}, {pendingData.company}</h3>
               <h3 className="company-email">{pendingData.email}</h3>
-              <button
-                className="delete-reference"
-                onClick={() => markForDeletion(index)}
-              >
-                X
-              </button>
+              <button className="delete-reference" onClick={() => markForDeletion(identifier)}>X</button>
             </div>
             <p>{pendingData.desc}</p>
           </div>
@@ -139,6 +165,21 @@ export default function EditMode({
   return (
     <>
       <button onClick={saveChanges}>Save changes</button>
+      <div className="pending-changes">
+  {Object.entries(pendingChanges).map(([key, change]) => {
+    // Determine if the change is a deletion
+    const isDeletion = key.startsWith("delete_");
+    const displayKey = isDeletion ? key.replace("delete_", "") : key;
+    return (
+      <div key={key} className="pending-change">
+        <span>
+          {displayKey}: {isDeletion ? "Marked for deletion - " + change.value.name : change.value}
+        </span>
+        <button onClick={() => revertChange(key)}>X</button>
+      </div>
+    );
+  })}
+</div>
       {userData && (
         <section className="sec intro-sec">
           <div className="intro-vid">
@@ -220,7 +261,6 @@ export default function EditMode({
               "reference",
               reference,
               "references",
-              "testseeker",
               index
             )
           )}
@@ -247,8 +287,8 @@ EditMode.propTypes = {
         desc: PropTypes.string,
       })
     ),
-    challenges: PropTypes.array,
-    skills: PropTypes.array,
+    challenges: PropTypes.string,
+    skills: PropTypes.string,
     introduction: PropTypes.string,
     banner: PropTypes.string,
     pictureURL: PropTypes.string,

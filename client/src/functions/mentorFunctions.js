@@ -17,7 +17,16 @@ const deleteFilesInFolder = async (folderPath) => {
     throw error;
   }
 };
-
+const deleteImageFromStorage = async (imageUrl) => {
+  const imageRef = storageRef(storage, imageUrl);
+  try {
+    await deleteObject(imageRef);
+    console.log('Image deleted successfully');
+  } catch (error) {
+    console.error('Error deleting image:', error);
+    throw error;
+  }
+};
 const uploadFileToStorage = async (file, path) => {
   try {
     const fileRef = storageRef(storage, path);
@@ -64,4 +73,4 @@ const getMentorById = async (userId) => {
     }
   };
 
-export { uploadFileToStorage, deleteFilesInFolder, updateUserField, getMentorById };
+export { deleteImageFromStorage, uploadFileToStorage, deleteFilesInFolder, updateUserField, getMentorById };

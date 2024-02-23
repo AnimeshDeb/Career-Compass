@@ -1,6 +1,7 @@
 import Carousel from "react-multi-carousel";
 import "react-multi-carousel/lib/styles.css";
 import PropTypes from "prop-types";
+import { useState } from "react";
 import {
   deleteFilesInFolder,
   uploadFileToStorage,
@@ -31,13 +32,35 @@ export default function EditMode({
   pendingChanges,
   setPendingChanges,
 }) {
+  const [currentGallery, setCurrentGallery] = useState(userData.gallery);
+
+  const handleDeleteImage = (index) => {
+    const imageToDelete = currentGallery[index];
+    // Remove the image from the current gallery state
+    const newGallery = currentGallery.filter((_, i) => i !== index);
+    setCurrentGallery(newGallery);
+    // Add the deletion to pendingChanges
+    setPendingChanges((prevChanges) => ({
+      ...prevChanges,
+      [`delete_gallery_${imageToDelete.imageURL}`]: { type: "delete", value: imageToDelete },
+    }));
+  };
+
+  const handleNewImage = (event) => {
+    if (event.target.files && event.target.files[0]) {
+      const newImageFile = event.target.files[0];
+      const newImageIndex = userData.gallery.length;
+      setPendingChanges((prevChanges) => ({
+        ...prevChanges,
+        [`new_gallery_${newImageIndex}`]: { type: "new", value: newImageFile },
+      }));
+    }
+  };
   const renderEditableView = (dataType, data, field, index = null) => {
     const pendingKey = `${field}`;
     const pendingData = pendingChanges[pendingKey]
       ? pendingChanges[pendingKey].value
       : data;
-    console.log(pendingKey, pendingChanges, pendingData);
-
     switch (dataType) {
       case "text":
         return (
@@ -141,17 +164,14 @@ export default function EditMode({
       <section className="men-sec gallery-sec">
         <h2>Gallery</h2>
         {userData && (
-          <Carousel
-            responsive={responsive}
-            autoPlay={true}
-            autoPlaySpeed={3000}
-          >
-            {userData.gallery.map((image, index) => (
-              <div className="gallery-item" key={index}>
-                <img src={image.imageURL} alt="Picture" />
-              </div>
-            ))}
-          </Carousel>
+          <Carousel responsive={responsive} autoPlay={true} autoPlaySpeed={3000}>
+          {currentGallery.map((image, index) => (
+            <div className="gallery-item" key={index}>
+              <button onClick={() => handleDeleteImage(index)}>X</button>
+              <img src={image.imageURL} alt="Picture" />
+            </div>
+          ))}
+        </Carousel>
         )}
       </section>
     </div>
