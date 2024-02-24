@@ -36,23 +36,40 @@ export default function EditMode({
 
   const handleDeleteImage = (index) => {
     const imageToDelete = currentGallery[index];
-    // Remove the image from the current gallery state
     const newGallery = currentGallery.filter((_, i) => i !== index);
     setCurrentGallery(newGallery);
-    // Add the deletion to pendingChanges
     setPendingChanges((prevChanges) => ({
       ...prevChanges,
-      [`delete_gallery_${imageToDelete.imageURL}`]: { type: "delete", value: imageToDelete },
+      [`delete_gallery_${imageToDelete.imageURL}`]: {
+        type: "image",
+        value: imageToDelete,
+      },
     }));
   };
 
   const handleNewImage = (event) => {
     if (event.target.files && event.target.files[0]) {
       const newImageFile = event.target.files[0];
-      const newImageIndex = userData.gallery.length;
+      const objectURL = URL.createObjectURL(newImageFile);
+
+      const newImageCount = Object.keys(pendingChanges).filter((key) =>
+        key.startsWith("new_gallery_")
+      ).length;
+      const tempId = `new_gallery_${currentGallery.length + newImageCount}`;
+
+      const newGalleryItem = {
+        imageURL: objectURL,
+        tempId: tempId, // Unique identifier for newly added images
+      };
+
+      setCurrentGallery((currentGallery) => [
+        ...currentGallery,
+        newGalleryItem,
+      ]);
+
       setPendingChanges((prevChanges) => ({
         ...prevChanges,
-        [`new_gallery_${newImageIndex}`]: { type: "new", value: newImageFile },
+        [tempId]: { type: "image", value: newImageFile },
       }));
     }
   };
@@ -72,7 +89,6 @@ export default function EditMode({
             />
           </>
         );
-      case "image":
       case "video": {
         const inputId = `file-input-${field}-${index}`;
         const fileUrl =
@@ -122,32 +138,88 @@ export default function EditMode({
   const saveChanges = async () => {
     const updates = Object.entries(pendingChanges).map(
       async ([field, { value, type }]) => {
+        console.log(field, type, value);
         const updateObject = {};
         if (type === "text") {
           updateObject[field] = value;
+          await updateUserField(updateObject, userId);
+        } else if (type === "image") {
+          const storeChange = `${deletePrevious}/${field}`;
+          const newPath = await uploadFileToStorage(value, storeChange);
+          updateObject[field] = newPath;
+          await updateUserGallery(updateObject, userId);
         } else {
           const deletePrevious = `Users/Mentors/${userData.displayName}/${field}/`;
           await deleteFilesInFolder(deletePrevious);
           const storeChange = `${deletePrevious}/${field}_${userData.displayName}`;
           const newPath = await uploadFileToStorage(value, storeChange);
           updateObject[field] = newPath;
+          await updateUserField(updateObject, userId);
         }
-        console.log(updateObject);
-        updateUserField(updateObject, userId);
       }
     );
 
     try {
       await Promise.all(updates);
       console.log("All changes saved successfully.");
+      const newGallery = pendingChanges["gallery"]
+        ? [...currentGallery, pendingChanges["gallery"].value]
+        : currentGallery;
+      setCurrentGallery(
+        newGallery.filter(
+          (image) => !pendingChanges[`delete_gallery_${image.imageURL}`]
+        )
+      );
+      setPendingChanges({});
     } catch (error) {
       console.error("Error saving changes:", error);
     }
-    setPendingChanges({});
+  };
+
+  const revertChange = (field) => {
+    const updatedChanges = { ...pendingChanges };
+
+    if (field.startsWith("delete_gallery_")) {
+      const imageInfo = pendingChanges[field].value;
+      setCurrentGallery((current) => [...current, imageInfo]);
+    }
+
+    if (field.startsWith("new_gallery_")) {
+      setCurrentGallery((currentGallery) =>
+        currentGallery.filter((image) => image.tempId !== field)
+      );
+    }
+
+    delete updatedChanges[field];
+    setPendingChanges(updatedChanges);
   };
   return (
     <div>
       <button onClick={saveChanges}>Save changes</button>
+      <div className="pending-changes">
+        {Object.entries(pendingChanges).map(([key, change]) => {
+          const isDeletion = key.startsWith("delete_");
+          const isFileChange = change.type === "video" || "pictureURL";
+          const displayKey = isDeletion ? key.replace("delete_", "") : key;
+          let displayValue;
+          if (isDeletion) {
+            displayValue = "Marked for deletion - " + change.value.name;
+          } else if (isFileChange) {
+            displayValue = `File selected - ${change.value.name}`;
+          } else {
+            displayValue = change.value;
+          }
+
+          return (
+            <div key={key} className="pending-change">
+              <span>
+                {displayKey}: {displayValue}
+              </span>
+              <button onClick={() => revertChange(key)}>X</button>
+            </div>
+          );
+        })}
+      </div>
       {userData && (
         <section className="men-sec men-intro-sec">
           <h2>Introduction</h2>
@@ -164,15 +236,33 @@ export default function EditMode({
       <section className="men-sec gallery-sec">
         <h2>Gallery</h2>
         {userData && (
-          <Carousel responsive={responsive} autoPlay={true} autoPlaySpeed={3000}>
-          {currentGallery.map((image, index) => (
-            <div className="gallery-item" key={index}>
-              <button onClick={() => handleDeleteImage(index)}>X</button>
-              <img src={image.imageURL} alt="Picture" />
-            </div>
-          ))}
-        </Carousel>
+          <Carousel
+            responsive={responsive}
+            autoPlay={true}
+            autoPlaySpeed={3000}
+          >
+            {currentGallery.map((image, index) => {
+              const isExistingImage = userData.gallery.some(
+                (galleryImage) => galleryImage.imageURL === image.imageURL
+              );
+              return (
+                <div className="gallery-item" key={index}>
+                  {isExistingImage && (
+                    <button onClick={() => handleDeleteImage(index)}>X</button>
+                  )}
+                  <img src={image.imageURL} alt="Picture" />
+                </div>
+              );
+            })}
+          </Carousel>
         )}
+        <label htmlFor={1}>Upload New Image</label>
+        <input
+          id={1}
+          type="file"
+          onChange={(e) => handleNewImage(e)}
+          accept="image/*"
+        />
       </section>
     </div>
   );

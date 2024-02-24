@@ -30,28 +30,31 @@ export default function EditMode({
     }
   };
 
-
   const revertChange = (field) => {
-  if (field.startsWith("delete_")) {
-    const identifier = field.replace("delete_", "");
-    const referenceIndex = userData.references.findIndex(ref => ref.email === identifier); // Adjust based on your identifier
-    if (referenceIndex !== -1) {
-      setMarkedForDeletion(current => current.filter(index => index !== referenceIndex));
+    if (field.startsWith("delete_")) {
+      const identifier = field.replace("delete_", "");
+      const referenceIndex = userData.references.findIndex(
+        (ref) => ref.email === identifier
+      );
+      if (referenceIndex !== -1) {
+        setMarkedForDeletion((current) =>
+          current.filter((index) => index !== referenceIndex)
+        );
+      }
     }
-  }
 
-  setPendingChanges((currentChanges) => {
-    const updatedChanges = { ...currentChanges };
-    delete updatedChanges[field];
-    return updatedChanges;
-  });
-};
+    setPendingChanges((currentChanges) => {
+      const updatedChanges = { ...currentChanges };
+      delete updatedChanges[field];
+      return updatedChanges;
+    });
+  };
   const handleChange = (event, type, field) => {
     let newChange = event.target.files[0];
     if (type === "text") {
       newChange = event.target.value;
     }
-
+    console.log(type, field);
     setPendingChanges((prevChanges) => ({
       ...prevChanges,
       [`${field}`]: { value: newChange, type },
@@ -59,8 +62,9 @@ export default function EditMode({
   };
 
   const saveChanges = async () => {
-    const updatedReferences = userData.references.filter((ref, index) => 
-    !markedForDeletion.includes(index));
+    const updatedReferences = userData.references.filter(
+      (ref, index) => !markedForDeletion.includes(index)
+    );
 
     try {
       const deletionPromises = markedForDeletion.map(async (index) => {
@@ -71,24 +75,24 @@ export default function EditMode({
           console.error("Invalid reference fields:", refFields);
         }
       });
-    const updates = Object.entries(pendingChanges).map(
-      async ([field, { value, type }]) => {
-        console.log(field, value, type)
-        const updateObject = {};
-        if (type === "text") {
-          updateObject[field] = value;
-        } else {
-          const deletePrevious = `Users/Seekers/${userData.displayName}/${field}/`;
-          await deleteFilesInFolder(deletePrevious);
-          const storeChange = `${deletePrevious}/${field}_${userData.displayName}`;
-          const newPath = await uploadFileToStorage(value, storeChange);
-          updateObject[field] = newPath;
+      const updates = Object.entries(pendingChanges).map(
+        async ([field, { value, type }]) => {
+          console.log(field, value, type);
+          const updateObject = {};
+          if (type === "text") {
+            updateObject[field] = value;
+          } else {
+            const deletePrevious = `Users/Seekers/${userData.displayName}/${field}/`;
+            await deleteFilesInFolder(deletePrevious);
+            const storeChange = `${deletePrevious}/${field}_${userData.displayName}`;
+            const newPath = await uploadFileToStorage(value, storeChange);
+            updateObject[field] = newPath;
+          }
+          updateUserField(updateObject, userId);
         }
-        updateUserField(updateObject, userId);
-      }
-    );
+      );
 
-    await Promise.all([...deletionPromises, ...updates]);
+      await Promise.all([...updates, ...deletionPromises]);
 
       console.log("All changes saved successfully.");
       setPendingChanges({});
@@ -101,13 +105,11 @@ export default function EditMode({
     const pendingData = pendingChanges[pendingKey]
       ? pendingChanges[pendingKey].value
       : data;
-
     switch (dataType) {
       case "text":
         return (
           <input
             type="text"
-            value={pendingData}
             onChange={(e) => handleChange(e, dataType, field, index)}
           />
         );
@@ -145,13 +147,20 @@ export default function EditMode({
         if (markedForDeletion.includes(identifier)) {
           return null;
         }
-      
+
         return (
           <div className="reference-item" key={identifier}>
             <div className="top-company">
-              <h3 className="company-name">{pendingData.name}, {pendingData.company}</h3>
+              <h3 className="company-name">
+                {pendingData.name}, {pendingData.company}
+              </h3>
               <h3 className="company-email">{pendingData.email}</h3>
-              <button className="delete-reference" onClick={() => markForDeletion(identifier)}>X</button>
+              <button
+                className="delete-reference"
+                onClick={() => markForDeletion(identifier)}
+              >
+                X
+              </button>
             </div>
             <p>{pendingData.desc}</p>
           </div>
@@ -166,20 +175,30 @@ export default function EditMode({
     <>
       <button onClick={saveChanges}>Save changes</button>
       <div className="pending-changes">
-  {Object.entries(pendingChanges).map(([key, change]) => {
-    // Determine if the change is a deletion
-    const isDeletion = key.startsWith("delete_");
-    const displayKey = isDeletion ? key.replace("delete_", "") : key;
-    return (
-      <div key={key} className="pending-change">
-        <span>
-          {displayKey}: {isDeletion ? "Marked for deletion - " + change.value.name : change.value}
-        </span>
-        <button onClick={() => revertChange(key)}>X</button>
+        {Object.entries(pendingChanges).map(([key, change]) => {
+          const isDeletion = key.startsWith("delete_");
+          const isFileChange = change.type === "video" || "pictureURL";
+          const displayKey = isDeletion ? key.replace("delete_", "") : key;
+          console.log(pendingChanges, isDeletion, isFileChange, displayKey);
+          let displayValue;
+          if (isDeletion) {
+            displayValue = "Marked for deletion - " + change.value.name;
+          } else if (isFileChange) {
+            displayValue = `File selected - ${change.value.name}`;
+          } else {
+            displayValue = change.value;
+          }
+
+          return (
+            <div key={key} className="pending-change">
+              <span>
+                {displayKey}: {displayValue}
+              </span>
+              <button onClick={() => revertChange(key)}>X</button>
+            </div>
+          );
+        })}
       </div>
-    );
-  })}
-</div>
       {userData && (
         <section className="sec intro-sec">
           <div className="intro-vid">
@@ -257,12 +276,7 @@ export default function EditMode({
         <section className="sec references-sec">
           <h2>References</h2>
           {userData.references.map((reference, index) =>
-            renderEditableView(
-              "reference",
-              reference,
-              "references",
-              index
-            )
+            renderEditableView("reference", reference, "references", index)
           )}
         </section>
       )}

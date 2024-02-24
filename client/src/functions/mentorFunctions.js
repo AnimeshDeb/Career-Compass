@@ -1,4 +1,4 @@
-import { getDoc, doc, collection, getDocs, updateDoc } from 'firebase/firestore';
+import { getDoc,addDoc, doc, collection, getDocs, updateDoc } from 'firebase/firestore';
 import { db, storage } from '../firebase';
 import { getDownloadURL, ref as storageRef, uploadBytes, listAll, deleteObject  } from 'firebase/storage';
 
@@ -38,7 +38,17 @@ const uploadFileToStorage = async (file, path) => {
     throw error;
   }
 };
-
+const updateUserGallery = async(object, userId) =>{
+  try{
+    const userDocRef = doc(db, 'Mentors', userId);
+    const gallerySubcollectionRef = collection(userDocRef, "gallery");
+  
+    await addDoc(gallerySubcollectionRef, object)
+  } catch(error){
+    console.log("Error updating gallery:", error.message);
+    throw error;
+  }
+}
 const updateUserField = async(object,userId)=>{
   try{
     const userDocRef = doc(db, 'Mentors', userId);
