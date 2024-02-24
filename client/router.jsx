@@ -40,6 +40,7 @@ import SeekerChallenges from "./src/components/SeekerChallengers.jsx";
 import SeekerEducation from "./src/components/SeekerEducation.jsx";
 import SeekerJobs from "./src/components/SeekerJobs.jsx";
 import SeekerProfilepic from "./src/components/SeekerProfilepic.jsx";
+import JobList from './src/components/JobList.jsx';
 
 export const router = createBrowserRouter([
   // {
@@ -249,12 +250,19 @@ export const router = createBrowserRouter([
     ),
   },
   {
+    
+      path: '/Joblist',
+      element: <JobList />,
+    
+  },
+  {
     path: "/SeekerForgotPassword",
     element: (
       <SeekerAuthProvider>
         <SeekerUpdateProfile />
       </SeekerAuthProvider>
     ),
+    
   },
   { path: "/user", element: <UserpageSeeker /> },
   { path: "/mentor", element: <UserpageMentor /> },
