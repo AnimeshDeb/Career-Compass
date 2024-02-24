@@ -6,6 +6,8 @@ import {
   deleteFilesInFolder,
   uploadFileToStorage,
   updateUserField,
+  updateUserGallery,
+  deleteImageFromStorage,
 } from "../../../../functions/mentorFunctions";
 const responsive = {
   superLargeDesktop: {
@@ -41,7 +43,7 @@ export default function EditMode({
     setPendingChanges((prevChanges) => ({
       ...prevChanges,
       [`delete_gallery_${imageToDelete.imageURL}`]: {
-        type: "image",
+        type: "deleteImage",
         value: imageToDelete,
       },
     }));
@@ -59,7 +61,7 @@ export default function EditMode({
 
       const newGalleryItem = {
         imageURL: objectURL,
-        tempId: tempId, // Unique identifier for newly added images
+        tempId: tempId,
       };
 
       setCurrentGallery((currentGallery) => [
@@ -144,10 +146,12 @@ export default function EditMode({
           updateObject[field] = value;
           await updateUserField(updateObject, userId);
         } else if (type === "image") {
-          const storeChange = `${deletePrevious}/${field}`;
-          const newPath = await uploadFileToStorage(value, storeChange);
-          updateObject[field] = newPath;
+          const storagePath = `Users/Mentors/${userData.displayName}/gallery/${field}`;
+          const newPath = await uploadFileToStorage(value, storagePath);
+          updateObject["imageURL"] = newPath;
           await updateUserGallery(updateObject, userId);
+        } else if (type === "deleteImage") {
+          await deleteImageFromStorage(userId, value.imageURL); // Ensure this matches how you call this function
         } else {
           const deletePrevious = `Users/Mentors/${userData.displayName}/${field}/`;
           await deleteFilesInFolder(deletePrevious);
@@ -158,7 +162,6 @@ export default function EditMode({
         }
       }
     );
-
     try {
       await Promise.all(updates);
       console.log("All changes saved successfully.");
