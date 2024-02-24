@@ -1,27 +1,22 @@
 // client/src/components/JobList.jsx
-import React, { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
-import { collection, getDocs } from 'firebase/firestore';
-import { db } from '../firebase';
-import { getJobListings } from '../functions/jobFunctions';
+import { useEffect, useState } from "react";
+import { getJobListings } from "../functions/jobFunctions";
 
 const JobListing = ({ job }) => {
   // ... (JobListing code remains unchanged)
 };
 
 const JobList = () => {
-  const [searchTerm, setSearchTerm] = useState('');
+  const [searchTerm, setSearchTerm] = useState("");
   const [jobs, setJobs] = useState(null);
-
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const fetchedJob = await getJobListings();
-        setJobs(fetchedJob);
-    console.log(jobs)
+        const fetchedJobs = await getJobListings();
+        setJobs(fetchedJobs);
       } catch (error) {
-        console.error("Error fetching user by ID:", error.message);
+        console.error("Error fetching jobs:", error.message);
       }
     };
 
@@ -49,32 +44,15 @@ const JobList = () => {
   return (
     <div>
       <h1>Job Listings</h1>
-      {/* <input
-        type="text"
-        placeholder="Search for jobs..."
-        value={searchTerm}
-        onChange={handleSearchChange}
-        style={{ marginBottom: '10px' }} // Adjust style as needed
-      /> */}
-    {jobs.map((job, index) => (
-        <>
-          <h1 key={index}>{job.id}</h1>
-        </>
-      ))}
-
-      <div style={{ 
-        display: searchTerm ? 'block' : 'none', // Only display the box if there is a search term
-        border: '1px solid #ddd', // Example box border
-        padding: '10px', // Example padding inside the box
-        borderRadius: '5px', // Example border radius
-        maxHeight: '300px', // Maximum height of the box
-        overflowY: 'auto' // Scroll for overflow content
-      }}>
-        {/* Render the JobListing component for each filtered job */}
-        {filteredJobs.map((job) => (
-          <JobListing key={job.id} job={job} />
-        ))}
-      </div>
+      {jobs ? (
+        jobs.map((job, index) => (
+          <div key={index}>
+            <h2>{job.id}</h2>
+          </div>
+        ))
+      ) : (
+        <p>Loading jobs...</p>
+      )}
     </div>
   );
 };
