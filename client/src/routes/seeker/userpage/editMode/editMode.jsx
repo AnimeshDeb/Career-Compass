@@ -138,7 +138,12 @@ export default function EditMode({
           <div className={`media-container ${dataType}`}>
             {fileUrl ? (
               dataType === "video" ? (
-                renderTextVideo(userData.challenges)
+                <>
+                  <video key={`${index}_${new Date().getTime()}`} controls>
+                    <source src={fileUrl} type="video/mp4" />
+                    Your browser does not support the video tag.
+                  </video>
+                </>
               ) : (
                 <img src={fileUrl} alt={field} />
               )

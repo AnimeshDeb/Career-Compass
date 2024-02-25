@@ -17,7 +17,6 @@ export default function UserBanner({
     handlePendingChange(field, newChange, type);
   };
 
-  // Use process.env.PUBLIC_URL to reference images in the public folder
   const placeholderBanner = "/placeholderBanner.jpg";
   const placeholderPFP = "/placeholderPFP.png";
   const renderUrlImage = (dataType, data, field) => {
