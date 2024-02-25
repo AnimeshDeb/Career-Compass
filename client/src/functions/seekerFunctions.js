@@ -33,6 +33,7 @@ const deleteReference = async (userId, refFields) => {
 }
 const uploadFileToStorage = async (file, path) => {
   try {
+    console.log(file,path)
     const fileRef = storageRef(storage, path);
     await uploadBytes(fileRef, file);
     const downloadURL = await getDownloadURL(fileRef);

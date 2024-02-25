@@ -19,7 +19,6 @@ export default function UserpageSeeker() {
       ...prev,
       [field]: { value, type },
     }));
-    console.log(pendingChanges);
   };
   //Edit Mode
   const toggleEditMode = () => {

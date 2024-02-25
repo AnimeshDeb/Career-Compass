@@ -20,7 +20,6 @@ export default function UserpageMentor() {
       ...prev,
       [field]: { value, type },
     }));
-    console.log(pendingChanges);
   };
   //Edit Mode
   const toggleEditMode = () => {
@@ -51,9 +50,8 @@ export default function UserpageMentor() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const userId = "42Aw4GuY4bsANuED2UEY";
+        const userId = "a0MqGXB2hlJ5uJNheiKX";
         const fetchedUserData = await getMentorById(userId);
-        console.log(fetchedUserData);
         setUserData(fetchedUserData);
       } catch (error) {
         console.error("Error fetching user by ID:", error.message);
@@ -89,7 +87,7 @@ export default function UserpageMentor() {
           <EditMode
             pendingChanges={pendingChanges}
             setPendingChanges={setPendingChanges}
-            userId={"42Aw4GuY4bsANuED2UEY"}
+            userId={"a0MqGXB2hlJ5uJNheiKX"}
             iconSize={iconSize}
             userData={userData}
           />

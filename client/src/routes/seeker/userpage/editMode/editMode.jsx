@@ -54,7 +54,6 @@ export default function EditMode({
     if (type === "text") {
       newChange = event.target.value;
     }
-    console.log(type, field);
     setPendingChanges((prevChanges) => ({
       ...prevChanges,
       [`${field}`]: { value: newChange, type },
@@ -100,50 +99,66 @@ export default function EditMode({
       console.error("Error saving changes:", error);
     }
   };
+  const renderTextVideo = (content) => {
+    if (content.startsWith("http")) {
+      return (
+        <video controls>
+          <source src={content} type="video/mp4" />
+          Your browser does not support the video tag.
+        </video>
+      );
+    } else {
+      return <p>{content}</p>;
+    }
+  };
   const renderEditableView = (dataType, data, field, index = null) => {
     const pendingKey = `${field}`;
     const pendingData = pendingChanges[pendingKey]
       ? pendingChanges[pendingKey].value
       : data;
+    const inputId = `file-input-${field}-${index}`;
+
     switch (dataType) {
       case "text":
         return (
           <input
             type="text"
+            value={pendingData || ""}
             onChange={(e) => handleChange(e, dataType, field, index)}
           />
         );
       case "image":
       case "video": {
-        const inputId = `file-input-${field}-${index}`;
         const fileUrl =
           dataType === "video" && pendingData instanceof File
             ? URL.createObjectURL(pendingData)
             : pendingData;
+
         return (
           <div className={`media-container ${dataType}`}>
-            {dataType === "video" ? (
-              <>
-                <video key={`${index}_${new Date().getTime()}`} controls>
-                  <source src={fileUrl} type="video/mp4" />
-                  Your browser does not support the video tag.
-                </video>
-                <label htmlFor={inputId}>Upload New Video</label>
-                <input
-                  id={inputId}
-                  type="file"
-                  onChange={(e) => handleChange(e, dataType, field, index)}
-                  accept="video/*"
-                />
-              </>
+            {fileUrl ? (
+              dataType === "video" ? (
+                renderTextVideo(userData.challenges)
+              ) : (
+                <img src={fileUrl} alt={field} />
+              )
             ) : (
-              <img src={fileUrl} alt={field} />
+              <p>Insert New Info Here</p>
             )}
+            <label htmlFor={inputId}>
+              Upload New {dataType === "video" ? "Video" : "Image"}
+            </label>
+            <input
+              id={inputId}
+              type="file"
+              onChange={(e) => handleChange(e, dataType, field, index)}
+              accept={dataType === "video" ? "video/*" : "image/*"}
+            />
           </div>
         );
       }
       case "reference": {
-        const identifier = index; // Example, adjust based on your data
+        const identifier = index;
         if (markedForDeletion.includes(identifier)) {
           return null;
         }

@@ -2,6 +2,7 @@ import Carousel from "react-multi-carousel";
 import "react-multi-carousel/lib/styles.css";
 import Audio_Btn from "../../../../components/Buttons/audio__btn/audio_btn";
 import PropTypes from "prop-types";
+
 const responsive = {
   superLargeDesktop: {
     breakpoint: { max: 4000, min: 3000 },
@@ -20,46 +21,59 @@ const responsive = {
     items: 1,
   },
 };
+
 export default function UserMode({ userData, iconSize }) {
   return (
     <div>
-      {userData && (
-        <section className="men-sec men-intro-sec">
-          <h2>Introduction</h2>
-          <div className="men-intro-content">
-            <p>{userData.intro_text}</p>
-            <Audio_Btn
-              className="audio-btn"
-              audioSrc={userData.intro_audio}
-              iconSize={iconSize}
-            ></Audio_Btn>
-          </div>
-        </section>
+      {userData ? (
+        <>
+          <section className="men-sec men-intro-sec">
+            <h2>Introduction</h2>
+            <div className="men-intro-content">
+              <p>{userData.intro_text || "Introduction text not available"}</p>
+              {userData.intro_audio ? (
+                <Audio_Btn
+                  className="audio-btn"
+                  audioSrc={userData.intro_audio}
+                  iconSize={iconSize}
+                ></Audio_Btn>
+              ) : (
+                <></>
+              )}
+            </div>
+          </section>
+          <section className="men-sec men-video-sec">
+            {userData.intro_video ? (
+              <video controls>
+                <source src={userData.intro_video} type="video/mp4" />
+                Your browser does not support the video tag.
+              </video>
+            ) : (
+              "Introduction video not available"
+            )}
+          </section>
+          <section className="men-sec gallery-sec">
+            <h2>Gallery</h2>
+            {userData.gallery && userData.gallery.length > 0 ? (
+              <Carousel
+                responsive={responsive}
+                autoPlay={true}
+                autoPlaySpeed={3000}
+              >
+                {userData.gallery.map((image, index) => (
+                  <div className="gallery-item" key={index}>
+                    <img src={image.imageURL} alt="Gallery item" />
+                  </div>
+                ))}
+              </Carousel>
+            ) : (
+              "Gallery is empty"
+            )}
+          </section>
+        </>
+      ) : (
+        <p>User data not available</p>
       )}
-      {userData && (
-        <section className="men-sec men-video-sec">
-          <video controls>
-            <source src={userData.intro_video} type="video/mp4" />
-            Your browser does not support the video tag.
-          </video>
-        </section>
-      )}
-      <section className="men-sec gallery-sec">
-        <h2>Gallery</h2>
-        {userData && (
-          <Carousel
-            responsive={responsive}
-            autoPlay={true}
-            autoPlaySpeed={3000}
-          >
-            {userData.gallery.map((image, index) => (
-              <div className="gallery-item" key={index}>
-                <img src={image.imageURL} alt="Picture" />
-              </div>
-            ))}
-          </Carousel>
-        )}
-      </section>
     </div>
   );
 }

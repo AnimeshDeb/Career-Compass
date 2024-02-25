@@ -151,7 +151,7 @@ export default function EditMode({
           updateObject["imageURL"] = newPath;
           await updateUserGallery(updateObject, userId);
         } else if (type === "deleteImage") {
-          await deleteImageFromStorage(userId, value.imageURL); // Ensure this matches how you call this function
+          await deleteImageFromStorage(userId, value.imageURL);
         } else {
           const deletePrevious = `Users/Mentors/${userData.displayName}/${field}/`;
           await deleteFilesInFolder(deletePrevious);
