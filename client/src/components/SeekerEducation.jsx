@@ -15,23 +15,23 @@ import {
 function SeekerEducation() {
   const navigate = useNavigate();
   const [seekerSchoolNameTxt, setSeekerSchoolNameTxt] = useState("");
-  const [seekerLocation, setSeekerLocation] = useState("");
+  const [seekerMajor, setSeekerMajor] = useState("");
   const [seekerEducationTypeTxt, setSeekerEducationTypeTxt] = useState("");
-  const [seekerGrade, setSeekerGrade] = useState("");
+  const [seekerGraduating, setSeekerGraduating] = useState("");
   const location = useLocation();
   const name = location.state?.fullName;
 
   const handleChangeSchool = (e) => {
     setSeekerSchoolNameTxt(e.target.value);
   };
-  const handleChangeLocation = (e) => {
-    setSeekerLocation(e.target.value);
+  const handleChangeMajor = (e) => {
+    setSeekerMajor(e.target.value);
   };
   const handleChangeEducationType = (e) => {
     setSeekerEducationTypeTxt(e.target.value);
   };
-  const handleChangeGrade = (e) => {
-    setSeekerGrade(e.target.value);
+  const handleChangeGraduating = (e) => {
+    setSeekerGraduating(e.target.value);
   };
   async function handleSubmit(e) {
     e.preventDefault();
@@ -40,9 +40,10 @@ function SeekerEducation() {
       const docRef = doc(usersCollection, name);
       const educationSubcollectionRef = collection(docRef, "Education");
       await addDoc(educationSubcollectionRef, {
-        name: seekerSchoolNameTxt,
-        level: seekerEducationTypeTxt,
-        score: seekerGrade,
+        University: seekerSchoolNameTxt,
+        DegreeType: seekerEducationTypeTxt,
+        ClassOf: seekerGraduating,
+        Major: seekerMajor,
       });
       // await setDoc(educationSubcollectionRef, seekerEducationData, {merge: true});
       navigate("/SeekerJobs", { state: { fullName: name } });
@@ -61,7 +62,7 @@ function SeekerEducation() {
               <Form.Label></Form.Label>
               <Form.Control
                 type="text"
-                placeholder="Type in your school name... "
+                placeholder="Type in your university name... "
                 value={seekerSchoolNameTxt}
                 onChange={handleChangeSchool}
                 required
@@ -71,7 +72,7 @@ function SeekerEducation() {
               <Form.Label></Form.Label>
               <Form.Control
                 type="text"
-                placeholder="Type in your education type..."
+                placeholder="What degree are you going for..."
                 value={seekerEducationTypeTxt}
                 onChange={handleChangeEducationType}
                 required
@@ -81,9 +82,19 @@ function SeekerEducation() {
               <Form.Label></Form.Label>
               <Form.Control
                 type="text"
-                placeholder="Type in your grade..."
-                value={seekerGrade}
-                onChange={handleChangeGrade}
+                placeholder="When are you graduating..."
+                value={seekerGraduating}
+                onChange={handleChangeGraduating}
+                required
+              />
+            </Form.Group>
+            <Form.Group id="major">
+              <Form.Label></Form.Label>
+              <Form.Control
+                type="text"
+                placeholder="What is your major..."
+                value={seekerMajor}
+                onChange={handleChangeMajor}
                 required
               />
             </Form.Group>

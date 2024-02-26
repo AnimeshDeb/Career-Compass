@@ -41,22 +41,23 @@ function SeekerProfilepic(){
     }
     function onFileSelect(e){
       setImageUpload(e.target.files[0]);
-
-      const files=e.target.files;
-      if(files.length===0)return;
+        const files=e.target.files;
+        if(files.length===0)return;
+        
+        const file=files[0];
       
-      const file=files[0];
-    
-          
-          
-              setImages((prevImages)=>[
-              ...prevImages,
-                  {name: file.name,
-                  url: URL.createObjectURL(file),
-                      
-                  },
-                  ]);
-        fileInputRef.current.disabled=true;
+            
+            
+                setImages((prevImages)=>[
+                ...prevImages,
+                    {name: file.name,
+                    url: URL.createObjectURL(file),
+                        
+                    },
+                    ]);
+          fileInputRef.current.disabled=true;
+            
+        
     }
     function deleteImage(index){
         setImages((prevImages)=>
@@ -68,29 +69,39 @@ function SeekerProfilepic(){
 
     function onDragOver(e){
       e.preventDefault();
-      setIsDragging(true);
-      e.dataTransfer.dropEffect="copy"
+      if(images.length===0){
+        setIsDragging(true);
+        e.dataTransfer.dropEffect="copy";
+      }
+
+      
     }
     function onDragLeave(e){
       e.preventDefault();
-      setIsDragging(false);
+      if(images.length===0){
+        setIsDragging(false);
+      }
+      
     }
 
     function onDrop(e){
       e.preventDefault();
-      setIsDragging(false);
-      const files=e.dataTransfer.files;
-      for(let i=0; i<files.length;i++){
+      if(images.length===0){
+        setIsDragging(false);
+        const files=e.dataTransfer.files;
+        setImageUpload(files[0]);
         
-            setImages((prevImages)=>[
-            ...prevImages,
-                {name: files[i].name,
-                url: URL.createObjectURL(files[i]),
-                    
-                },
-                ]);
-        
-    }
+        setImages((prevImages)=>[
+          ...prevImages,
+              {name: files[0].name,
+              url: URL.createObjectURL(files[0]),
+                  
+              },
+              ]);
+  fileInputRef.current.disabled=true;
+  setMode("video");
+  console.log("value of image is "+ imageUpload);
+      }
     }
 
     function uploadImage(){
@@ -108,7 +119,7 @@ function SeekerProfilepic(){
         console.log("Download url:"+ downloadURL);
         alert("image uploaded successfully");
         const seekerProfilepicData={
-          PictureURL: downloadURL,
+          pictureURL: downloadURL,
         }
         setDoc(docRef, seekerProfilepicData, {merge:true});
         
