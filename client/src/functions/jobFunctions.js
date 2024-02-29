@@ -5,10 +5,9 @@ import { doc, getDoc, collection, getDocs, addDoc, updateDoc, deleteDoc } from '
 // Function to get a list of all job listings from the database
 const getJobListings = async () => {
   try {
-    const jobCollectionRef = collection(db, 'Jobs');
+    const jobCollectionRef = collection(db, 'Jobs'); // Ensure 'Jobs' is the correct collection name
     const jobSnapshot = await getDocs(jobCollectionRef);
     const jobList = jobSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-    console.log(jobList)
     return jobList;
   } catch (error) {
     console.error('Error fetching job listings:', error.message);
@@ -66,6 +65,9 @@ const deleteJobListing = async (jobId) => {
     console.error('Error deleting job listing:', error.message);
     throw error;
   }
+
+  
+  
 };
 
 export { getJobListings, getJobListingById, createJobListing, updateJobListing, deleteJobListing };
