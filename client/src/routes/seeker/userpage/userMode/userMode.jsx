@@ -17,16 +17,26 @@ export default function UserMode({ userData }) {
   return (
     <>
       {userData && (
-        <section className="sec intro-sec">
-          <div className="intro-vid">
-            <h2>Introduction</h2>
-            {userData.introduction ? (
-              renderTextVideo(userData.introduction)
-            ) : (
-              <p>No introduction available.</p>
-            )}
-          </div>
-          <div className="education">
+        <>
+          <section className="sec intro-sec">
+            <div className="intro-vid">
+              <h2>Introduction</h2>
+              {userData.introduction ? (
+                renderTextVideo(userData.introduction)
+              ) : (
+                <p>No introduction available.</p>
+              )}
+            </div>
+            <div className="skill-vid">
+              <h2>Skills</h2>
+              {userData.skills ? (
+                renderTextVideo(userData.skills)
+              ) : (
+                <p>No skills available.</p>
+              )}
+            </div>
+          </section>
+          <section className="education">
             <h2>Education</h2>
             {userData.education && userData.education.length > 0 ? (
               userData.education.map((education, index) => (
@@ -39,59 +49,46 @@ export default function UserMode({ userData }) {
             ) : (
               <p>No education information available.</p>
             )}
-          </div>
-          <div className="skill-vid">
-            <h2>Skills</h2>
-            {userData.skills ? (
-              renderTextVideo(userData.skills)
-            ) : (
-              <p>No skills available.</p>
-            )}
-          </div>
-        </section>
-      )}
-
-      {userData && (
-        <section className="middle">
-          <section className="middle-container">
-            <div className="sec challenges-sec">
-              <h2>Challenges</h2>
-              {userData.challenges ? (
-                renderTextVideo(userData.challenges)
-              ) : (
-                <p>No challenges available.</p>
-              )}
-            </div>
-            <aside className="Maybolin-AI">
-              <p>Keep on looking. You will find it! - Maybolin AI</p>
-            </aside>
           </section>
-        </section>
-      )}
-
-      {userData && (
-        <section className="sec references-sec">
-          <h2>References</h2>
-          {userData.references && userData.references.length > 0 ? (
-            userData.references.map((reference, index) => (
-              <div className="reference-item" key={index}>
-                <div className="top-company">
-                  <h3 className="company-name">
-                    {reference.name
-                      ? `${reference.name}, ${reference.company},`
-                      : "Reference name not provided"}
-                  </h3>
-                  <h3 className="company-email">
-                    {reference.email || "Email not provided"}
-                  </h3>
-                </div>
-                <p>{reference.desc || "Description not provided"}</p>
+          <section className="middle">
+            <section className="middle-container">
+              <div className="sec challenges-sec">
+                <h2>Challenges</h2>
+                {userData.challenges ? (
+                  renderTextVideo(userData.challenges)
+                ) : (
+                  <p>No challenges available.</p>
+                )}
               </div>
-            ))
-          ) : (
-            <p>No references available.</p>
-          )}
-        </section>
+              <aside className="Maybolin-AI">
+                <p>Keep on looking. You will find it! - Maybolin AI</p>
+              </aside>
+            </section>
+          </section>
+          <section className="job-sec"></section>
+          <section className="sec references-sec">
+            <h2>References</h2>
+            {userData.references && userData.references.length > 0 ? (
+              userData.references.map((reference, index) => (
+                <div className="reference-item" key={index}>
+                  <div className="top-company">
+                    <h3 className="company-name">
+                      {reference.name
+                        ? `${reference.name}, ${reference.company},`
+                        : "Reference name not provided"}
+                    </h3>
+                    <h3 className="company-email">
+                      {reference.email || "Email not provided"}
+                    </h3>
+                  </div>
+                  <p>{reference.desc || "Description not provided"}</p>
+                </div>
+              ))
+            ) : (
+              <p>No references available.</p>
+            )}
+          </section>
+        </>
       )}
     </>
   );
