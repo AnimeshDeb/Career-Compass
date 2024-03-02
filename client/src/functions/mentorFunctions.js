@@ -1,4 +1,4 @@
-import { getDoc, doc, collection, getDocs, updateDoc } from 'firebase/firestore';
+import { getDoc,addDoc, query, where, deleteDoc,doc, collection, getDocs, updateDoc } from 'firebase/firestore';
 import { db, storage } from '../firebase';
 import { getDownloadURL, ref as storageRef, uploadBytes, listAll, deleteObject  } from 'firebase/storage';
 
@@ -18,10 +18,38 @@ const deleteFilesInFolder = async (folderPath) => {
   }
 };
 
+const deleteImageFromFirestore = async (userId, imageUrl) => {
+  const galleryRef = collection(db, 'Mentors', userId, 'gallery');
+  const q = query(galleryRef, where("imageURL", "==", imageUrl));
+
+  try {
+    const querySnapshot = await getDocs(q);
+    querySnapshot.forEach(async (doc) => {
+      await deleteDoc(doc.ref);
+      console.log(`Document with imageURL ${imageUrl} deleted successfully`);
+    });
+  } catch (error) {
+    console.error('Error deleting document from Firestore:', error);
+    throw error;
+  }
+};
+
+const deleteImageFromStorage = async (userId, imageUrl) => {
+  const imageRef = storageRef(storage, imageUrl);
+  console.log(imageRef)
+  try {
+    await deleteObject(imageRef);
+    console.log('Image deleted successfully from Storage');
+    await deleteImageFromFirestore(userId, imageUrl);
+  } catch (error) {
+    console.error('Error deleting image from Storage or Firestore:', error);
+    throw error;
+  }
+};
 const uploadFileToStorage = async (file, path) => {
   try {
     const fileRef = storageRef(storage, path);
-    const snapshot = await uploadBytes(fileRef, file);
+    await uploadBytes(fileRef, file);
     const downloadURL = await getDownloadURL(fileRef);
     return downloadURL;
   } catch (error) {
@@ -29,7 +57,16 @@ const uploadFileToStorage = async (file, path) => {
     throw error;
   }
 };
-
+const updateUserGallery = async(object, userId) =>{
+  try{
+    const userDocRef = doc(db, 'Mentors', userId);
+    const gallerySubcollectionRef = collection(userDocRef, "gallery");
+    await addDoc(gallerySubcollectionRef, object)
+  } catch(error){
+    console.log("Error updating gallery:", error.message);
+    throw error;
+  }
+}
 const updateUserField = async(object,userId)=>{
   try{
     const userDocRef = doc(db, 'Mentors', userId);
@@ -64,4 +101,4 @@ const getMentorById = async (userId) => {
     }
   };
 
-export { uploadFileToStorage, deleteFilesInFolder, updateUserField, getMentorById };
+export { updateUserGallery, deleteImageFromStorage, uploadFileToStorage, deleteFilesInFolder, updateUserField, getMentorById };

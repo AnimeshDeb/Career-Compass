@@ -20,7 +20,6 @@ export default function UserpageSeeker({name}) {
       ...prev,
       [field]: { value, type },
     }));
-    console.log(pendingChanges);
   };
   //Edit Mode
   const toggleEditMode = () => {
@@ -55,7 +54,6 @@ export default function UserpageSeeker({name}) {
       try {
         const userId = name;
         const fetchedUserData = await getSeekerById(userId);
-        console.log(fetchedUserData);
         setUserData(fetchedUserData);
       } catch (error) {
         console.error("Error fetching user by ID:", error.message);

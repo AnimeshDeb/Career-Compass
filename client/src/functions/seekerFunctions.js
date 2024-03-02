@@ -1,4 +1,4 @@
-import { getDoc, doc, collection, getDocs, updateDoc } from 'firebase/firestore';
+import { getDoc, query, where, doc,deleteDoc, collection, getDocs, updateDoc } from 'firebase/firestore';
 import { db, storage } from '../firebase';
 import { getDownloadURL, ref as storageRef, uploadBytes, listAll, deleteObject  } from 'firebase/storage';
 
@@ -17,9 +17,23 @@ const deleteFilesInFolder = async (folderPath) => {
     throw error;
   }
 };
+const deleteReference = async (userId, refFields) => {
+  const userDocRef = doc(db, "Seekers", userId);
+  const referencesSubcollectionRef = collection(userDocRef, "references");
+  const queryRef = query(referencesSubcollectionRef, where("email", "==", refFields.email)); // Use the appropriate field to match
+  const snapshot = await getDocs(queryRef);
 
+  if (!snapshot.empty) {
+    const docRef = snapshot.docs[0].ref;
+    await deleteDoc(docRef);
+    console.log("Reference deleted successfully");
+  } else {
+    console.error("No matching reference found to delete");
+  }
+}
 const uploadFileToStorage = async (file, path) => {
   try {
+    console.log(file,path)
     const fileRef = storageRef(storage, path);
     await uploadBytes(fileRef, file);
     const downloadURL = await getDownloadURL(fileRef);
@@ -86,4 +100,4 @@ const getSeekerById = async (userId) => {
   }
 };
 
-export { getSeekerById, updateUserField, deleteFilesInFolder, getSeekerJobsById, uploadFileToStorage};
+export { getSeekerById, deleteReference, updateUserField, deleteFilesInFolder, getSeekerJobsById, uploadFileToStorage};

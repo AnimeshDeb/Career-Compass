@@ -11,6 +11,7 @@ import UserpageMentor from "./src/routes/mentor/userpage/userpageMentor.jsx";
 import UserpageCompany from "./src/routes/company/userpage/userpageCompany.jsx";
 import { createBrowserRouter } from "react-router-dom";
 import JobsApplied from "./src/routes/seeker/jobsApplied/jobsApplied.jsx";
+import SearchUser from "./src/routes/searchUsers/searchUsers.jsx";
 
 import Onboard from "./src/components/Onboard";
 import AdminSignup from "./src/components/AdminSignup.jsx";
@@ -256,6 +257,7 @@ export const router = createBrowserRouter([
       </SeekerAuthProvider>
     ),
   },
+  { path: "/searchUsers", element: <SearchUser /> },
   { path: "/user", element: <UserpageSeeker /> },
   { path: "/mentor", element: <UserpageMentor /> },
   { path: "/company", element: <UserpageCompany /> },
