@@ -46,6 +46,7 @@ const uploadFileToStorage = async (file, path) => {
 
 const updateUserField = async(object,userId)=>{
   try{
+    console.log(object)
     const userDocRef = doc(db, 'Seekers', userId);
     await updateDoc(userDocRef, object)
   } catch(error){

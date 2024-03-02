@@ -51,43 +51,80 @@ const ReferenceItem = React.memo(({ reference, handleDelete, index }) => {
     </div>
   );
 });
-const VideoItem = React.memo(({ videoData, handleChange, field, index }) => {
-  const [fileUrl, setFileUrl] = useState("");
+const VideoOrTextItem = React.memo(
+  ({ videoData, handleChange, field, index }) => {
+    const [previewUrl, setPreviewUrl] = useState("");
+    const isUrl =
+      typeof videoData === "string" && /^https?:\/\//.test(videoData);
 
-  useEffect(() => {
-    if (videoData instanceof File) {
-      const url = URL.createObjectURL(videoData);
-      setFileUrl(url);
-      return () => URL.revokeObjectURL(url);
-    } else {
-      setFileUrl(videoData);
-    }
-  }, [videoData]);
+    useEffect(() => {
+      return () => {
+        if (previewUrl) {
+          URL.revokeObjectURL(previewUrl);
+        }
+      };
+    }, [previewUrl]);
 
-  const inputId = `video-input-${field}-${index}`;
+    useEffect(() => {
+      if (videoData instanceof File) {
+        // Create a URL for the file
+        const fileUrl = URL.createObjectURL(videoData);
+        setPreviewUrl(fileUrl);
+      } else if (
+        typeof videoData === "string" &&
+        (videoData.startsWith("http://") || videoData.startsWith("https://"))
+      ) {
+        setPreviewUrl(videoData);
+      } else {
+        setPreviewUrl("");
+      }
+    }, [videoData]);
 
-  return (
-    <div className="media-container video">
-      {fileUrl ? (
-        <>
+    const inputId = `input-${field}-${index}`;
+
+    const handleFileChange = (e) => {
+      handleChange(e, "video", field, index);
+    };
+
+    const handleTextChange = (e) => {
+      handleChange(e, "text", field, index);
+    };
+
+    return (
+      <div className="media-container">
+        {previewUrl ? (
           <video key={`${index}_${new Date().getTime()}`} controls>
-            <source src={fileUrl} type="video/mp4" />
+            <source src={previewUrl} type="video/mp4" />
             Your browser does not support the video tag.
           </video>
-        </>
-      ) : (
-        <p>Insert New Info Here</p>
-      )}
-      <label htmlFor={inputId}>Upload New Video</label>
-      <input
-        id={inputId}
-        type="file"
-        onChange={(e) => handleChange(e, "video", field, index)}
-        accept="video/*"
-      />
-    </div>
-  );
-});
+        ) : (
+          typeof videoData === "string" && <p>{videoData}</p>
+        )}
+        <div>
+          <label htmlFor={`${inputId}-video`}>Upload New Video</label>
+          <input
+            id={`${inputId}-video`}
+            type="file"
+            onChange={handleFileChange}
+            accept="video/*"
+          />
+        </div>
+        <div>
+          <label htmlFor={`${inputId}-text`}>Or Enter Text</label>
+          <input
+            id={`${inputId}-text`}
+            type="text"
+            defaultValue={
+              !isUrl && typeof videoData === "string" ? videoData : ""
+            }
+            onBlur={handleTextChange}
+            placeholder="Enter text"
+          />
+        </div>
+      </div>
+    );
+  }
+);
 const EducationItem = React.memo(
   ({
     index,
@@ -151,7 +188,8 @@ const EducationItem = React.memo(
     );
   }
 );
-VideoItem.displayName = "VideoItem";
+
+VideoOrTextItem.displayName = "VideoOrTextItem";
 ReferenceItem.displayName = "ReferenceItem";
 EducationItem.displayName = "EducationItem";
 JobItem.displayName = "JobItem";
@@ -209,17 +247,22 @@ export default function EditMode({
     });
   };
   const handleChange = useCallback(
-    (event, type, field) => {
+    (event, type, field, index) => {
       let value;
+      const key = `${field}`;
+
       if (type === "text") {
         value = event.target.value;
+        if (pendingChanges[key] && pendingChanges[key].type === "video") {
+          URL.revokeObjectURL(pendingChanges[key].value);
+        }
       } else if (type === "video") {
         value = event.target.files[0];
       }
 
       setPendingChanges((prev) => ({
         ...prev,
-        [`${field}`]: { value, type },
+        [key]: { value, type },
       }));
       console.log(pendingChanges);
     },
@@ -301,7 +344,7 @@ export default function EditMode({
           <section className="sec intro-sec">
             <div className="intro-vid">
               <h2>Introduction</h2>
-              <VideoItem
+              <VideoOrTextItem
                 videoData={
                   pendingChanges["introduction"]?.value || userData.introduction
                 }
@@ -313,7 +356,7 @@ export default function EditMode({
 
             <div className="skill-vid">
               <h2>Skills</h2>
-              <VideoItem
+              <VideoOrTextItem
                 videoData={pendingChanges["skills"]?.value || userData.skills}
                 handleChange={handleChange}
                 field="skills"
@@ -358,7 +401,7 @@ export default function EditMode({
             <div className="middle-container">
               <div className="sec challenges-sec">
                 <h2>Challenges</h2>
-                <VideoItem
+                <VideoOrTextItem
                   videoData={
                     pendingChanges["challenges"]?.value || userData.challenges
                   }
