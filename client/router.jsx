@@ -42,6 +42,8 @@ import SeekerEducation from "./src/components/SeekerEducation.jsx";
 import SeekerJobs from "./src/components/SeekerJobs.jsx";
 import SeekerProfilepic from "./src/components/SeekerProfilepic.jsx";
 import ParentComponent from "./src/components/ParentComponent.jsx";
+
+import JobList from './src/components/JobList.jsx';
 export const router = createBrowserRouter([
  {
   path:"/parent",
@@ -250,12 +252,19 @@ export const router = createBrowserRouter([
     ),
   },
   {
+    
+      path: '/Joblist',
+      element: <JobList />,
+    
+  },
+  {
     path: "/SeekerForgotPassword",
     element: (
       <SeekerAuthProvider>
         <SeekerUpdateProfile />
       </SeekerAuthProvider>
     ),
+    
   },
   { path: "/searchUsers", element: <SearchUser /> },
   { path: "/user", element: <UserpageSeeker /> },

@@ -1,0 +1,19 @@
+/* JobList.css */
+.job-listing {
+    border: 1px solid rgba(204, 204, 204, 0); /* Light grey border */
+    padding: 16px;
+    margin-bottom: 16px; /* Add space between job listings */
+    border-radius: 8px; /* Optional: rounded corners */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Optional: add some shadow for depth */
+  }
+  
+  .job-listing h2 {
+    margin-top: 0;
+    color: #333; /* Darker text for the title */
+  }
+  
+  .job-listing p {
+    color: #666; /* Lighter text for the body */
+    line-height: 1.6; /* More readable line spacing */
+  }
+  
