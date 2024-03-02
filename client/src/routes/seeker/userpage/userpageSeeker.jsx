@@ -64,7 +64,12 @@ export default function UserpageSeeker({ name }) {
 
   return (
     <div className="main">
-      <Navbar className="nav" userType={"seeker"} iconSize={iconSize} />
+      <Navbar
+        className="nav"
+        userId={name}
+        userType={"seeker"}
+        iconSize={iconSize}
+      />
       {userData && (
         <UserBanner
           iconSize={iconSize}
