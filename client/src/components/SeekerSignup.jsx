@@ -17,7 +17,6 @@ function SeekerSignup() {
   const fullNameRef = useRef();
   const { signup } = useAuth();
   const [error, setError] = useState("");
-  const [newName, setNewName] = useState();
   const navigate = useNavigate();
   //we have a loading state so that the user doesnt keep clicking the button
   const [loading, setLoading] = useState(false);
@@ -31,12 +30,11 @@ function SeekerSignup() {
     try {
       setError(""); // set error back to empty string so that we dont have error initially
       setLoading(true); //loading is set to true since the user has clicked the signup button.
-      setNewName(
+      const newName =
         fullNameRef.current.value
           .split("")
           .filter((char) => char !== " ")
-          .join("") + v4()
-      );
+          .join("") + v4();
       await signup(emailRef.current.value, passwordRef.current.value, newName); // Here we call the signup function, which is in AuthContexts file with certain parameters. If signup does not work then error will be outputted
 
       setName(newName);
