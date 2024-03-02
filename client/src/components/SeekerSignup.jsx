@@ -7,7 +7,8 @@ import React, { useRef } from "react";
 import { useAuth } from "../Contexts/SeekerAuthContext";
 import { updateCurrentUser } from "firebase/auth";
 import SeekerIntro from "./SeekerSignProcessIntro";
-
+import ParentComponent from "./ParentComponent";
+import {v4} from 'uuid';
 function SeekerSignup() {
   const emailRef = useRef();
   const passwordRef = useRef();
@@ -34,10 +35,12 @@ function SeekerSignup() {
       await signup(
         emailRef.current.value,
         passwordRef.current.value,
-        fullNameRef.current.value
+        fullNameRef.current.value.split("").filter(char => char !== " ").join("") + v4()
       ); // Here we call the signup function, which is in AuthContexts file with certain parameters. If signup does not work then error will be outputted
       
-      navigate("/seekerIntro", {state: {fullName: fullNameRef.current.value}}); //If signup is successful, then user is navigated to the user page, else they get an error as signup wouldn't have been successful.
+      setName(fullNameRef.current.value);
+      
+      navigate("/parent", {state: {fullName: fullNameRef.current.value}}); //If signup is successful, then user is navigated to the user page, else they get an error as signup wouldn't have been successful.
       //using await, we wait for signup to finish
     } catch (error) {
       //error message that will be displayed in case the signup process isnt succesful

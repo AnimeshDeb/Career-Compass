@@ -11,12 +11,12 @@ import {
 } from "firebase/firestore";
 import { db } from "../firebase";
 import { Card, Form, Button, Alert } from "react-bootstrap";
-
-function SeekerJobs() {
+import PropTypes from "prop-types";
+function SeekerJobs({handleNextStep, handlePrevStep, name}) {
   const [jobLocation, setJobLocation] = useState("");
   const [jobName, setJobName] = useState("");
   const location = useLocation();
-  const name = location.state?.fullName;
+  // const name = location.state?.fullName;
   const navigate = useNavigate();
 
   async function handleSubmit(e) {
@@ -29,7 +29,8 @@ function SeekerJobs() {
         Job_Name: jobName,
         Job_location: jobLocation,
       });
-      navigate("/SeekerProfilepic", { state: { fullName: name } });
+      handleNextStep();
+      // navigate("/SeekerProfilepic", { state: { fullName: name } });
     } catch (error) {
       console.error("ERROR: " + error);
     }
@@ -65,6 +66,7 @@ function SeekerJobs() {
                 placeholder="What is the location of your job?"
               />
             </Form.Group>
+            <button type="text" onClick={()=> handlePrevStep()}>Back</button>
             <button onSubmit={handleSubmit}> Next </button>
           </Form>
         </Card.Body>
@@ -72,4 +74,9 @@ function SeekerJobs() {
     </>
   );
 }
+SeekerJobs.propTypes={
+  handleNextStep: PropTypes.func.isRequired,
+  name: PropTypes.string.isRequired,
+  handlePrevStep: PropTypes.func.isRequired,
+};
 export default SeekerJobs;

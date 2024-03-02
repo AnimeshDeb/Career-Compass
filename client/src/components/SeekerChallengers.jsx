@@ -20,11 +20,12 @@ import '../styling/UploadImages.css';
 import { storage } from '../firebase';
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 import { v4 } from 'uuid';
+import PropTypes from "prop-types";
 
-function SeekerChallenges() {
+function SeekerChallenges({handleNextStep, handlePrevStep, name}) {
   const location = useLocation();
   const navigate = useNavigate();
-  const name = location.state?.fullName;
+  // const name = location.state?.fullName;
   const [images, setImages] = useState([]);
   const [isDragging, setIsDragging] = useState(false);
   const fileInputRef = useRef(null);
@@ -45,7 +46,8 @@ function SeekerChallenges() {
 
     setImages((prevImages) => [
       ...prevImages,
-      { name: file.name, url: URL.createObjectURL(file) },
+      { name: file.name, url: URL.createObjectURL(file),type: file.type,
+      },
     ]);
     fileInputRef.current.disabled = true;
   }
@@ -126,8 +128,8 @@ function SeekerChallenges() {
       if (mode === 'text') {
         await setDoc(docRef, seekerChallangeData, { merge: true });
       }
-
-      navigate('/seekerEducation', { state: { fullName: name } });
+      handleNextStep();
+      // navigate('/seekerEducation', { state: { fullName: name } });
     } catch (error) {
       console.log('The error is: ' + error);
       console.error('ERROR: ' + error);
@@ -193,15 +195,22 @@ function SeekerChallenges() {
                       &times;{' '}
                     </span>
 
-                    <img src={images.url} alt={images.name} />
-                  </div>
+                    {images.type && images.type.includes("video") ? ( // Check if it's a video
+        <video controls>
+          <source src={images.url} type={images.type} />
+          Your browser does not support the video tag.
+        </video>
+      ) : (
+        <img src={images.url} alt={images.name} />
+      )}
+    </div>
                 ))}
               </div>
               <button type="button" onClick={uploadImage}>
                 Upload
               </button>
             </div>
-
+            <Button type="text" onClick={()=>handlePrevStep()}>Back</Button>
             <Button type="submit"> Next</Button>
           </Form>
         </Card.Body>
@@ -209,4 +218,9 @@ function SeekerChallenges() {
     </>
   );
 }
+SeekerChallenges.propTypes={
+  handleNextStep: PropTypes.func.isRequired,
+  name: PropTypes.string.isRequired,
+  handlePrevStep: PropTypes.func.isRequired,
+};
 export default SeekerChallenges;

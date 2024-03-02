@@ -17,12 +17,13 @@ import { useAuth } from "../Contexts/SeekerAuthContext";
 import {storage} from "../firebase";
 import {ref, uploadBytes, getDownloadURL} from "firebase/storage";
 import {v4} from "uuid";
+import PropTypes from "prop-types";
 
-function SeekerIntro() {
+function SeekerIntro({handleNextStep, name}) {
   const navigate = useNavigate();
   const [seekerTxtIntro, setSeekerTxtIntro] = useState("");
   const location = useLocation();
-  const name = location.state?.fullName;
+  // const name = location.state?.fullName;
   console.log("fullName value is: " + name);
   const [images, setImages]= useState([]);
   const [isDragging, setIsDragging]=useState(false);
@@ -32,6 +33,7 @@ function SeekerIntro() {
   const imgMetaData={contentType: "image/jpeg"};
   const [mode, setMode]=useState();
   const usersCollection = collection(db, "Seekers");
+  console.log("name is: "+ name);
   const docRef = doc(usersCollection, name);
   
 
@@ -52,6 +54,7 @@ function SeekerIntro() {
                 ...prevImages,
                     {name: file.name,
                     url: URL.createObjectURL(file),
+                    type: file.type,
                         
                     },
                     ]);
@@ -148,7 +151,9 @@ function handleVideoClick(){
       {
         await setDoc(docRef, seekerIntroUpdatedData, { merge: true });
       }
-      navigate("/seekerSkills", { state: { NameFull: name } });
+      handleNextStep();
+
+      // navigate("/seekerSkills", { state: { NameFull: name } });
     } catch (error) {
       console.error("ERROR: ", error);
       console.log("the error is:" + error);
@@ -198,9 +203,15 @@ function handleVideoClick(){
                 {images.map((images, index)=>(
                     <div className="image" key={index}>
                     <span className="delete" onClick={()=>deleteImage(index)}> &times; </span>
-                  
-                  <img src={images.url} alt={images.name}/>
-                  </div>
+                    {images.type && images.type.includes("video") ? ( // Check if it's a video
+        <video controls>
+          <source src={images.url} type={images.type} />
+          Your browser does not support the video tag.
+        </video>
+      ) : (
+        <img src={images.url} alt={images.name} />
+      )}
+    </div>
                 ))}
                 
               </div>
@@ -214,5 +225,10 @@ function handleVideoClick(){
     </>
   );
 }
+
+SeekerIntro.propTypes={
+  handleNextStep: PropTypes.func.isRequired,
+  name: PropTypes.string.isRequired,
+};
 
 export default SeekerIntro;

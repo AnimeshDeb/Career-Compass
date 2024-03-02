@@ -11,15 +11,15 @@ import {
   doc,
   setDoc,
 } from "firebase/firestore";
-
-function SeekerEducation() {
+import PropTypes from "prop-types";
+function SeekerEducation({handleNextStep, handlePrevStep, name}) {
   const navigate = useNavigate();
   const [seekerSchoolNameTxt, setSeekerSchoolNameTxt] = useState("");
   const [seekerMajor, setSeekerMajor] = useState("");
   const [seekerEducationTypeTxt, setSeekerEducationTypeTxt] = useState("");
   const [seekerGraduating, setSeekerGraduating] = useState("");
   const location = useLocation();
-  const name = location.state?.fullName;
+  // const name = location.state?.fullName;
 
   const handleChangeSchool = (e) => {
     setSeekerSchoolNameTxt(e.target.value);
@@ -46,7 +46,8 @@ function SeekerEducation() {
         Major: seekerMajor,
       });
       // await setDoc(educationSubcollectionRef, seekerEducationData, {merge: true});
-      navigate("/SeekerJobs", { state: { fullName: name } });
+      handleNextStep();
+      // navigate("/SeekerJobs", { state: { fullName: name } });
     } catch (error) {
       console.log("The error is: " + error);
       console.error("ERROR: " + error);
@@ -98,6 +99,7 @@ function SeekerEducation() {
                 required
               />
             </Form.Group>
+            <Button type="text"  onClick={()=>handlePrevStep()}> Back</Button>
             <Button type="submit"> Next</Button>
           </Form>
         </Card.Body>
@@ -105,4 +107,10 @@ function SeekerEducation() {
     </>
   );
 }
+
+SeekerEducation.propTypes={
+  handleNextStep: PropTypes.func.isRequired,
+  name: PropTypes.string.isRequired,
+  handlePrevStep: PropTypes.func.isRequired,
+};
 export default SeekerEducation;

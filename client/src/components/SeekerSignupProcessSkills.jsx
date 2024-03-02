@@ -16,12 +16,14 @@ import "../styling/UploadImages.css"
 import {storage} from "../firebase";
 import {ref, uploadBytes, getDownloadURL} from "firebase/storage";
 import {v4} from "uuid";
+import PropTypes from "prop-types";
 
-function SeekerSkills()
+
+function SeekerSkills({handleNextStep,handlePrevStep, name})
 {
     const navigate=useNavigate();
     const location=useLocation();
-    const name=location.state?.NameFull;
+    // const name=location.state?.NameFull;
     const [images, setImages]= useState([]);
     const [isDragging, setIsDragging]=useState(false);
     const fileInputRef=useRef(null);
@@ -51,6 +53,8 @@ function SeekerSkills()
                 ...prevImages,
                     {name: file.name,
                     url: URL.createObjectURL(file),
+                    type: file.type,
+
                         
                     },
                     ]);
@@ -142,8 +146,8 @@ function SeekerSkills()
             await setDoc(docRef, seekerSkillsUpdatedData, {merge:true});
         }
         
-
-        navigate("/seekerChallenges", {state: {fullName: name}});
+        handleNextStep();
+        // navigate("/seekerChallenges", {state: {fullName: name}});
         }
         catch(error){
             console.log("The error is: "+ error);
@@ -161,6 +165,7 @@ function SeekerSkills()
       function handleVideoClick(){
         setMode("video");
       }
+    
 
     return(
         <>
@@ -198,15 +203,22 @@ function SeekerSkills()
                     <div className="image" key={index}>
                     <span className="delete" onClick={()=>deleteImage(index)}> &times; </span>
                   
-                  <img src={images.url} alt={images.name}/>
-                  </div>
+                    {images.type && images.type.includes("video") ? ( // Check if it's a video
+        <video controls>
+          <source src={images.url} type={images.type} />
+          Your browser does not support the video tag.
+        </video>
+      ) : (
+        <img src={images.url} alt={images.name} />
+      )}
+    </div>
                 ))}
                 
               </div>
               <button type="button" onClick={uploadImage}>Upload</button>
             </div>
 
-
+                    <Button type="text" onClick={()=>handlePrevStep()}>Back</Button>
                     <Button type="submit"> Next</Button>
                 </Form>
             </Card.Body>
@@ -215,4 +227,10 @@ function SeekerSkills()
         </>
     );
 }
+
+SeekerSkills.propTypes={
+  handleNextStep: PropTypes.func.isRequired,
+  name: PropTypes.string.isRequired,
+  handlePrevStep: PropTypes.func.isRequired,
+};
 export default SeekerSkills

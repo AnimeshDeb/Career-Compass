@@ -40,64 +40,64 @@ import SeekerChallenges from "./src/components/SeekerChallengers.jsx";
 import SeekerEducation from "./src/components/SeekerEducation.jsx";
 import SeekerJobs from "./src/components/SeekerJobs.jsx";
 import SeekerProfilepic from "./src/components/SeekerProfilepic.jsx";
-
+import ParentComponent from "./src/components/ParentComponent.jsx";
 export const router = createBrowserRouter([
+ {
+  path:"/parent",
+  element:(
+    <SeekerAuthProvider>
+      <ParentComponent/>
+    </SeekerAuthProvider>
+  )
+ },
   // {
-  //   path: "/user",
+  //   path: "/SeekerProfilepic",
   //   element: (
-  //     <AuthProvider>
-  //       <UserSeeker />
-  //     </AuthProvider>
+  //     <SeekerAuthProvider>
+  //       <SeekerProfilepic />
+  //     </SeekerAuthProvider>
   //   ),
   // },
-  {
-    path: "/SeekerProfilepic",
-    element: (
-      <SeekerAuthProvider>
-        <SeekerProfilepic />
-      </SeekerAuthProvider>
-    ),
-  },
-  {
-    path: "/SeekerJobs",
-    element: (
-      <SeekerAuthProvider>
-        <SeekerJobs />
-      </SeekerAuthProvider>
-    ),
-  },
-  {
-    path: "/seekerEducation",
-    element: (
-      <SeekerAuthProvider>
-        <SeekerEducation />
-      </SeekerAuthProvider>
-    ),
-  },
-  {
-    path: "/seekerChallenges",
-    element: (
-      <SeekerAuthProvider>
-        <SeekerChallenges />
-      </SeekerAuthProvider>
-    ),
-  },
-  {
-    path: "/seekerSkills",
-    element: (
-      <SeekerAuthProvider>
-        <SeekerSkills />
-      </SeekerAuthProvider>
-    ),
-  },
-  {
-    path: "/seekerIntro",
-    element: (
-      <SeekerAuthProvider>
-        <SeekerIntro />
-      </SeekerAuthProvider>
-    ),
-  },
+  // {
+  //   path: "/SeekerJobs",
+  //   element: (
+  //     <SeekerAuthProvider>
+  //       <SeekerJobs />
+  //     </SeekerAuthProvider>
+  //   ),
+  // },
+  // {
+  //   path: "/seekerEducation",
+  //   element: (
+  //     <SeekerAuthProvider>
+  //       <SeekerEducation />
+  //     </SeekerAuthProvider>
+  //   ),
+  // },
+  // {
+  //   path: "/seekerChallenges",
+  //   element: (
+  //     <SeekerAuthProvider>
+  //       <SeekerChallenges />
+  //     </SeekerAuthProvider>
+  //   ),
+  // },
+  // {
+  //   path: "/seekerSkills",
+  //   element: (
+  //     <SeekerAuthProvider>
+  //       <SeekerSkills />
+  //     </SeekerAuthProvider>
+  //   ),
+  // },
+  // {
+  //   path: "/seekerIntro",
+  //   element: (
+  //     <SeekerAuthProvider>
+  //       <SeekerIntro />
+  //     </SeekerAuthProvider>
+  //   ),
+  // },
   {
     path: "/AdminUser",
     element: (

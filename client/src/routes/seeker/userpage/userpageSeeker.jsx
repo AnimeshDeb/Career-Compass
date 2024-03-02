@@ -6,8 +6,9 @@ import Footer from "../../../components/footer/footer.jsx";
 import UserBanner from "../../../components/UserBanner/UserBanner.jsx";
 import UserMode from "./userMode/userMode.jsx";
 import EditMode from "./editMode/editMode.jsx";
-
-export default function UserpageSeeker() {
+import PropTypes from "prop-types";
+export default function UserpageSeeker({name}) {
+  console.log("name is: "+ name);
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
   const [iconSize, setIconSize] = useState("2x");
   const [editMode, setEditMode] = useState(false);
@@ -52,7 +53,7 @@ export default function UserpageSeeker() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const userId = "i0xxrmCRV1bG9i6rAt4Xgprtmy83";
+        const userId = name;
         const fetchedUserData = await getSeekerById(userId);
         console.log(fetchedUserData);
         setUserData(fetchedUserData);
@@ -85,7 +86,7 @@ export default function UserpageSeeker() {
           <EditMode
             pendingChanges={pendingChanges}
             setPendingChanges={setPendingChanges}
-            userId={"i0xxrmCRV1bG9i6rAt4Xgprtmy83"}
+            userId={name}
             iconSize={iconSize}
             userData={userData}
           />
@@ -100,4 +101,10 @@ export default function UserpageSeeker() {
       <Footer className="seek-footer" />
     </div>
   );
+
+
+}
+
+UserpageSeeker.propTypes={
+  name: PropTypes.string.isRequired,
 }

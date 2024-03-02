@@ -15,13 +15,14 @@ import "../styling/UploadImages.css";
 import {storage} from "../firebase";
 import {ref, uploadBytes, getDownloadURL} from "firebase/storage";
 import {v4} from "uuid";
+import PropTypes from "prop-types";
 
-function SeekerProfilepic(){
+function SeekerProfilepic({handlePrevStep, handleNextStep, name}){
     const [images, setImages]= useState([]);
     const [isDragging, setIsDragging]=useState(false);
     const fileInputRef=useRef(null);
     const location=useLocation();
-    const name=location.state?.fullName;
+    // const name=location.state?.fullName;
     const [imageUpload, setImageUpload]=useState(null);
     const imgMetaData={contentType: "image/jpeg"};
     const [mode, setMode]=useState();
@@ -32,7 +33,7 @@ function SeekerProfilepic(){
         try{
             
             
-            await setDoc(docRef, seekerProfilepicData, {merge: true});
+            handleNextStep();
         }
         catch(error){console.error("ERROR", error.message)}
     }
@@ -120,7 +121,8 @@ function SeekerProfilepic(){
         alert("image uploaded successfully");
         const seekerProfilepicData={
           pictureURL: downloadURL,
-        }
+        };
+        
         setDoc(docRef, seekerProfilepicData, {merge:true});
         
       });
@@ -160,12 +162,18 @@ return(
               </div>
               <button type="button" onClick={uploadImage}>Upload</button>
             </div>
+            <Button type="text" onClick={()=> handlePrevStep()}>Back</Button>
             <Button type="submit">Next</Button>
           </Form>
         </Card.Body>
     </Card>
     </>
 )
+}
+SeekerProfilepic.propTypes={
+  handleNextStep: PropTypes.func.isRequired,
+  name: PropTypes.string.isRequired,
+  handlePrevStep: PropTypes.func.isRequired,
 }
 
 export default SeekerProfilepic
