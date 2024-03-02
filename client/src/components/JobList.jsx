@@ -5,12 +5,23 @@ import { getJobListings } from "../functions/jobFunctions";
 
 // Define a functional component to display individual job listings
 const JobListing = ({ job, onJobClick }) => {
-  // Return a div that displays the job's ID and calls onJobClick with the job object when clicked
+  // Style for the job listing container with a border
+  const jobListingStyle = {
+    cursor: 'pointer',
+    border: '1px solid #ddd',
+    borderRadius: '4px',
+    padding: '16px',
+    margin: '8px 0',
+    backgroundColor: '#2e318e',
+    color: 'white',
+    boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)',
+  };
+
+  // Return a div that displays the job's details and calls onJobClick with the job object when clicked
   return (
-    <div onClick={() => onJobClick(job)} style={{ cursor: 'pointer' }}>
+    <div style={jobListingStyle} onClick={() => onJobClick(job)}>
       <h1>{job.id}</h1>
       <h2>{job.Description}</h2>
-      <h2>{job.Requirements}</h2>
     </div>
   );
 };
@@ -23,36 +34,46 @@ const JobList = () => {
   const [jobs, setJobs] = useState([]);
   // Initialize state for selected job with default null
   const [selectedJob, setSelectedJob] = useState(null);
+  // Initialize state for showing the location submenu
+  const [showLocationSubMenu, setShowLocationSubMenu] = useState(false);
+
+  // Placeholder for the location submenu action
+  const handleLocationClick = (location) => {
+    console.log('Location filter to be implemented:', location);
+    // Here you would filter the jobs by the selected location
+  };
 
   // Use useEffect hook to fetch job listings when the component mounts
   useEffect(() => {
     const fetchData = async () => {
       try {
-        // Asynchronously fetch job listings and update the jobs state
         const fetchedJobs = await getJobListings();
         setJobs(fetchedJobs);
       } catch (error) {
-        // Log an error message if fetching jobs fails
         console.error("Error fetching jobs:", error.message);
       }
     };
 
-    // Call the fetchData function
     fetchData();
-  }, []); // Empty dependency array means this effect runs only once after initial render
+  }, []);
 
   // Define a function to handle clicks on job listings
   const handleJobClick = (job) => {
-    setSelectedJob(job); // Update the selectedJob state with the clicked job
+    setSelectedJob(job);
   };
 
   // Define a function to filter jobs based on the search term
   const filterJobs = (jobs, searchTerm) => {
-    if (!searchTerm) return jobs; // Return all jobs if no search term is entered
+    if (!searchTerm) return jobs;
     return jobs.filter((job) => {
       const idString = job.id.toString();
       return idString.toLowerCase().includes(searchTerm.toLowerCase());
     });
+  };
+
+  // Toggle the location submenu
+  const toggleLocationSubMenu = () => {
+    setShowLocationSubMenu(!showLocationSubMenu);
   };
 
   // Filter jobs using the search term
@@ -60,26 +81,37 @@ const JobList = () => {
 
   // Render the JobList component
   return (
-    <div style={{ display: 'flex' }}>
+    <div style={{ display: 'flex', flexDirection: 'column' }}>
       <div style={{ flexGrow: 1, width: selectedJob ? '50%' : '100%' }}>
         <h1>Job Listings</h1>
-        <input
-          type="text"
-          placeholder="Search for jobs"
-          value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value)}
-        />
+        <div style={{ display: 'flex', alignItems: 'center', marginBottom: '16px' }}>
+          <input
+            type="text"
+            placeholder="Search for jobs"
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            style={{ marginRight: '8px', width: '300px' }}
+          />
+          <button onClick={toggleLocationSubMenu}>Filter</button> {/* Toggles the location submenu */}
+        </div>
+        {showLocationSubMenu && (
+          <div style={{ display: 'flex', flexDirection: 'column', padding: '8px', border: '1px solid #ddd' }}>
+            <button onClick={() => handleLocationClick('New York')}>New York</button>
+            <button onClick={() => handleLocationClick('San Francisco')}>San Francisco</button>
+            <button onClick={() => handleLocationClick('Austin')}>Austin</button>
+            {/* More locations can be added here */}
+          </div>
+        )}
         {filteredJobs.length > 0 ? (
           filteredJobs.map((job) => (
             <JobListing key={job.id} job={job} onJobClick={handleJobClick} />
-            
           ))
         ) : (
           <p>No jobs found.</p>
         )}
       </div>
-      
-      {selectedJob && (
+      {selectedJob
+ && (
         <div style={{
           width: '50%',
           height: '100%',
@@ -93,10 +125,11 @@ const JobList = () => {
         }}>
           <h3>Job Details</h3>
           <p><strong>ID:</strong> {selectedJob.id}</p>
-          <p><strong>Title:</strong> {selectedJob.Title}</p>
+          <p><strong>Title</strong> {selectedJob.Title}</p>
           <p><strong>Description:</strong> {selectedJob.Description}</p>
           <p><strong>Requirements:</strong> {selectedJob.Requirements}</p>
           <p><strong>Salary Range:</strong> {selectedJob.Salary}</p>
+          <p><strong>Location:</strong> {selectedJob.Location}</p>
           {/* Additional job details can be displayed here */}
           <button onClick={() => setSelectedJob(null)}>Close</button>
         </div>
