@@ -8,21 +8,21 @@ import { useAuth } from "../Contexts/SeekerAuthContext";
 import { updateCurrentUser } from "firebase/auth";
 import SeekerIntro from "./SeekerSignProcessIntro";
 import ParentComponent from "./ParentComponent";
-import {v4} from 'uuid';
+import { v4 } from "uuid";
 function SeekerSignup() {
   const emailRef = useRef();
   const passwordRef = useRef();
   const passwordConfirmRef = useRef();
-  const [name, setName]=useState(0);
+  const [name, setName] = useState(0);
   const fullNameRef = useRef();
   const { signup } = useAuth();
   const [error, setError] = useState("");
+  const [newName, setNewName] = useState();
   const navigate = useNavigate();
   //we have a loading state so that the user doesnt keep clicking the button
   const [loading, setLoading] = useState(false);
-  
+
   async function handleSubmit(e) {
-  
     e.preventDefault(); //prevents form from refreshing
     //checkign below if the passwords match in confirm password confirm and the password sections
     if (passwordRef.current.value !== passwordConfirmRef.current.value) {
@@ -31,16 +31,17 @@ function SeekerSignup() {
     try {
       setError(""); // set error back to empty string so that we dont have error initially
       setLoading(true); //loading is set to true since the user has clicked the signup button.
-      
-      await signup(
-        emailRef.current.value,
-        passwordRef.current.value,
-        fullNameRef.current.value.split("").filter(char => char !== " ").join("") + v4()
-      ); // Here we call the signup function, which is in AuthContexts file with certain parameters. If signup does not work then error will be outputted
-      
-      setName(fullNameRef.current.value);
-      
-      navigate("/parent", {state: {fullName: fullNameRef.current.value}}); //If signup is successful, then user is navigated to the user page, else they get an error as signup wouldn't have been successful.
+      setNewName(
+        fullNameRef.current.value
+          .split("")
+          .filter((char) => char !== " ")
+          .join("") + v4()
+      );
+      await signup(emailRef.current.value, passwordRef.current.value, newName); // Here we call the signup function, which is in AuthContexts file with certain parameters. If signup does not work then error will be outputted
+
+      setName(newName);
+
+      navigate("/parent", { state: { fullName: newName } }); //If signup is successful, then user is navigated to the user page, else they get an error as signup wouldn't have been successful.
       //using await, we wait for signup to finish
     } catch (error) {
       //error message that will be displayed in case the signup process isnt succesful

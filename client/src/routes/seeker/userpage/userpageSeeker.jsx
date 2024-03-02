@@ -7,8 +7,7 @@ import UserBanner from "../../../components/UserBanner/UserBanner.jsx";
 import UserMode from "./userMode/userMode.jsx";
 import EditMode from "./editMode/editMode.jsx";
 import PropTypes from "prop-types";
-export default function UserpageSeeker({name}) {
-  console.log("name is: "+ name);
+export default function UserpageSeeker({ name }) {
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
   const [iconSize, setIconSize] = useState("2x");
   const [editMode, setEditMode] = useState(false);
@@ -99,10 +98,8 @@ export default function UserpageSeeker({name}) {
       <Footer className="seek-footer" />
     </div>
   );
-
-
 }
 
-UserpageSeeker.propTypes={
+UserpageSeeker.propTypes = {
   name: PropTypes.string.isRequired,
-}
+};
