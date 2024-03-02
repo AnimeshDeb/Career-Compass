@@ -14,4 +14,5 @@ export default function SearchButton({ className, userId, iconSize }) {
 SearchButton.propTypes = {
   className: PropTypes.string,
   iconSize: PropTypes.string,
+  userId: PropTypes.string,
 };
