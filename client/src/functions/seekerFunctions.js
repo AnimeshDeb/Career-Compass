@@ -81,11 +81,12 @@ const getSeekerById = async (userId) => {
   
     if (userDocSnapshot.exists()) {
       const userData = userDocSnapshot.data();
-      const referencesData = await getSubcollectionData(userDocRef, 'references');
-      const educationData = await getSubcollectionData(userDocRef, 'education');
-  
+      const referencesData = await getSubcollectionData(userDocRef, 'References');
+      const educationData = await getSubcollectionData(userDocRef, 'Education');
+      const jobsData = await getSubcollectionData(userDocRef, 'Jobs');
       const combinedData = {
         ...userData,
+        jobs: jobsData,
         references: referencesData,
         education: educationData,
       };

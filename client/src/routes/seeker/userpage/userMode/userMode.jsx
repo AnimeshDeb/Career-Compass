@@ -36,14 +36,17 @@ export default function UserMode({ userData }) {
               )}
             </div>
           </section>
-          <section className="education">
+          <section className="sec education">
             <h2>Education</h2>
             {userData.education && userData.education.length > 0 ? (
               userData.education.map((education, index) => (
-                <div className="education-text" key={index}>
-                  <h4>{education.level || "Level not provided"}</h4>
-                  <h4>{education.name || "School name not provided"}</h4>
-                  <h4>{education.score || "Score not provided"}</h4>
+                <div className="education-item" key={index}>
+                  <h3>{education.University}</h3>
+                  <div className="education-bottom">
+                    <h4>{education.DegreeType}</h4>
+                    <h4>{education.Major}</h4>
+                    <h4 className="education-classof">| {education.ClassOf}</h4>
+                  </div>
                 </div>
               ))
             ) : (
@@ -65,7 +68,21 @@ export default function UserMode({ userData }) {
               </aside>
             </section>
           </section>
-          <section className="job-sec"></section>
+          <section className="sec job-sec">
+            <h2>Employment History</h2>
+            {userData.jobs && userData.jobs.length > 0 ? (
+              userData.jobs.map((job, index) => (
+                <>
+                  <div className="job-item" key={index}>
+                    <h4 className="job-name">{job.Job_Name}</h4>
+                    <h4 className="job-location"> | {job.Job_location}</h4>
+                  </div>
+                </>
+              ))
+            ) : (
+              <h2>Add some jobs on Edit Mode</h2>
+            )}
+          </section>
           <section className="sec references-sec">
             <h2>References</h2>
             {userData.references && userData.references.length > 0 ? (
