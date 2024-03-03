@@ -10,14 +10,12 @@ import PropTypes from "prop-types";
 function SeekerIntro({ handleNextStep, name }) {
   const [seekerTxtIntro, setSeekerTxtIntro] = useState("");
   // const name = location.state?.fullName;
-  console.log("fullName value is: " + name);
   const [images, setImages] = useState([]);
   const [isDragging, setIsDragging] = useState(false);
   const fileInputRef = useRef(null);
   const [imageUpload, setImageUpload] = useState(null);
   const [mode, setMode] = useState();
   const usersCollection = collection(db, "Seekers");
-  console.log("name is: " + name);
   const docRef = doc(usersCollection, name);
 
   // const user=auth.currentUser

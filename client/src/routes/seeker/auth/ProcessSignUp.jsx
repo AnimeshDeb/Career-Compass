@@ -11,7 +11,7 @@ import "../../../styling/UploadImages.css";
 function ParentComponent() {
   const navigate = useNavigate();
   const location = useLocation();
-  const name = location.state?.fullName;
+  const name = location.state?.uid;
   const [step, setStep] = useState(0);
 
   const handleNextStep = () => {

@@ -1,26 +1,13 @@
-import React, { useContext, useEffect, useId, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { db, auth } from "../firebase";
 import {
   createUserWithEmailAndPassword,
   sendPasswordResetEmail,
   signInWithEmailAndPassword,
   signOut,
-  updateEmail,
   updatePassword as updatePasswordInAuth,
-  updateProfile,
 } from "firebase/auth";
-import {
-  collection,
-  addDoc,
-  getDocs,
-  where,
-  query,
-  doc,
-  setDoc,
-} from "firebase/firestore";
-
-import { getAuth, onAuthStateChanged } from "firebase/auth";
-import SeekerIntro from "../routes/seeker/signup/steps/SeekerSignProcessIntro";
+import { collection, getDocs, doc, setDoc } from "firebase/firestore";
 
 const SeekerAuthContext = React.createContext();
 export function useAuth() {
@@ -43,22 +30,15 @@ export function SeekerAuthProvider({ children }) {
         email,
         password
       );
-      const userId = userCredential.user.uid;
-      const user = userCredential.user;
+      const { user } = userCredential;
+      console.log(user.uid);
+      const userDocRef = doc(db, "Seekers", user.uid);
 
-      // await updateProfile(userCredential.user);
-
-      const usersCollection = collection(db, "Seekers");
-      const usersSnapshot = await getDocs(usersCollection);
-      const userCount = usersSnapshot.size + 1;
-
-      const userDocRef = doc(usersCollection, fullName); //setting the document as fullName so that fullName can be used specifically to reference the documents
-      //using setDoc, which is a firebase fnctionality, to display certain
-      // fields in the firebase database, such as email, display name, password, and their user id.
       await setDoc(userDocRef, {
         email: user.email,
         password: password,
-        UID: user.uid,
+        displayName: fullName,
+        UID: user.uid, // Consider if you really need to store UID explicitly since it's already the document ID
       });
 
       return userCredential;

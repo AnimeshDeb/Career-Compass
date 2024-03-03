@@ -4,7 +4,6 @@ import { useNavigate } from "react-router-dom";
 import { Card, Form, Button, Alert } from "react-bootstrap";
 import { useRef } from "react";
 import { useAuth } from "../../../Contexts/SeekerAuthContext";
-import { v4 } from "uuid";
 function SeekerSignup() {
   const emailRef = useRef();
   const passwordRef = useRef();
@@ -25,14 +24,14 @@ function SeekerSignup() {
     try {
       setError(""); // set error back to empty string so that we dont have error initially
       setLoading(true); //loading is set to true since the user has clicked the signup button.
-      const newName =
-        fullNameRef.current.value
-          .split("")
-          .filter((char) => char !== " ")
-          .join("") + v4();
-      await signup(emailRef.current.value, passwordRef.current.value, newName); // Here we call the signup function, which is in AuthContexts file with certain parameters. If signup does not work then error will be outputted
 
-      navigate("/parent", { state: { fullName: newName } }); //If signup is successful, then user is navigated to the user page, else they get an error as signup wouldn't have been successful.
+      const userCredential = await signup(
+        emailRef.current.value,
+        passwordRef.current.value,
+        fullNameRef.current.value
+      );
+      const uid = userCredential.user.uid;
+      navigate("/parent", { state: { uid: uid } }); //If signup is successful, then user is navigated to the user page, else they get an error as signup wouldn't have been successful.
       //using await, we wait for signup to finish
     } catch (error) {
       //error message that will be displayed in case the signup process isnt succesful

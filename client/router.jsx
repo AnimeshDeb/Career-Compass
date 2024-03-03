@@ -6,14 +6,14 @@ import JobsApplied from "./src/routes/seeker/jobsApplied/jobsApplied.jsx";
 import SearchUser from "./src/routes/searchUsers/searchUsers.jsx";
 import Onboard from "./src/routes/Onboard.jsx";
 import { AuthProvider } from "./src/Contexts/AuthContext";
-import ForgotPassword from "./src/routes/seeker/signup/ForgotPassword.jsx";
+import ForgotPassword from "./src/routes/seeker/auth/ForgotPassword.jsx";
 import { SeekerAuthProvider } from "./src/Contexts/SeekerAuthContext.jsx";
-import SeekerPrivateRoute from "./src/routes/seeker/signup/steps/SeekerPrivateRoute.jsx";
-import SeekerLogin from "./src/routes/seeker/signup/steps/SeekerLogin.jsx";
-import SeekerSignup from "./src/routes/seeker/signup/SeekerSignup.jsx";
-import SeekerUser from "./src/routes/seeker/signup/steps/SeekerUser.jsx";
-import SeekerUpdateProfile from "./src/routes/seeker/signup/steps/SeekerUpdateProfile.jsx";
-import ParentComponent from "./src/routes/seeker/signup/ProcessSignUp.jsx";
+import SeekerPrivateRoute from "./src/routes/seeker/auth/steps/SeekerPrivateRoute.jsx";
+import SeekerLogin from "./src/routes/seeker/auth/SeekerLogin.jsx";
+import SeekerSignup from "./src/routes/seeker/auth/SeekerSignup.jsx";
+import SeekerUser from "./src/routes/seeker/auth/steps/SeekerUser.jsx";
+import SeekerUpdateProfile from "./src/routes/seeker/auth/steps/SeekerUpdateProfile.jsx";
+import ParentComponent from "./src/routes/seeker/auth/ProcessSignUp.jsx";
 
 import JobList from "./src/routes/JobList/JobList.jsx";
 export const router = createBrowserRouter([
