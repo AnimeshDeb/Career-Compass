@@ -1,0 +1,35 @@
+@import url('../../constants/colors/colors.css');
+.onboard-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    text-align: center;
+    width: 100%;
+  }
+  
+  .onboard-logo {
+    margin-bottom: 20px; 
+  }
+  
+  .onboard-buttons {
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap; 
+  }
+  
+  .onboard-button a {
+    display: block;
+    width: 100%;
+    color: white;
+    text-decoration: none;
+  }
+  
+  .btn-primary a {
+    color: #fff;
+  }
+  
+  .btn-success a {
+    color: #fff;
+  }

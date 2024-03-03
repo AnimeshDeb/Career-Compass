@@ -1,5 +1,6 @@
-import { useState } from "react";
-import { performSearch } from "../../functions/searchFunctions";
+import React, { useState } from "react";
+import { performSearch } from "../../../functions/searchFunctions";
+import "./searchUser.css"; // Ensure this path is correct
 
 export default function SearchUser() {
   const [searchTerm, setSearchTerm] = useState("");
@@ -10,33 +11,30 @@ export default function SearchUser() {
     const results = await performSearch(searchTerm);
     setSearchResults(results);
   };
+
   const placeholderPFP = "/placeholderPFP.png";
+
   return (
-    <div>
+    <div className="searchContainer">
       <input
+        className="searchInput"
         type="text"
         value={searchTerm}
         onChange={(e) => setSearchTerm(e.target.value)}
         placeholder="Search by name..."
       />
-      <button onClick={handleSearch}>Search</button>
-      <ul>
+      <button className="searchButton" onClick={handleSearch}>
+        <i className="fas fa-search"></i>
+      </button>
+      <ul className="userList">
         {searchResults.map((user) => (
-          <li key={user.id}>
+          <li key={user.id} className="userItem">
             {user.pictureURL ? (
-              <img
-                src={user.pictureURL}
-                alt="User"
-                style={{ width: "40px", height: "40px", borderRadius: "50%" }}
-              />
+              <img src={user.pictureURL} alt="User" />
             ) : (
-              <img
-                src={placeholderPFP}
-                alt="User"
-                style={{ width: "40px", height: "40px", borderRadius: "50%" }}
-              />
+              <img src={placeholderPFP} alt="User" />
             )}
-            {user.displayName} ({user.userType}) - {user.email}
+            {user.displayName} ({user.userType})
           </li>
         ))}
       </ul>
