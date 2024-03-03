@@ -1,18 +1,9 @@
-// import Onboard from "./src/components/Onboard"
-// import Admin_signup from "./src/components/Admin-signup.jsx";
-// import {AuthProvider} from "./src/Contexts/AuthContext"
-// export const router = createBrowserRouter([
-//   { path: "/user", element: (<AuthProvider> <UserSeeker /> <AuthProvider/>) },
-//   {path: "/", element: <Onboard />},
-//   {path: "/admin-signup", element: <Admin_signup/>},
-// ]);
 import UserpageSeeker from "./src/routes/seeker/userpage/userpageSeeker.jsx";
 import UserpageMentor from "./src/routes/mentor/userpage/userpageMentor.jsx";
 import UserpageCompany from "./src/routes/company/userpage/userpageCompany.jsx";
 import { createBrowserRouter } from "react-router-dom";
 import JobsApplied from "./src/routes/seeker/jobsApplied/jobsApplied.jsx";
 import SearchUser from "./src/routes/searchUsers/searchUsers.jsx";
-
 import Onboard from "./src/components/Onboard";
 import AdminSignup from "./src/components/AdminSignup.jsx";
 import { AuthProvider } from "./src/Contexts/AuthContext";
@@ -27,80 +18,24 @@ import CompaniesPrivateRoute from "./src/components/CompaniesPrivateRoute.jsx";
 import CompaniesSignup from "./src/components/CompaniesSignup.jsx";
 import CompaniesUpdateProfile from "./src/components/CompaniesUpdateProfile.jsx";
 import CompaniesUser from "./src/components/CompaniesUser.jsx";
-import CompaniesForgotPassword from "./src/components/CompaniesForgotPassword.jsx";
-import SeekerForgotPassword from "./src/components/SeekerForgotPassword.jsx";
 import { SeekerAuthProvider } from "./src/Contexts/SeekerAuthContext.jsx";
 import SeekerPrivateRoute from "./src/components/SeekerPrivateRoute.jsx";
 import SeekerLogin from "./src/components/SeekerLogin.jsx";
 import SeekerSignup from "./src/components/SeekerSignup.jsx";
 import SeekerUser from "./src/components/SeekerUser.jsx";
 import SeekerUpdateProfile from "./src/components/SeekerUpdateProfile.jsx";
-import SeekerIntro from "./src/components/SeekerSignProcessIntro.jsx";
-import SeekerSkills from "./src/components/SeekerSignupProcessSkills.jsx";
-import SeekerChallenges from "./src/components/SeekerChallengers.jsx";
-import SeekerEducation from "./src/components/SeekerEducation.jsx";
-import SeekerJobs from "./src/components/SeekerJobs.jsx";
-import SeekerProfilepic from "./src/components/SeekerProfilepic.jsx";
 import ParentComponent from "./src/components/ParentComponent.jsx";
 
-import JobList from './src/components/JobList.jsx';
+import JobList from "./src/components/JobList.jsx";
 export const router = createBrowserRouter([
- {
-  path:"/parent",
-  element:(
-    <SeekerAuthProvider>
-      <ParentComponent/>
-    </SeekerAuthProvider>
-  )
- },
-  // {
-  //   path: "/SeekerProfilepic",
-  //   element: (
-  //     <SeekerAuthProvider>
-  //       <SeekerProfilepic />
-  //     </SeekerAuthProvider>
-  //   ),
-  // },
-  // {
-  //   path: "/SeekerJobs",
-  //   element: (
-  //     <SeekerAuthProvider>
-  //       <SeekerJobs />
-  //     </SeekerAuthProvider>
-  //   ),
-  // },
-  // {
-  //   path: "/seekerEducation",
-  //   element: (
-  //     <SeekerAuthProvider>
-  //       <SeekerEducation />
-  //     </SeekerAuthProvider>
-  //   ),
-  // },
-  // {
-  //   path: "/seekerChallenges",
-  //   element: (
-  //     <SeekerAuthProvider>
-  //       <SeekerChallenges />
-  //     </SeekerAuthProvider>
-  //   ),
-  // },
-  // {
-  //   path: "/seekerSkills",
-  //   element: (
-  //     <SeekerAuthProvider>
-  //       <SeekerSkills />
-  //     </SeekerAuthProvider>
-  //   ),
-  // },
-  // {
-  //   path: "/seekerIntro",
-  //   element: (
-  //     <SeekerAuthProvider>
-  //       <SeekerIntro />
-  //     </SeekerAuthProvider>
-  //   ),
-  // },
+  {
+    path: "/parent",
+    element: (
+      <SeekerAuthProvider>
+        <ParentComponent />
+      </SeekerAuthProvider>
+    ),
+  },
   {
     path: "/AdminUser",
     element: (
@@ -252,10 +187,8 @@ export const router = createBrowserRouter([
     ),
   },
   {
-    
-      path: '/Joblist',
-      element: <JobList />,
-    
+    path: "/Joblist",
+    element: <JobList />,
   },
   {
     path: "/SeekerForgotPassword",
@@ -264,7 +197,6 @@ export const router = createBrowserRouter([
         <SeekerUpdateProfile />
       </SeekerAuthProvider>
     ),
-    
   },
   { path: "/searchUsers", element: <SearchUser /> },
   { path: "/user", element: <UserpageSeeker /> },

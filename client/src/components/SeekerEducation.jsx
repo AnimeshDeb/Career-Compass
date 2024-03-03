@@ -1,24 +1,13 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { Card, Form, Button } from "react-bootstrap";
-import { useNavigate, useLocation } from "react-router-dom";
-import { db, auth } from "../firebase";
-import {
-  collection,
-  addDoc,
-  getDocs,
-  where,
-  query,
-  doc,
-  setDoc,
-} from "firebase/firestore";
+import { db } from "../firebase";
+import { collection, addDoc, doc } from "firebase/firestore";
 import PropTypes from "prop-types";
-function SeekerEducation({handleNextStep, handlePrevStep, name}) {
-  const navigate = useNavigate();
+function SeekerEducation({ handleNextStep, handlePrevStep, name }) {
   const [seekerSchoolNameTxt, setSeekerSchoolNameTxt] = useState("");
   const [seekerMajor, setSeekerMajor] = useState("");
   const [seekerEducationTypeTxt, setSeekerEducationTypeTxt] = useState("");
   const [seekerGraduating, setSeekerGraduating] = useState("");
-  const location = useLocation();
   // const name = location.state?.fullName;
 
   const handleChangeSchool = (e) => {
@@ -99,7 +88,10 @@ function SeekerEducation({handleNextStep, handlePrevStep, name}) {
                 required
               />
             </Form.Group>
-            <Button type="text"  onClick={()=>handlePrevStep()}> Back</Button>
+            <Button type="text" onClick={() => handlePrevStep()}>
+              {" "}
+              Back
+            </Button>
             <Button type="submit"> Next</Button>
           </Form>
         </Card.Body>
@@ -108,7 +100,7 @@ function SeekerEducation({handleNextStep, handlePrevStep, name}) {
   );
 }
 
-SeekerEducation.propTypes={
+SeekerEducation.propTypes = {
   handleNextStep: PropTypes.func.isRequired,
   name: PropTypes.string.isRequired,
   handlePrevStep: PropTypes.func.isRequired,

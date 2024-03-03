@@ -1,19 +1,14 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { Card, Form, Button, Alert } from "react-bootstrap";
-import React, { useRef } from "react";
+import { useRef } from "react";
 import { useAuth } from "../Contexts/SeekerAuthContext";
-import { updateCurrentUser } from "firebase/auth";
-import SeekerIntro from "./SeekerSignProcessIntro";
-import ParentComponent from "./ParentComponent";
 import { v4 } from "uuid";
 function SeekerSignup() {
   const emailRef = useRef();
   const passwordRef = useRef();
   const passwordConfirmRef = useRef();
-  const [name, setName] = useState(0);
   const fullNameRef = useRef();
   const { signup } = useAuth();
   const [error, setError] = useState("");
@@ -36,8 +31,6 @@ function SeekerSignup() {
           .filter((char) => char !== " ")
           .join("") + v4();
       await signup(emailRef.current.value, passwordRef.current.value, newName); // Here we call the signup function, which is in AuthContexts file with certain parameters. If signup does not work then error will be outputted
-
-      setName(newName);
 
       navigate("/parent", { state: { fullName: newName } }); //If signup is successful, then user is navigated to the user page, else they get an error as signup wouldn't have been successful.
       //using await, we wait for signup to finish

@@ -1,38 +1,22 @@
-import { db, auth } from '../firebase';
-import React, { useState, useRef } from 'react';
-import { Card, Form, Button, Alert } from 'react-bootstrap';
-import {
-  collection,
-  addDoc,
-  getDocs,
-  where,
-  query,
-  doc,
-  setDoc,
-} from 'firebase/firestore';
-
-import { getAuth } from 'firebase/auth';
-import { useAuth } from '../Contexts/SeekerAuthContext';
-import { useLocation } from 'react-router-dom';
-import { Link } from 'react-router-dom';
-import { useNavigate } from 'react-router-dom';
-import '../styling/UploadImages.css';
-import { storage } from '../firebase';
-import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
-import { v4 } from 'uuid';
+import { db } from "../firebase";
+import { useState, useRef } from "react";
+import { Card, Form, Button } from "react-bootstrap";
+import { collection, doc, setDoc } from "firebase/firestore";
+import "../styling/UploadImages.css";
+import { storage } from "../firebase";
+import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
+import { v4 } from "uuid";
 import PropTypes from "prop-types";
 
-function SeekerChallenges({handleNextStep, handlePrevStep, name}) {
-  const location = useLocation();
-  const navigate = useNavigate();
+function SeekerChallenges({ handleNextStep, handlePrevStep, name }) {
   // const name = location.state?.fullName;
   const [images, setImages] = useState([]);
   const [isDragging, setIsDragging] = useState(false);
   const fileInputRef = useRef(null);
-  const [seekerTxtChallenges, setSeekerTxtChallenges] = useState('');
+  const [seekerTxtChallenges, setSeekerTxtChallenges] = useState("");
   const [imageUpload, setImageUpload] = useState(null);
   const [mode, setMode] = useState();
-  const usersCollection = collection(db, 'Seekers');
+  const usersCollection = collection(db, "Seekers");
   const docRef = doc(usersCollection, name);
   function selectFiles() {
     fileInputRef.current.click();
@@ -46,8 +30,7 @@ function SeekerChallenges({handleNextStep, handlePrevStep, name}) {
 
     setImages((prevImages) => [
       ...prevImages,
-      { name: file.name, url: URL.createObjectURL(file),type: file.type,
-      },
+      { name: file.name, url: URL.createObjectURL(file), type: file.type },
     ]);
     fileInputRef.current.disabled = true;
   }
@@ -60,7 +43,7 @@ function SeekerChallenges({handleNextStep, handlePrevStep, name}) {
     e.preventDefault();
     if (images.length === 0) {
       setIsDragging(true);
-      e.dataTransfer.dropEffect = 'copy';
+      e.dataTransfer.dropEffect = "copy";
     }
   }
   function onDragLeave(e) {
@@ -82,18 +65,18 @@ function SeekerChallenges({handleNextStep, handlePrevStep, name}) {
         { name: files[0].name, url: URL.createObjectURL(files[0]) },
       ]);
       fileInputRef.current.disabled = true;
-      setMode('video');
-      console.log('value of image is ' + imageUpload);
+      setMode("video");
+      console.log("value of image is " + imageUpload);
     }
   }
   function uploadImage() {
-    console.log('Images: ', images);
+    console.log("Images: ", images);
     if (imageUpload === null) return;
     const imageRef = ref(
       storage,
       `Users/Seekers/ ${name}/${imageUpload.name + v4()}`
     );
-    console.log('Image upload value is: ' + imageUpload);
+    console.log("Image upload value is: " + imageUpload);
 
     uploadBytes(imageRef, imageUpload)
       .then((snapshot) => {
@@ -103,21 +86,21 @@ function SeekerChallenges({handleNextStep, handlePrevStep, name}) {
       })
       .then((downloadURL) => {
         //
-        console.log('Download url:' + downloadURL);
-        alert('image uploaded successfully');
+        console.log("Download url:" + downloadURL);
+        alert("image uploaded successfully");
         const seekerChallangeData = {
           challenges: downloadURL,
         };
-        if (mode === 'video') {
+        if (mode === "video") {
           setDoc(docRef, seekerChallangeData, { merge: true });
         }
       });
   }
   function handleTextClick() {
-    setMode('text');
+    setMode("text");
   }
   function handleVideoClick() {
-    setMode('video');
+    setMode("video");
   }
   async function handleSubmit(e) {
     e.preventDefault();
@@ -125,14 +108,14 @@ function SeekerChallenges({handleNextStep, handlePrevStep, name}) {
       const seekerChallangeData = {
         challenges: seekerTxtChallenges,
       };
-      if (mode === 'text') {
+      if (mode === "text") {
         await setDoc(docRef, seekerChallangeData, { merge: true });
       }
       handleNextStep();
       // navigate('/seekerEducation', { state: { fullName: name } });
     } catch (error) {
-      console.log('The error is: ' + error);
-      console.error('ERROR: ' + error);
+      console.log("The error is: " + error);
+      console.error("ERROR: " + error);
     }
   }
   const handleChange = (e) => {
@@ -167,7 +150,7 @@ function SeekerChallenges({handleNextStep, handlePrevStep, name}) {
                   <span className="select">Drop images here </span>
                 ) : (
                   <>
-                    Drag & Drop image here or{' '}
+                    Drag & Drop image here or{" "}
                     <span
                       className="select"
                       role="button"
@@ -191,26 +174,28 @@ function SeekerChallenges({handleNextStep, handlePrevStep, name}) {
                 {images.map((images, index) => (
                   <div className="image" key={index}>
                     <span className="delete" onClick={() => deleteImage(index)}>
-                      {' '}
-                      &times;{' '}
+                      {" "}
+                      &times;{" "}
                     </span>
 
                     {images.type && images.type.includes("video") ? ( // Check if it's a video
-        <video controls>
-          <source src={images.url} type={images.type} />
-          Your browser does not support the video tag.
-        </video>
-      ) : (
-        <img src={images.url} alt={images.name} />
-      )}
-    </div>
+                      <video controls>
+                        <source src={images.url} type={images.type} />
+                        Your browser does not support the video tag.
+                      </video>
+                    ) : (
+                      <img src={images.url} alt={images.name} />
+                    )}
+                  </div>
                 ))}
               </div>
               <button type="button" onClick={uploadImage}>
                 Upload
               </button>
             </div>
-            <Button type="text" onClick={()=>handlePrevStep()}>Back</Button>
+            <Button type="text" onClick={() => handlePrevStep()}>
+              Back
+            </Button>
             <Button type="submit"> Next</Button>
           </Form>
         </Card.Body>
@@ -218,7 +203,7 @@ function SeekerChallenges({handleNextStep, handlePrevStep, name}) {
     </>
   );
 }
-SeekerChallenges.propTypes={
+SeekerChallenges.propTypes = {
   handleNextStep: PropTypes.func.isRequired,
   name: PropTypes.string.isRequired,
   handlePrevStep: PropTypes.func.isRequired,

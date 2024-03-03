@@ -1,12 +1,9 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { Card, Form, Button, Alert } from "react-bootstrap";
-import React, { useRef } from "react";
+import { useRef } from "react";
 import { useAuth } from "../Contexts/SeekerAuthContext";
-import { doc, updateDoc } from "firebase/firestore";
-import { db, auth } from "../firebase";
 import { reauthenticateWithCredential, EmailAuthProvider } from "firebase/auth";
 function SeekerUpdateProfile() {
   const emailRef = useRef();

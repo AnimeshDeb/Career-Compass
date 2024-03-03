@@ -1,23 +1,11 @@
-import React, { useState, useRef } from "react";
-import { useNavigate, useLocation } from "react-router-dom";
-import {
-  collection,
-  addDoc,
-  getDocs,
-  where,
-  query,
-  doc,
-  setDoc,
-} from "firebase/firestore";
+import { useState } from "react";
+import { collection, addDoc, doc } from "firebase/firestore";
 import { db } from "../firebase";
-import { Card, Form, Button, Alert } from "react-bootstrap";
+import { Card, Form } from "react-bootstrap";
 import PropTypes from "prop-types";
-function SeekerJobs({handleNextStep, handlePrevStep, name}) {
+function SeekerJobs({ handleNextStep, handlePrevStep, name }) {
   const [jobLocation, setJobLocation] = useState("");
   const [jobName, setJobName] = useState("");
-  const location = useLocation();
-  // const name = location.state?.fullName;
-  const navigate = useNavigate();
 
   async function handleSubmit(e) {
     e.preventDefault();
@@ -66,7 +54,9 @@ function SeekerJobs({handleNextStep, handlePrevStep, name}) {
                 placeholder="What is the location of your job?"
               />
             </Form.Group>
-            <button type="text" onClick={()=> handlePrevStep()}>Back</button>
+            <button type="text" onClick={() => handlePrevStep()}>
+              Back
+            </button>
             <button onSubmit={handleSubmit}> Next </button>
           </Form>
         </Card.Body>
@@ -74,7 +64,7 @@ function SeekerJobs({handleNextStep, handlePrevStep, name}) {
     </>
   );
 }
-SeekerJobs.propTypes={
+SeekerJobs.propTypes = {
   handleNextStep: PropTypes.func.isRequired,
   name: PropTypes.string.isRequired,
   handlePrevStep: PropTypes.func.isRequired,
