@@ -13,18 +13,57 @@ const JobListing = ({ job, onJobClick }) => {
     padding: '16px',
     margin: '8px 0',
     backgroundColor: '#2e318e',
+    borderRadius: '10px',
     color: 'white',
     boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)',
   };
 
-  // Return a div that displays the job's details and calls onJobClick with the job object when clicked
+  const greenBoxStyle = {
+    display: 'flex',
+    justifyContent: 'center', // Center content horizontally
+    alignItems: 'center', // Center content vertically
+    minWidth: '10px', // A minimum width for the green box to contain the "Details" text
+    backgroundColor: 'green', // Green color for the box
+    color: 'white', // Text color
+    border: 'none', 
+    borderRadius: '40px',
+    padding: '10px', // Padding inside the green box
+    marginLeft: '1700px', // Space between the green box and the job title
+    cursor: 'pointer', // Change cursor to pointer when hovering over the box
+  };
+
+  const applyButtonStyle = {
+    backgroundColor: 'blue', // Blue color for the apply button
+    color: 'white', // Text color for the apply button
+    padding: '10px 125px', // Padding inside the apply button
+    minWidth: '10px',
+    border: 'none', // No border for the apply button
+    borderRadius: '40px', // Rounded corners for the apply button
+    cursor: 'pointer', // Change cursor to pointer when hovering over the button
+    marginLeft: '1700px', 
+    textDecoration: 'none', // No underline for the text
+  };
+
+  
   return (
     <div style={jobListingStyle} onClick={() => onJobClick(job)}>
-      <h1>{job.id}</h1>
-      <h2>{job.Description}</h2>
+      <div>
+        <div style={greenBoxStyle}>
+          Details {/* Text inside the green box */}
+        </div>
+        <div> {/* Job details */}
+          <h1>{job.id}</h1>
+          <h2>{job.Description}</h2>
+        </div>
+      </div>
+      {/* Apply button */}
+      <button style={applyButtonStyle} onClick={(event) => handleApplyClick(event, job)}>
+        Apply
+      </button>
     </div>
   );
 };
+
 
 // Define the main functional component to display the job list
 const JobList = () => {
@@ -36,6 +75,8 @@ const JobList = () => {
   const [selectedJob, setSelectedJob] = useState(null);
   // Initialize state for showing the location submenu
   const [showLocationSubMenu, setShowLocationSubMenu] = useState(false);
+  const [locationFilter, setLocationFilter] = useState(""); // Added state for location filter
+
 
   // Placeholder for the location submenu action
   const handleLocationClick = (location) => {
@@ -93,6 +134,7 @@ const JobList = () => {
             style={{ marginRight: '8px', width: '300px' }}
           />
           <button onClick={toggleLocationSubMenu}>Filter</button> {/* Toggles the location submenu */}
+          
         </div>
         {showLocationSubMenu && (
           <div style={{ display: 'flex', flexDirection: 'column', padding: '8px', border: '1px solid #ddd' }}>
