@@ -1,9 +1,8 @@
-import { db } from "../firebase";
+import { db } from "../../../../firebase";
 import { useState, useRef } from "react";
 import { Card, Form, Button } from "react-bootstrap";
 import { collection, doc, setDoc } from "firebase/firestore";
-import "../styling/UploadImages.css";
-import { storage } from "../firebase";
+import { storage } from "../../../../firebase";
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { v4 } from "uuid";
 import PropTypes from "prop-types";

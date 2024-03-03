@@ -2,9 +2,9 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 import { Card, Form, Button, Alert } from "react-bootstrap";
 import { useRef } from "react";
-import { useAuth } from "../Contexts/CompaniesAuthContext";
+import { useAuth } from "../../../../Contexts/SeekerAuthContext";
 
-function CompaniesForgotPassword() {
+function SeekerForgotPassword() {
   const emailRef = useRef();
   const { resetpassword } = useAuth();
   const [error, setError] = useState("");
@@ -47,16 +47,16 @@ function CompaniesForgotPassword() {
             </Button>
           </Form>
           <div className="w-100 text-center mt-3">
-            <Link to="/CompaniesLogin">Log In</Link>
+            <Link to="/SeekerLogin">Log In</Link>
           </div>
         </Card.Body>
       </Card>
 
       <div className="w-100 text-center mt-2">
-        Need an account? <Link to="/CompaniesSignup">Sign Up</Link>
+        Need an account? <Link to="/SeekerSignup">Sign Up</Link>
       </div>
     </>
   );
 }
 
-export default CompaniesForgotPassword;
+export default SeekerForgotPassword;

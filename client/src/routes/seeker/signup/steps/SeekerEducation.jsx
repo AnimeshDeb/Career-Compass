@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Card, Form, Button } from "react-bootstrap";
-import { db } from "../firebase";
+import { db } from "../../../../firebase";
 import { collection, addDoc, doc } from "firebase/firestore";
 import PropTypes from "prop-types";
 function SeekerEducation({ handleNextStep, handlePrevStep, name }) {

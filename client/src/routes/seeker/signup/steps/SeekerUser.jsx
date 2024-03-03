@@ -1,10 +1,10 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Card, Button, Alert } from "react-bootstrap";
-import { useAuth } from "../Contexts/CompaniesAuthContext";
+import { useAuth } from "../../../../Contexts/SeekerAuthContext";
 
 //Taking changeColor as a parameter here. 'changeColor' is coming from the app.js file. Remember that 'changeColor' is a function that is equivalent to 'changeBackgroundColor' function.
-function CompaniesUser() {
+function SeekerUser() {
   const [error, setError] = useState(""); // state is used to display any error
   const { currentUser, logout } = useAuth(); // referencing auth so that we can access the current user and also logout. These
   // are functionalities of firebase. We are also referencing the logout function from AuthContext file by using use Auth.
@@ -14,7 +14,7 @@ function CompaniesUser() {
     setError(""); //setting error to empty string
     try {
       await logout();
-      navigate("/CompaniesLogin"); //once user logs out, the page switches to the login page
+      navigate("/seekerLogin"); //once user logs out, the page switches to the login page
     } catch (error) {
       //in case user cant log out, error message will be displayed
       console.log("the error is: ", { error });
@@ -32,7 +32,7 @@ function CompaniesUser() {
           <strong> Email: </strong> {currentUser.email}
           <strong> Password </strong> {currentUser.password}
           <Link
-            to="/CompaniesUpdateProfile"
+            to="/SeekerUpdateProfile"
             className="btn btn-primary w-100 mt-3"
           >
             Update Profile
@@ -47,4 +47,4 @@ function CompaniesUser() {
     </div>
   );
 }
-export default CompaniesUser;
+export default SeekerUser;

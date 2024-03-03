@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import { Card, Form, Button, Alert } from "react-bootstrap";
 import { useRef } from "react";
-import { useAuth } from "../Contexts/SeekerAuthContext";
+import { useAuth } from "../../../../Contexts/SeekerAuthContext";
 import { reauthenticateWithCredential, EmailAuthProvider } from "firebase/auth";
 function SeekerUpdateProfile() {
   const emailRef = useRef();

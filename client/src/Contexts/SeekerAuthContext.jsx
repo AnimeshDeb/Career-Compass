@@ -20,7 +20,7 @@ import {
 } from "firebase/firestore";
 
 import { getAuth, onAuthStateChanged } from "firebase/auth";
-import SeekerIntro from "../components/SeekerSignProcessIntro";
+import SeekerIntro from "../routes/seeker/signup/steps/SeekerSignProcessIntro";
 
 const SeekerAuthContext = React.createContext();
 export function useAuth() {

@@ -1,12 +1,13 @@
 import { useState } from "react";
-import SeekerIntro from "./SeekerSignProcessIntro";
-import SeekerSkills from "./SeekerSignupProcessSkills";
-import SeekerChallenges from "./SeekerChallengers";
+import SeekerIntro from "./steps/SeekerSignProcessIntro";
+import SeekerSkills from "./steps/SeekerSignupProcessSkills";
+import SeekerChallenges from "./steps/SeekerChallengers";
 import { useLocation } from "react-router-dom";
-import SeekerEducation from "./SeekerEducation";
-import SeekerJobs from "./SeekerJobs";
-import SeekerProfilepic from "./SeekerProfilepic";
+import SeekerEducation from "./steps/SeekerEducation";
+import SeekerJobs from "./steps/SeekerJobs";
+import SeekerProfilepic from "./steps/SeekerProfilepic";
 import { useNavigate } from "react-router-dom";
+import "../../../styling/UploadImages.css";
 function ParentComponent() {
   const navigate = useNavigate();
   const location = useLocation();

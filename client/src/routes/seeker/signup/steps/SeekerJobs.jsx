@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { collection, addDoc, doc } from "firebase/firestore";
-import { db } from "../firebase";
+import { db } from "../../../../firebase";
 import { Card, Form } from "react-bootstrap";
 import PropTypes from "prop-types";
 function SeekerJobs({ handleNextStep, handlePrevStep, name }) {
