@@ -25,10 +25,7 @@ video{
     max-width: 470px;
     margin: 20px;
 }
-.intro-sec h2,
-.skills-sec h2,
-.challenges-sec h2,
-.references-sec h2 {
+.sec h2 {
     font-family: 'Ultra';
     background-color: var(--tertiary_color);
     color: var(--white);
@@ -44,31 +41,51 @@ video{
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
-    width: 33.33%;
+    width: 50%;
     min-width: 330px;
 }
 .gallery-sec{
     margin-bottom: 0px;
     padding-bottom: 0px;
 }
-.education{
-    width: 33.33%;
-    min-width: 300px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+.education-item{
+    margin-top: 10px;
+    margin-left: 50px;
 }
-.education-text {
-    text-align: center;
-    width: 100%;
-    padding-top: 10%;
-}
-.education-text h4{
+.education-item h4,h3{
     font-family: 'Ultra';
-    font-weight: 550;
-    font-size: x-large;
+    margin-top: 0px;
+    margin-right: 20px;
+    font-weight: 200;
+    font-size: medium;
 }
-
+.education-item h3{
+    font-size: large;
+}
+.education-bottom{
+    display: flex;
+    flex-wrap: wrap;
+}
+.education-classof{
+    color: var(--secondary_color);
+}
+.job-item{
+    display: flex;
+    margin-left: 50px;
+}
+.job-item h4,h3{
+    font-family: 'Ultra';
+    margin-top: 0px;
+    margin-right: 20px;
+    font-weight: 200;
+}
+.job-name{
+    font-size: large;
+}
+.job-location{
+    font-size: medium;
+    color: var(--secondary_color);
+}
 .company-name{
     font-family: 'Ultra';
     color: var(--tertiary_color);
@@ -107,11 +124,18 @@ video{
 .Maybolin-AI {
     background-color: var(--tertiary_color);
     color: var(--white);
-    border: 100px;
     border-bottom-left-radius: 10px;
-    padding: 170px;
+    padding: 110px;
     width: 10%;
     min-width: 400px;
+}
+.Maybolin-AI p{
+    font-family: 'Ultra';
+    color: var(--white);
+    margin: 0;
+    padding: 5px;
+    margin-bottom: 0px;
+    font-size: x-large;
 }
 .challenges-sec{
     width: 50%;
@@ -168,10 +192,7 @@ video{
         min-width: 0px;
         margin-bottom: 15px;
     }
-    .intro-sec h2,
-    .skills-sec h2,
-    .challenges-sec h2,
-    .references-sec h2 {
+    .sec h2 {
         font-family: 'Ultra';
         background-color: var(--tertiary_color);
         color: var(--white);

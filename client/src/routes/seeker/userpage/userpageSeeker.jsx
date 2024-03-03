@@ -1,19 +1,21 @@
 import "./userpageSeeker.css";
 import Navbar from "../../../components/navbar/navbar.jsx";
 import { useEffect, useState } from "react";
+import { useLocation } from "react-router-dom";
 import { getSeekerById } from "../../../functions/seekerFunctions.js";
 import Footer from "../../../components/footer/footer.jsx";
 import UserBanner from "../../../components/UserBanner/UserBanner.jsx";
 import UserMode from "./userMode/userMode.jsx";
 import EditMode from "./editMode/editMode.jsx";
 import PropTypes from "prop-types";
-export default function UserpageSeeker({ name }) {
+export default function UserpageSeeker() {
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
   const [iconSize, setIconSize] = useState("2x");
   const [editMode, setEditMode] = useState(false);
   const [userData, setUserData] = useState(null);
   const [pendingChanges, setPendingChanges] = useState({});
-
+  const location = useLocation();
+  const name = location.state?.name;
   const handlePendingChange = (field, value, type) => {
     setPendingChanges((prev) => ({
       ...prev,
