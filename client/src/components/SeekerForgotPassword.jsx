@@ -1,38 +1,34 @@
 import { useState } from "react";
-import { Link} from "react-router-dom";
-import axios from "axios";
-import { useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { Card, Form, Button, Alert } from "react-bootstrap";
-import React, { useRef } from "react";
-import { useAuth, resetpassword } from "../Contexts/SeekerAuthContext";
+import { useRef } from "react";
+import { useAuth } from "../Contexts/SeekerAuthContext";
 
 function SeekerForgotPassword() {
   const emailRef = useRef();
-  const passwordRef = useRef();
-  const navigate=useNavigate();
-  const {resetpassword}=useAuth();
-  const [error, setError]=useState('')
-  const [message, setMessage]=useState('')
+  const { resetpassword } = useAuth();
+  const [error, setError] = useState("");
+  const [message, setMessage] = useState("");
   //we have a loading state so that the user doesnt keep clicking the button
-  const [loading, setLoading]=useState(false)
-  async function handleSubmit(e){
-    e.preventDefault()//prevents form from refreshing
+  const [loading, setLoading] = useState(false);
+  async function handleSubmit(e) {
+    e.preventDefault(); //prevents form from refreshing
     //checking below if password is same as whats in db
-   
-    try{
-        setMessage('')
-    setError('')// set error back to empty string so that we dont have error
-    setLoading(true)
-    await resetpassword(emailRef.current.value)//Using resetpassword function with appropriate parameters passed in. It should
-    // be noted that since we are using useAuth for this, firebase handles the functionality of the user resetting the password.
-    // It handles the logic of the user receiving an email with their password once they type their email and submit.
-    setMessage('Check your email for further instructions');
-    //using await, we wait for signup to finish
-  } catch (error) {
-    console.error("Failed to reset email, error is:  ", error);
-      setError('Failed to reset password')
+
+    try {
+      setMessage("");
+      setError(""); // set error back to empty string so that we dont have error
+      setLoading(true);
+      await resetpassword(emailRef.current.value); //Using resetpassword function with appropriate parameters passed in. It should
+      // be noted that since we are using useAuth for this, firebase handles the functionality of the user resetting the password.
+      // It handles the logic of the user receiving an email with their password once they type their email and submit.
+      setMessage("Check your email for further instructions");
+      //using await, we wait for signup to finish
+    } catch (error) {
+      console.error("Failed to reset email, error is:  ", error);
+      setError("Failed to reset password");
     }
-    setLoading(false)
+    setLoading(false);
   }
   return (
     <>

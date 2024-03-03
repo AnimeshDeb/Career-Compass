@@ -1,37 +1,34 @@
 import { useState } from "react";
-import { Link} from "react-router-dom";
-import axios from "axios";
+import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import { Card, Form, Button, Alert } from "react-bootstrap";
-import React, { useRef } from "react";
-import {useAuth} from "../Contexts/AuthContext"
-import ForgotPassword from "./ForgotPassword";
+import { useRef } from "react";
+import { useAuth } from "../Contexts/AuthContext";
 
 function AdminLogin() {
   const emailRef = useRef();
   const passwordRef = useRef();
-  const navigate=useNavigate();
-  const {login}=useAuth();
-  const [error, setError]=useState('')
+  const navigate = useNavigate();
+  const { login } = useAuth();
+  const [error, setError] = useState("");
   //we have a loading state so that the user doesnt keep clicking the button
-  const [loading, setLoading]=useState(false)
-  async function handleSubmit(e){
-    e.preventDefault()//prevents form from refreshing
+  const [loading, setLoading] = useState(false);
+  async function handleSubmit(e) {
+    e.preventDefault(); //prevents form from refreshing
     //checking below if password is same as whats in db
-   
-    try{
 
-    setError('')// set error back to empty string so that we dont have error
-    setLoading(true)
-    await login(emailRef.current.value, passwordRef.current.value)// We are calling the login function from AuthContexts with appropriate parameters and
-    //if login does not work then error will be outputted
-     navigate('/AdminUser')
-    //using await, we wait for signup to finish
-  } catch (error) {
-    console.error("Error signing in: ", error);
-      setError('Failed to sign in')
+    try {
+      setError(""); // set error back to empty string so that we dont have error
+      setLoading(true);
+      await login(emailRef.current.value, passwordRef.current.value); // We are calling the login function from AuthContexts with appropriate parameters and
+      //if login does not work then error will be outputted
+      navigate("/AdminUser");
+      //using await, we wait for signup to finish
+    } catch (error) {
+      console.error("Error signing in: ", error);
+      setError("Failed to sign in");
     }
-    setLoading(false)
+    setLoading(false);
   }
   return (
     <>
