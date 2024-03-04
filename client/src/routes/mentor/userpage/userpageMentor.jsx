@@ -1,5 +1,5 @@
 import "./userpageMentor.css";
-import Navbar from "../../../components/navbar/navbar.jsx";
+import Navbar from "../../../components/navbar/version1/navbar.jsx";
 import { useEffect, useState } from "react";
 import { getMentorById } from "../../../functions/mentorFunctions.js";
 import Footer from "../../../components/footer/footer.jsx";

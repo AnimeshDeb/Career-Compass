@@ -1,5 +1,8 @@
 @import url('../../../constants/colors/colors.css');
 @import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css');
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 .searchContainer {
     display: flex;
     align-items: center;
@@ -7,7 +10,7 @@
     border-radius: 25px;
     padding: 8px;
     position: relative;
-    margin: 40px;
+    margin-top: 0px;
     max-width: 1200px;
   }
   
@@ -15,10 +18,11 @@
     flex: 1;
     border: 1px solid var(--primary_color);
     outline: none;
-    padding: 15px 20px 15px 50px;
+    padding: 20px 40px 20px 50px;
     border-radius: 5px;
     font-size: 16px;
-    width: 100%;
+    width: 600px;
+    margin: 0px;
     color: var(--primary_color);
     background-color: white;
     background-image: url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/webfonts/fa-solid-900.svg#search');
@@ -30,29 +34,36 @@
     background-color: transparent;
     border: none;
     position: absolute;
-    right: 10px;
+    right: 30px;
     color: var(--primary_color);
     cursor: pointer;
   }
   
   .searchButton i {
     margin-right: 0;
+    cursor: pointer;
   }
   
   .userList {
     list-style: none;
+    margin-top: 0;
     padding: 0;
   }
   
   .userItem {
     display: flex;
     align-items: center;
+    padding: 10px;
+    background-color: var(--primary_color);
+    color: white;
+    font-size: x-large;
     margin-bottom: 10px;
   }
   
   .userItem img {
     width: 40px;
+    background-color: white;
     height: 40px;
-    border-radius: 50%;
+    padding: 10px;
     margin-right: 10px;
   }

@@ -1,9 +1,8 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
-import { useNavigate } from "react-router-dom";
-import { Card, Form, Button, Alert } from "react-bootstrap";
+import { Link, useNavigate } from "react-router-dom";
 import { useRef } from "react";
 import { useAuth } from "../../../Contexts/SeekerAuthContext";
+import Navbar from "../../../components/navbar/version1/navbar";
 function SeekerSignup() {
   const emailRef = useRef();
   const passwordRef = useRef();
@@ -12,71 +11,100 @@ function SeekerSignup() {
   const { signup } = useAuth();
   const [error, setError] = useState("");
   const navigate = useNavigate();
-  //we have a loading state so that the user doesnt keep clicking the button
   const [loading, setLoading] = useState(false);
 
   async function handleSubmit(e) {
-    e.preventDefault(); //prevents form from refreshing
-    //checkign below if the passwords match in confirm password confirm and the password sections
+    e.preventDefault();
     if (passwordRef.current.value !== passwordConfirmRef.current.value) {
       return setError("Passwords do not match");
     }
     try {
-      setError(""); // set error back to empty string so that we dont have error initially
-      setLoading(true); //loading is set to true since the user has clicked the signup button.
-
+      setError("");
+      setLoading(true);
       const userCredential = await signup(
         emailRef.current.value,
         passwordRef.current.value,
         fullNameRef.current.value
       );
-      const uid = userCredential.user.uid;
-      navigate("/parent", { state: { uid: uid } }); //If signup is successful, then user is navigated to the user page, else they get an error as signup wouldn't have been successful.
-      //using await, we wait for signup to finish
+      navigate("/parent", { state: { uid: userCredential.user.uid } });
     } catch (error) {
-      //error message that will be displayed in case the signup process isnt succesful
       setError(error.message);
     }
-    setLoading(false); //once user signs up, loading is set to false as the process is finished.
+    setLoading(false);
   }
+
   return (
     <>
-      <Card>
-        <Card.Body>
-          <h2 className="text-center mb-4">Sign Up</h2>
-          {error && <Alert variant="danger">{error}</Alert>}
-          {/* In the signup, we require the users email, password, and display name. After clicing the sign up button,
-          we make a call to the signup function in AuthContexts so that the information is saved in the firebase database
-          and then the user successfully logs in. */}
-          <Form onSubmit={handleSubmit}>
-            <Form.Group id="fullname">
-              <Form.Label>Full Name</Form.Label>
-              <Form.Control type="fullname" ref={fullNameRef} required />
-            </Form.Group>
-            <Form.Group id="email">
-              <Form.Label>Email</Form.Label>
-              <Form.Control type="email" ref={emailRef} required />
-            </Form.Group>
-            <Form.Group id="password">
-              <Form.Label>Password</Form.Label>
-              <Form.Control type="password" ref={passwordRef} required />
-            </Form.Group>
-            <Form.Group id="password-confirm">
-              <Form.Label>Password Confirmation</Form.Label>
-              <Form.Control type="password" ref={passwordConfirmRef} required />
-            </Form.Group>
-            <Button disabled={loading} className="w-100" type="submit">
-              Sign up
-            </Button>
-          </Form>
-        </Card.Body>
-      </Card>
-
-      <div className="w-100 text-center mt-2">
-        Already have an account? <Link to="/SeekerLogin">Log In</Link>
+      <Navbar />
+      <div className="max-w-md mx-auto mt-10 bg-white p-8 border border-gray-200 rounded-lg shadow-md">
+        <h2 className="text-2xl font-bold text-center mb-4">Sign Up</h2>
+        {error && (
+          <div className="bg-red-500 text-white p-3 rounded mb-4">{error}</div>
+        )}
+        <form onSubmit={handleSubmit} className="space-y-4">
+          <div>
+            <label className="block text-sm font-bold mb-2" htmlFor="fullname">
+              Full Name
+            </label>
+            <input
+              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+              type="text"
+              ref={fullNameRef}
+              required
+            />
+          </div>
+          <div>
+            <label className="block text-sm font-bold mb-2" htmlFor="email">
+              Email
+            </label>
+            <input
+              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+              type="email"
+              ref={emailRef}
+              required
+            />
+          </div>
+          <div>
+            <label className="block text-sm font-bold mb-2" htmlFor="password">
+              Password
+            </label>
+            <input
+              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+              type="password"
+              ref={passwordRef}
+              required
+            />
+          </div>
+          <div>
+            <label
+              className="block text-sm font-bold mb-2"
+              htmlFor="password-confirm"
+            >
+              Password Confirmation
+            </label>
+            <input
+              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+              type="password"
+              ref={passwordConfirmRef}
+              required
+            />
+          </div>
+          <button
+            disabled={loading}
+            className="w-full bg-primary hover:bg-primary-dark text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+            type="submit"
+          >
+            Sign Up
+          </button>
+        </form>
+        <div className="text-center mt-4">
+          Already have an account?{" "}
+          <Link to="/SeekerLogin" className="text-blue-500 hover:text-blue-800">
+            Log In
+          </Link>
+        </div>
       </div>
     </>
   );
 }
-
 export default SeekerSignup;

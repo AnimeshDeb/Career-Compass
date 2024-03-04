@@ -1,5 +1,4 @@
 import { useState, useRef } from "react";
-import { Card, Form, Button } from "react-bootstrap";
 import { collection, doc, setDoc } from "firebase/firestore";
 import { db } from "../../../../firebase";
 import { storage } from "../../../../firebase";
@@ -23,17 +22,19 @@ function SeekerIntro({ handleNextStep, name }) {
     fileInputRef.current.click();
   }
   function onFileSelect(e) {
-    setImageUpload(e.target.files[0]);
-    const files = e.target.files;
-    if (files.length === 0) return;
-
-    const file = files[0];
-
-    setImages((prevImages) => [
-      ...prevImages,
-      { name: file.name, url: URL.createObjectURL(file), type: file.type },
-    ]);
-    fileInputRef.current.disabled = true;
+    const file = e.target.files[0];
+    if (file && file.type.startsWith("video/")) {
+      // Check if the selected file is a video
+      setImageUpload(file);
+      setImages([
+        { name: file.name, url: URL.createObjectURL(file), type: file.type },
+      ]);
+      fileInputRef.current.disabled = true;
+      setMode("video");
+    } else {
+      // Handle the case where a non-video file is selected
+      alert("Please select a video file.");
+    }
   }
   function deleteImage(index) {
     setImages((prevImages) => prevImages.filter((_, i) => i !== index));
@@ -129,79 +130,100 @@ function SeekerIntro({ handleNextStep, name }) {
 
   return (
     <>
-      <h1>Introductions</h1>
-      <p>Introduce yourself with text or a video. Perhaps both.</p>
+      <div className="bg-primary text-white p-1 pt-5 pl-10">
+        <h1 className="text-4xl font-bold mb-4">Introductions</h1>
+      </div>
+      <p className="text-left mb-6 text-2xl pl-10 pt-10">
+        Introduce yourself with <span className="text-secondary">text</span> or
+        a <span className="text-primary">video</span>. Perhaps both.
+      </p>
 
-      <Card>
-        <Card.Body>
-          <Form onSubmit={handleSubmit}>
-            <label className="introtxt">
-              <input
-                type="text"
-                name="seekerIntroInput"
-                onClick={handleTextClick}
-                value={seekerTxtIntro}
-                onChange={handleChange}
-                placeholder="Type your introduction here..."
-              />
-            </label>
+      <div className="max-w-4xl mx-auto p-6 space-y-6 bg-white rounded-lg shadow-md">
+        <form onSubmit={handleSubmit}>
+          <div className="mb-4">
+            <textarea
+              name="seekerIntroInput"
+              onClick={handleTextClick}
+              value={seekerTxtIntro}
+              onChange={handleChange}
+              placeholder="Type your introduction here..."
+              className="w-full h-36 p-4 text-lg border rounded-md focus:ring-blue-500 focus:border-blue-500"
+            />
+          </div>
 
-            <div className="card2" onClick={handleVideoClick}>
+          <div className="flex space-x-4">
+            <div className="flex-1">
+              {/* Drag and Drop for video upload */}
               <div
-                className="drag-area"
+                className="flex flex-col items-center justify-center h-48 p-4 border-2 border-dashed rounded-md cursor-pointer hover:border-blue-500"
+                onClick={selectFiles} // Make sure this calls the selectFiles function
                 onDragOver={onDragOver}
                 onDragLeave={onDragLeave}
                 onDrop={onDrop}
               >
                 {isDragging ? (
-                  <span className="select">Drop files here </span>
+                  <span className="text-blue-500">Drop files here</span>
                 ) : (
-                  <>
-                    Drag & Drop files here or{" "}
-                    <span
-                      className="select"
-                      role="button"
-                      onClick={selectFiles}
-                    >
-                      Browse
-                    </span>
-                  </>
+                  <span className="text-blue-500">
+                    Click here to put your video
+                  </span>
                 )}
 
                 <input
-                  name="file"
                   type="file"
                   ref={fileInputRef}
                   onChange={onFileSelect}
-                  className="file"
+                  className="hidden"
                 />
               </div>
-              <div className="container">
-                {images.map((images, index) => (
-                  <div className="image" key={index}>
-                    <span className="delete" onClick={() => deleteImage(index)}>
-                      {" "}
-                      &times;{" "}
-                    </span>
-                    {images.type && images.type.includes("video") ? ( // Check if it's a video
-                      <video controls>
-                        <source src={images.url} type={images.type} />
-                        Your browser does not support the video tag.
-                      </video>
-                    ) : (
-                      <img src={images.url} alt={images.name} />
-                    )}
-                  </div>
-                ))}
-              </div>
-              <button type="button" onClick={uploadImage}>
-                Upload
-              </button>
             </div>
-            <Button type="submit">Next</Button>
-          </Form>
-        </Card.Body>
-      </Card>
+
+            {/* Thumbnails */}
+            <div className="flex-1 space-y-4">
+              {images.map((image, index) => (
+                <div key={index} className="relative">
+                  <button
+                    type="button"
+                    className="absolute top-0 right-0 p-1 text-white bg-red-600 rounded-full"
+                    onClick={() => deleteImage(index)}
+                  >
+                    &times;
+                  </button>
+                  {/* Ensure image.type is defined before calling includes */}
+                  {image.type && image.type.includes("video") ? (
+                    <video controls className="w-full h-auto rounded-md">
+                      <source src={image.url} type={image.type} />
+                      Your browser does not support the video tag.
+                    </video>
+                  ) : (
+                    <img
+                      src={image.url}
+                      alt={image.name}
+                      className="w-full h-auto rounded-md"
+                    />
+                  )}
+                </div>
+              ))}
+            </div>
+          </div>
+
+          <div className="flex justify-between mt-6">
+            <button
+              type="button"
+              className="px-6 py-2 text-lg text-white bg-blue-600 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              onClick={uploadImage}
+            >
+              Upload
+            </button>
+            <button
+              type="submit"
+              className="px-6 py-2 text-lg text-white bg-green-600 rounded-md hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500"
+            >
+              Next
+            </button>
+          </div>
+        </form>
+      </div>
     </>
   );
 }

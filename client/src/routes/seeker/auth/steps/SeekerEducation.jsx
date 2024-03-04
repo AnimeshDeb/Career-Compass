@@ -44,58 +44,66 @@ function SeekerEducation({ handleNextStep, handlePrevStep, name }) {
   }
   return (
     <>
-      <h1>Education</h1>
-      <Card>
-        <Card.Body>
-          <Form onSubmit={handleSubmit}>
-            <Form.Group id="schoolName">
-              <Form.Label></Form.Label>
-              <Form.Control
-                type="text"
-                placeholder="Type in your university name... "
-                value={seekerSchoolNameTxt}
-                onChange={handleChangeSchool}
-                required
-              />
-            </Form.Group>
-            <Form.Group id="educationType">
-              <Form.Label></Form.Label>
-              <Form.Control
-                type="text"
-                placeholder="What degree are you going for..."
-                value={seekerEducationTypeTxt}
-                onChange={handleChangeEducationType}
-                required
-              />
-            </Form.Group>
-            <Form.Group id="grade">
-              <Form.Label></Form.Label>
-              <Form.Control
-                type="text"
-                placeholder="When are you graduating..."
-                value={seekerGraduating}
-                onChange={handleChangeGraduating}
-                required
-              />
-            </Form.Group>
-            <Form.Group id="major">
-              <Form.Label></Form.Label>
-              <Form.Control
-                type="text"
-                placeholder="What is your major..."
-                value={seekerMajor}
-                onChange={handleChangeMajor}
-                required
-              />
-            </Form.Group>
-            <Button type="text" onClick={() => handlePrevStep()}>
-              {" "}
+      <div className="bg-primary text-white p-5 pl-10">
+        <h1 className="text-4xl font-bold mb-4">Education</h1>
+      </div>
+      <p className="text-left text-2xl pl-10 pt-10">
+        Where did you go to <span className="text-secondary">school</span>? Tell
+        us your education.
+      </p>
+      <div className="max-w-4xl mx-auto p-6 space-y-6 bg-white rounded-lg shadow-md">
+        <form onSubmit={handleSubmit} className="space-y-4">
+          <div className="space-y-2">
+            <input
+              type="text"
+              className="w-full p-2 border rounded-md"
+              placeholder="Type in your university name..."
+              value={seekerSchoolNameTxt}
+              onChange={handleChangeSchool}
+              required
+            />
+            <input
+              type="text"
+              className="w-full p-2 border rounded-md"
+              placeholder="What degree are you going for..."
+              value={seekerEducationTypeTxt}
+              onChange={handleChangeEducationType}
+              required
+            />
+            <input
+              type="text"
+              className="w-full p-2 border rounded-md"
+              placeholder="When are you graduating..."
+              value={seekerGraduating}
+              onChange={handleChangeGraduating}
+              required
+            />
+            <input
+              type="text"
+              className="w-full p-2 border rounded-md"
+              placeholder="What is your major..."
+              value={seekerMajor}
+              onChange={handleChangeMajor}
+              required
+            />
+          </div>
+          <div className="flex justify-between">
+            <button
+              type="button"
+              className="bg-gray-600 text-white py-2 px-4 rounded hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-500"
+              onClick={handlePrevStep}
+            >
               Back
-            </Button>
-            <Button type="submit"> Next</Button>
-          </Form>
-        </Card.Body>
-      </Card>
+            </button>
+            <button
+              type="submit"
+              className="bg-primary text-white py-2 px-4 rounded hover:bg-primary-dark focus:outline-none focus:ring-2 focus:ring-primary"
+            >
+              Next
+            </button>
+          </div>
+        </form>
+      </div>
     </>
   );
 }

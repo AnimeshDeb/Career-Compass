@@ -1,5 +1,5 @@
 import "./userpageCompany.css";
-import Navbar from "../../../components/navbar/navbar.jsx";
+import Navbar from "../../../components/navbar/version1/navbar.jsx";
 import { useEffect, useState } from "react";
 import { getCompanyById } from "../../../functions/companyFunctions.js";
 import Footer from "../../../components/footer/footer.jsx";

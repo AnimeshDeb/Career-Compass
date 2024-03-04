@@ -1,5 +1,5 @@
 import "./userpageSeeker.css";
-import Navbar from "../../../components/navbar/navbar.jsx";
+import Navbar from "../../../components/navbar/version1/navbar.jsx";
 import { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 import { getSeekerById } from "../../../functions/seekerFunctions.js";

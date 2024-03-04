@@ -102,64 +102,85 @@ function SeekerProfilepic({ handlePrevStep, handleNextStep, name }) {
   }
   return (
     <>
-      <h1>Put your profile picture</h1>
-      <Card>
-        <Card.Body>
-          <Form onSubmit={handleSubmit}>
-            <div className="card2">
-              <div
-                className="drag-area"
-                onDragOver={onDragOver}
-                onDragLeave={onDragLeave}
-                onDrop={onDrop}
-              >
-                {isDragging ? (
-                  <span className="select">Drop images here </span>
-                ) : (
-                  <>
-                    Drag & Drop image here or{" "}
-                    <span
-                      className="select"
-                      role="button"
-                      onClick={selectFiles}
-                    >
-                      Browse
-                    </span>
-                  </>
-                )}
+      <div className="bg-primary text-white p-1 pt-5 pl-10">
+        <h1 className="text-4xl font-bold mb-4">Picture</h1>
+      </div>
+      <p className="text-left mb-6 text-2xl pl-10 pt-10">
+        Include a <span className="text-secondary">picture</span>
+      </p>
 
-                <input
-                  name="file"
-                  type="file"
-                  multiple
-                  ref={fileInputRef}
-                  onChange={onFileSelect}
-                  className="file"
-                />
-              </div>
-              <div className="container">
-                {images.map((images, index) => (
-                  <div className="image" key={index}>
-                    <span className="delete" onClick={() => deleteImage(index)}>
-                      {" "}
-                      &times;{" "}
-                    </span>
-
-                    <img src={images.url} alt={images.name} />
-                  </div>
-                ))}
-              </div>
-              <button type="button" onClick={uploadImage}>
-                Upload
-              </button>
+      <div className="max-w-md mx-auto bg-white p-6 rounded-lg shadow-md">
+        <form onSubmit={handleSubmit}>
+          <div className="space-y-4">
+            <div
+              className={`border-2 border-dashed rounded-full w-36 h-36 flex items-center justify-center mx-auto cursor-pointer ${
+                isDragging ? "border-primary" : "border-gray-300"
+              } hover:border-primary bg-secondary`}
+              onDragOver={onDragOver}
+              onDragLeave={onDragLeave}
+              onDrop={onDrop}
+              onClick={selectFiles}
+            >
+              {isDragging ? (
+                <span className="text-primary">Drop image here</span>
+              ) : (
+                <span className="text-white text-center">
+                  Click here to put your picture
+                </span>
+              )}
+              <input
+                type="file"
+                ref={fileInputRef}
+                onChange={onFileSelect}
+                className="hidden"
+                accept="image/*"
+              />
             </div>
-            <Button type="text" onClick={() => handlePrevStep()}>
+
+            <div className="flex justify-center space-x-4">
+              {images.map((image, index) => (
+                <div key={index} className="relative">
+                  <button
+                    type="button"
+                    className="absolute top-0 right-0 bg-red-600 text-white rounded-full p-1"
+                    onClick={() => deleteImage(index)}
+                  >
+                    &times;
+                  </button>
+                  <img
+                    src={image.url}
+                    alt={image.name}
+                    className="rounded-full w-36 h-36 object-cover"
+                  />
+                </div>
+              ))}
+            </div>
+          </div>
+
+          <div className="flex justify-between mt-6">
+            <button
+              type="button"
+              className="bg-gray-600 text-white py-2 px-4 rounded hover:bg-gray-700"
+              onClick={handlePrevStep}
+            >
               Back
-            </Button>
-            <Button type="submit">Next</Button>
-          </Form>
-        </Card.Body>
-      </Card>
+            </button>
+            <button
+              type="button"
+              className="bg-blue-600 text-white py-2 px-4 rounded hover:bg-blue-700"
+              onClick={uploadImage}
+            >
+              Upload
+            </button>
+            <button
+              type="submit"
+              className="bg-primary text-white py-2 px-4 rounded hover:bg-primary-dark"
+            >
+              Next
+            </button>
+          </div>
+        </form>
+      </div>
     </>
   );
 }

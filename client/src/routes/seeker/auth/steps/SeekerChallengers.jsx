@@ -123,82 +123,105 @@ function SeekerChallenges({ handleNextStep, handlePrevStep, name }) {
 
   return (
     <>
-      <h1>Challenges</h1>
-      <Card>
-        <Card.Body>
-          <Form onSubmit={handleSubmit}>
-            <label>
+      <div className="bg-primary text-white p-1 pt-5 pl-10">
+        <h1 className="text-4xl font-bold mb-4">Challenges</h1>
+      </div>
+      <p className="text-left mb-6 text-2xl pl-10 pt-10">
+        Any <span className="text-secondary">challenges</span> you want to
+        share? Do it in video or text.
+      </p>
+      <div className="max-w-4xl mx-auto p-6 mt-20 space-y-6 bg-white rounded-lg shadow-md">
+        <form onSubmit={handleSubmit} className="space-y-6">
+          <div>
+            <textarea
+              className="w-full h-36 p-4 text-lg border rounded-md focus:ring-blue-500 focus:border-blue-500"
+              onClick={handleTextClick}
+              onChange={handleChange}
+              placeholder="Type your challenges here..."
+              value={seekerTxtChallenges}
+            />
+          </div>
+          <div className="card2" onClick={handleVideoClick}>
+            <div
+              className={`drag-area flex flex-col items-center justify-center h-48 p-4 border-2 border-dashed rounded-md cursor-pointer ${
+                isDragging ? "border-blue-500" : "border-gray-300"
+              } hover:border-blue-500`}
+              onDragOver={onDragOver}
+              onDragLeave={onDragLeave}
+              onDrop={onDrop}
+            >
+              {isDragging ? (
+                <span className="select text-blue-500">Drop files here </span>
+              ) : (
+                <>
+                  Drag & Drop file here or{" "}
+                  <span
+                    className="select text-blue-500 cursor-pointer"
+                    role="button"
+                    onClick={selectFiles}
+                  >
+                    Browse
+                  </span>
+                </>
+              )}
               <input
-                type="text"
-                onClick={handleTextClick}
-                name="seekchallenges"
-                onChange={handleChange}
-                value={seekerTxtChallenges}
-                placeholder="Type your challenges here..."
+                name="file"
+                type="file"
+                multiple
+                ref={fileInputRef}
+                onChange={onFileSelect}
+                className="hidden"
               />
-            </label>
-
-            <div className="card2" onClick={handleVideoClick}>
-              <div
-                className="drag-area"
-                onDragOver={onDragOver}
-                onDragLeave={onDragLeave}
-                onDrop={onDrop}
-              >
-                {isDragging ? (
-                  <span className="select">Drop images here </span>
-                ) : (
-                  <>
-                    Drag & Drop image here or{" "}
-                    <span
-                      className="select"
-                      role="button"
-                      onClick={selectFiles}
-                    >
-                      Browse
-                    </span>
-                  </>
-                )}
-
-                <input
-                  name="file"
-                  type="file"
-                  multiple
-                  ref={fileInputRef}
-                  onChange={onFileSelect}
-                  className="file"
-                />
-              </div>
-              <div className="container">
-                {images.map((images, index) => (
-                  <div className="image" key={index}>
-                    <span className="delete" onClick={() => deleteImage(index)}>
-                      {" "}
-                      &times;{" "}
-                    </span>
-
-                    {images.type && images.type.includes("video") ? ( // Check if it's a video
-                      <video controls>
-                        <source src={images.url} type={images.type} />
-                        Your browser does not support the video tag.
-                      </video>
-                    ) : (
-                      <img src={images.url} alt={images.name} />
-                    )}
-                  </div>
-                ))}
-              </div>
-              <button type="button" onClick={uploadImage}>
-                Upload
-              </button>
             </div>
-            <Button type="text" onClick={() => handlePrevStep()}>
+            <div className="container space-y-4">
+              {images.map((image, index) => (
+                <div className="image relative" key={index}>
+                  <span
+                    className="delete absolute top-0 right-0 p-1 text-white bg-red-600 rounded-full"
+                    onClick={() => deleteImage(index)}
+                  >
+                    &times;
+                  </span>
+                  {image.type && image.type.includes("video") ? (
+                    <video controls className="w-full h-auto rounded-md">
+                      <source src={image.url} type={image.type} />
+                      Your browser does not support the video tag.
+                    </video>
+                  ) : (
+                    <img
+                      src={image.url}
+                      alt={image.name}
+                      className="w-full h-auto rounded-md"
+                    />
+                  )}
+                </div>
+              ))}
+            </div>
+            <button
+              type="button"
+              className="w-full mt-4 bg-blue-600 text-white py-2 px-4 rounded hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              onClick={uploadImage}
+            >
+              Upload
+            </button>
+          </div>
+          <div className="flex justify-between">
+            <button
+              className="bg-gray-600 text-white py-2 px-4 rounded hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-500"
+              type="button"
+              onClick={handlePrevStep}
+            >
               Back
-            </Button>
-            <Button type="submit"> Next</Button>
-          </Form>
-        </Card.Body>
-      </Card>
+            </button>
+            <button
+              className="bg-green-600 text-white py-2 px-4 rounded hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500"
+              type="submit"
+            >
+              Next
+            </button>
+          </div>
+        </form>
+      </div>
     </>
   );
 }

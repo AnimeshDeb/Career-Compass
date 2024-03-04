@@ -129,84 +129,106 @@ function SeekerSkills({ handleNextStep, handlePrevStep, name }) {
 
   return (
     <>
-      <h1>Skills</h1>
-      <p>Include your skills. Do it in video or text format:</p>
-      <Card>
-        <Card.Body>
-          <Form onSubmit={handleSubmit}>
-            <label>
-              <input
-                type="text"
-                onClick={handleTextClick}
-                name="SeekerSkills"
-                value={SeekTxtSkills}
-                onChange={handleChange}
-                placeholder="Type your skills here..."
-              />
-            </label>
+      <div className="bg-primary text-white p-1 pt-5 pl-10">
+        <h1 className="text-4xl font-bold mb-4">Skills</h1>
+      </div>
+      <p className="text-left mb-6 text-2xl pl-10 pt-10">
+        Include your <span className="text-secondary">skills</span> . Do it in
+        video or text format:
+      </p>
+      <div className="max-w-4xl mx-auto p-6 space-y-6 bg-white rounded-lg shadow-md">
+        <form onSubmit={handleSubmit}>
+          <div className="mb-4">
+            <textarea
+              className="w-full h-36 p-4 text-lg border rounded-md focus:ring-blue-500 focus:border-blue-500"
+              onClick={handleTextClick}
+              onChange={handleChange}
+              placeholder="Type your skills here..."
+              value={SeekTxtSkills}
+            />
+          </div>
 
-            <div className="card2" onClick={handleVideoClick}>
+          <div className="flex flex-wrap gap-4">
+            <div className="flex-1">
               <div
-                className="drag-area"
+                className={`flex flex-col items-center justify-center h-48 p-4 border-2 border-dashed rounded-md cursor-pointer ${
+                  isDragging ? "border-blue-500" : "border-gray-300"
+                } hover:border-blue-500`}
+                onClick={selectFiles}
                 onDragOver={onDragOver}
                 onDragLeave={onDragLeave}
                 onDrop={onDrop}
               >
                 {isDragging ? (
-                  <span className="select">Drop images here </span>
+                  <span className="text-blue-500">Drop files here</span>
                 ) : (
-                  <>
-                    Drag & Drop image here or{" "}
-                    <span
-                      className="select"
-                      role="button"
-                      onClick={selectFiles}
-                    >
-                      Browse
-                    </span>
-                  </>
+                  <span className="text-blue-500">
+                    Click or drag & drop to upload
+                  </span>
                 )}
-
                 <input
-                  name="file"
-                  type="file"
-                  multiple
+                  className="hidden"
                   ref={fileInputRef}
                   onChange={onFileSelect}
-                  className="file"
+                  type="file"
+                  multiple
                 />
               </div>
-              <div className="container">
-                {images.map((images, index) => (
-                  <div className="image" key={index}>
-                    <span className="delete" onClick={() => deleteImage(index)}>
-                      {" "}
-                      &times;{" "}
-                    </span>
-
-                    {images.type && images.type.includes("video") ? ( // Check if it's a video
-                      <video controls>
-                        <source src={images.url} type={images.type} />
-                        Your browser does not support the video tag.
-                      </video>
-                    ) : (
-                      <img src={images.url} alt={images.name} />
-                    )}
-                  </div>
-                ))}
-              </div>
-              <button type="button" onClick={uploadImage}>
-                Upload
-              </button>
             </div>
 
-            <Button type="text" onClick={() => handlePrevStep()}>
-              Back
-            </Button>
-            <Button type="submit"> Next</Button>
-          </Form>
-        </Card.Body>
-      </Card>
+            {/* Thumbnails */}
+            <div className="flex-1 space-y-4">
+              {images.map((image, index) => (
+                <div key={index} className="relative">
+                  <button
+                    className="absolute top-0 right-0 p-1 text-white bg-red-600 rounded-full"
+                    onClick={() => deleteImage(index)}
+                  >
+                    &times;
+                  </button>
+                  {image.type && image.type.includes("video") ? (
+                    <video className="w-full h-auto rounded-md" controls>
+                      <source src={image.url} type={image.type} />
+                      Your browser does not support the video tag.
+                    </video>
+                  ) : (
+                    <img
+                      className="w-full h-auto rounded-md"
+                      src={image.url}
+                      alt={image.name}
+                    />
+                  )}
+                </div>
+              ))}
+            </div>
+          </div>
+
+          <div className="flex justify-between mt-6">
+            <button
+              className="px-6 py-2 text-lg text-white bg-blue-600 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              type="button"
+              onClick={uploadImage}
+            >
+              Upload
+            </button>
+            <div className="flex gap-4">
+              <button
+                className="px-6 py-2 text-lg text-white bg-gray-600 rounded-md hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-500"
+                type="button"
+                onClick={handlePrevStep}
+              >
+                Back
+              </button>
+              <button
+                className="px-6 py-2 text-lg text-white bg-green-600 rounded-md hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500"
+                type="submit"
+              >
+                Next
+              </button>
+            </div>
+          </div>
+        </form>
+      </div>
     </>
   );
 }

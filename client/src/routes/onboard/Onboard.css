@@ -1,4 +1,7 @@
 @import url('../../constants/colors/colors.css');
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 .onboard-container {
     display: flex;
     flex-direction: column;
@@ -8,17 +11,36 @@
     text-align: center;
     width: 100%;
   }
-  
-  .onboard-logo {
-    margin-bottom: 20px; 
+  .onboard-logo, .onboard-buttons {
+    transition: opacity 1s ease-out, visibility 1s ease-out;
+    opacity: 1;
+    visibility: visible;
   }
   
-  .onboard-buttons {
+  .hidden {
+    opacity: 0;
+    visibility: hidden;
+  }
+  .onboard-logo {
+    padding-bottom: 0px;
+    margin-bottom: 0px; 
+  }
+  
+  .onboard-bsuttons {
     display: flex;
     gap: 20px;
     flex-wrap: wrap; 
   }
-  
+  .onboard-button{
+    background-color: var(--primary_color);
+    padding: 10px;
+    border-radius: 10px;
+    font-size: large;
+  }
+  .onboard-button:hover{
+    background-color: white;
+    color: var(--primary_color);
+  }
   .onboard-button a {
     display: block;
     width: 100%;

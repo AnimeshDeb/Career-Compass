@@ -9,7 +9,6 @@ const JobListing = ({ job, onJobClick }) => {
   const jobListingStyle = {
     cursor: "pointer",
     border: "1px solid #ddd",
-    borderRadius: "4px",
     padding: "16px",
     margin: "8px 0",
     backgroundColor: "#2e318e",

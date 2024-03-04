@@ -1,22 +1,20 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
-import { useNavigate } from "react-router-dom";
-import { Card, Form, Button, Alert } from "react-bootstrap";
+import { Link, useNavigate } from "react-router-dom";
 import { useRef } from "react";
 import { useAuth } from "../../../Contexts/SeekerAuthContext";
+import Navbar from "../../../components/navbar/version1/navbar";
 function SeekerLogin() {
   const emailRef = useRef();
   const passwordRef = useRef();
   const navigate = useNavigate();
   const { login } = useAuth();
   const [error, setError] = useState("");
-  //we have a loading state so that the user doesnt keep clicking the button
   const [loading, setLoading] = useState(false);
+
   async function handleSubmit(e) {
-    e.preventDefault(); //prevents form from refreshing
-    //checking below if password is same as whats in db
+    e.preventDefault();
     try {
-      setError(""); // set error back to empty string so that we dont have error
+      setError("");
       setLoading(true);
       const userCredentials = await login(
         emailRef.current.value,
@@ -24,42 +22,65 @@ function SeekerLogin() {
       );
       setLoading(false);
       navigate("/user", { state: { name: userCredentials.user.uid } });
-
-      //using await, we wait for signup to finish
     } catch (error) {
       console.error("Error signing in: ", error);
       setError("Failed to log in");
       setLoading(false);
     }
   }
+
   return (
     <>
-      <Card>
-        <Card.Body>
-          <h2 className="text-center mb-4">Log In</h2>
-          {error && <Alert variant="danger">{error}</Alert>}
-          {/* Similar fields as in the signup page are displayed, requiring users to enter their credentials to login. */}
-          <Form onSubmit={handleSubmit}>
-            <Form.Group id="email">
-              <Form.Label>Email</Form.Label>
-              <Form.Control type="email" ref={emailRef} required />
-            </Form.Group>
-            <Form.Group id="password">
-              <Form.Label>Password</Form.Label>
-              <Form.Control type="password" ref={passwordRef} required />
-            </Form.Group>
-            <Button disabled={loading} className="w-100" type="submit">
-              Log In
-            </Button>
-          </Form>
-          <div className="w-100 text-center mt-3">
-            <Link to="/SeekerForgotPassword">Forgot Password?</Link>
-          </div>
-        </Card.Body>
-      </Card>
+      <Navbar />
 
-      <div className="w-100 text-center mt-2">
-        Need an account? <Link to="/SeekerSignup">Sign Up</Link>
+      <div className="max-w-md mx-auto mt-10 bg-white p-8 border border-gray-200 rounded-lg shadow-md">
+        <h2 className="text-center text-2xl font-bold mb-4">Log In</h2>
+        {error && <p className="bg-red-500 text-white p-3 rounded">{error}</p>}
+        <form onSubmit={handleSubmit} className="space-y-4">
+          <div>
+            <label className="block text-sm font-bold mb-2" htmlFor="email">
+              Email
+            </label>
+            <input
+              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+              type="email"
+              ref={emailRef}
+              required
+            />
+          </div>
+          <div>
+            <label className="block text-sm font-bold mb-2" htmlFor="password">
+              Password
+            </label>
+            <input
+              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+              type="password"
+              ref={passwordRef}
+              required
+            />
+          </div>
+          <button
+            disabled={loading}
+            className="w-full bg-primary hover:bg-primary-dark text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+            type="submit"
+          >
+            Log In
+          </button>
+        </form>
+        <div className="mt-4 text-center">
+          <Link
+            to="/SeekerForgotPassword"
+            className="text-primary hover:underline"
+          >
+            Forgot Password?
+          </Link>
+        </div>
+        <div className="text-center mt-2">
+          Need an account?{" "}
+          <Link to="/SeekerSignup" className="text-primary hover:underline">
+            Sign Up
+          </Link>
+        </div>
       </div>
     </>
   );

@@ -5,7 +5,7 @@ import { createBrowserRouter } from "react-router-dom";
 import JobsApplied from "./src/routes/seeker/jobsApplied/jobsApplied.jsx";
 import SearchUser from "./src/routes/onboard/searchUsers/searchUsers.jsx";
 import Onboard from "./src/routes/onboard/Onboard.jsx";
-import { AuthProvider } from "./src/Contexts/AuthContext";
+import { AuthProvider } from "./src/Contexts/AuthContext.jsx";
 import ForgotPassword from "./src/routes/seeker/auth/ForgotPassword.jsx";
 import { SeekerAuthProvider } from "./src/Contexts/SeekerAuthContext.jsx";
 import SeekerPrivateRoute from "./src/routes/seeker/auth/steps/SeekerPrivateRoute.jsx";
