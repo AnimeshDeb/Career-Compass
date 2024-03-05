@@ -29,7 +29,9 @@ export const router = createBrowserRouter([
     path: "/",
     element: (
       <AuthProvider>
+        <SeekerAuthProvider>
         <Onboard />
+        </SeekerAuthProvider>
       </AuthProvider>
     ),
   },

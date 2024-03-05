@@ -44,7 +44,7 @@ function ParentComponent() {
     <>
       <NavbarWhite />
       {showWelcome && (
-        <div className="welcome-container fixed inset-x-0 h-3/4 top-1/8 mx-auto flex items-center justify-center flex-col bg-primary text-white z-10 p-16">
+        <div className="welcome-container fixed inset-x-0 h-full top-1/8 mx-auto flex items-center justify-center flex-col bg-primary text-white z-10 p-16">
           <h3 className="text-5xl font-bold">Welcome!</h3>
           <p className="text-xl mt-4">
             Let's finish <span className="text-secondary">your</span> profile

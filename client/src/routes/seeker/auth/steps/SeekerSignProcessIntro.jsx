@@ -117,8 +117,6 @@ function SeekerIntro({ handleNextStep, name }) {
         await setDoc(docRef, seekerIntroUpdatedData, { merge: true });
       }
       handleNextStep();
-
-      // navigate("/seekerSkills", { state: { NameFull: name } });
     } catch (error) {
       console.error("ERROR: ", error);
       console.log("the error is:" + error);
@@ -130,7 +128,7 @@ function SeekerIntro({ handleNextStep, name }) {
 
   return (
     <>
-      <div className="bg-primary text-white p-1 pt-5 pl-10">
+      <div className="bg-primary text-white pl-10">
         <h1 className="text-4xl font-bold mb-4">Introductions</h1>
       </div>
       <p className="text-left mb-6 text-2xl pl-10 pt-10">
@@ -147,16 +145,15 @@ function SeekerIntro({ handleNextStep, name }) {
               value={seekerTxtIntro}
               onChange={handleChange}
               placeholder="Type your introduction here..."
-              className="w-full h-36 p-4 text-lg border rounded-md focus:ring-blue-500 focus:border-blue-500"
+              className="w-full h-20 p-4 text-lg border rounded-md focus:ring-blue-500 focus:border-blue-500"
             />
           </div>
 
           <div className="flex space-x-4">
             <div className="flex-1">
-              {/* Drag and Drop for video upload */}
               <div
                 className="flex flex-col items-center justify-center h-48 p-4 border-2 border-dashed rounded-md cursor-pointer hover:border-blue-500"
-                onClick={selectFiles} // Make sure this calls the selectFiles function
+                onClick={selectFiles}
                 onDragOver={onDragOver}
                 onDragLeave={onDragLeave}
                 onDrop={onDrop}

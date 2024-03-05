@@ -1,85 +1,55 @@
-import React, { useState } from "react";
-import { Button, Container } from "react-bootstrap";
+import { useState, useEffect } from "react";
+import { Container } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import SearchUser from "./searchUsers/searchUsers";
 import largeLogo from "../../images/logos/large_v1.png";
 import "./Onboard.css";
-import anime from "animejs";
+import SeekerLogin from "../seeker/auth/SeekerLogin";
+import anime from "animejs"
 
 function Onboard() {
-  const [searchInitiated, setSearchInitiated] = useState(false);
-  const [showBackButton, setShowBackButton] = useState(false);
-  const searchUserRef = React.createRef();
-  const translateYValue = window.innerWidth < 768 ? "-100px" : "-400px";
-  const searchInputWidth = window.innerWidth < 768 ? "100%" : "500px";
-
-  const handleSearchFocus = () => {
-    if (!searchInitiated) {
-      setSearchInitiated(true);
+  const [tab, setTab] = useState("login"); 
+  const [isSearchActive, setIsSearchActive] = useState(false);
+  useEffect(() => {
+    if (isSearchActive) {
       anime({
-        targets: ".search-main",
-        translateY: [0, translateYValue],
-        duration: 3000,
-        easing: "easeOutExpo",
-      });
-      anime({
-        targets: ".searchInput",
-        width: ["600px", searchInputWidth],
-        easing: "easeOutExpo",
-        duration: 3000,
-        complete: function () {
-          setShowBackButton(true);
-        },
+        targets: '.left-side',
+        translateY: [0, -110],
+        duration: 500,
+        easing: 'easeOutQuad',
       });
     }
-  };
-
-  const revertView = () => {
-    if (searchInitiated) {
-      anime({
-        targets: ".search-main",
-        translateY: [translateYValue, 0],
-        duration: 1000,
-        easing: "easeInExpo",
-        complete: function () {
-          setSearchInitiated(false);
-          setShowBackButton(false);
-          if (searchUserRef.current) {
-            searchUserRef.current.resetSearch();
-          }
-        },
-      });
-      anime({
-        targets: ".searchInput",
-        width: ["800px", "600px"],
-        easing: "easeInExpo",
-        duration: 1000,
-      });
-    }
-  };
-
+  }, [isSearchActive]);
   return (
-    <Container className="onboard-container" fluid>
-      <img
-        src={largeLogo}
-        alt="medium_logo"
-        className={`onboard-logo ${searchInitiated ? "hidden" : ""}`}
-      />
-      <SearchUser
-        showBackButton={showBackButton}
-        onSearchFocus={handleSearchFocus}
-        onRevertView={revertView}
-        ref={searchUserRef}
-      />
-      <div className={`onboard-buttons ${searchInitiated ? "hidden" : ""}`}>
-        <Button variant="primary" className="onboard-button">
-          <Link to="/SeekerLogin"> Login </Link>
-        </Button>
-        <Button variant="success" className="onboard-button">
-          <Link to="/CompaniesLogin"> Sign Up </Link>
-        </Button>
-      </div>
-    </Container>
+    // Ensuring that the container is a flex container that fills the viewport height and centers its children
+    <div className="flex min-h-screen justify-center items-center p-4 bg-gray-50"> {/* Adjust background color as needed */}
+      <Container fluid className="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
+    <div className="left-side flex flex-col items-center w-full md:w-1/2"> {/* Remove additional padding/margin here */}
+      <img src={largeLogo} alt="Logo" className="h-auto max-w-full mb-4" />
+      <SearchUser isSearchActive={isSearchActive} setIsSearchActive={setIsSearchActive} />
+    </div>
+
+        <div className="flex flex-col w-full md:w-1/2 items-center">
+          <div className="border border-gray-300 rounded-lg w-full max-w-md">
+            <div className="flex bg-gray-100 p-2 rounded-t-lg justify-center">
+              <button onClick={() => setTab("login")} className={`px-4 text-xl py-2 ${tab === "login" ? "bg-primary text-white rounded-lg" : "bg-transparent"}`}>Login</button>
+              <button onClick={() => setTab("signup")} className={`px-4 text-xl py-2 ${tab === "signup" ? "bg-secondary text-white rounded-lg" : "bg-transparent"}`}>Sign Up</button>
+            </div>
+            <div className="p-4">
+              {tab === "login" && <SeekerLogin />}
+              {tab === "signup" && (
+                <div className="flex flex-col space-y-2">
+                  <h4>Choose what you are</h4>
+                  <Link to="/SeekerSignup" className="px-4 py-2 text-xl bg-primary text-white text-center rounded-md">Seeker</Link>
+                  <Link to="/MentorSignup" className="px-4 py-2 text-xl bg-secondary text-white text-center rounded-md">Mentor</Link>
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
+      </Container>
+    </div>
   );
 }
+
 export default Onboard;

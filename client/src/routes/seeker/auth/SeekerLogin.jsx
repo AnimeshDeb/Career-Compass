@@ -2,7 +2,6 @@ import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useRef } from "react";
 import { useAuth } from "../../../Contexts/SeekerAuthContext";
-import Navbar from "../../../components/navbar/version1/navbar";
 function SeekerLogin() {
   const emailRef = useRef();
   const passwordRef = useRef();
@@ -24,16 +23,14 @@ function SeekerLogin() {
       navigate("/user", { state: { name: userCredentials.user.uid } });
     } catch (error) {
       console.error("Error signing in: ", error);
-      setError("Failed to log in");
+      setError("Unable to Login");
       setLoading(false);
     }
   }
 
   return (
     <>
-      <Navbar />
-
-      <div className="max-w-md mx-auto mt-10 bg-white p-8 border border-gray-200 rounded-lg shadow-md">
+      <div className="max-w-md mx-auto mt-10 p-10 pt-0">
         <h2 className="text-center text-2xl font-bold mb-4">Log In</h2>
         {error && <p className="bg-red-500 text-white p-3 rounded">{error}</p>}
         <form onSubmit={handleSubmit} className="space-y-4">
@@ -73,12 +70,6 @@ function SeekerLogin() {
             className="text-primary hover:underline"
           >
             Forgot Password?
-          </Link>
-        </div>
-        <div className="text-center mt-2">
-          Need an account?{" "}
-          <Link to="/SeekerSignup" className="text-primary hover:underline">
-            Sign Up
           </Link>
         </div>
       </div>

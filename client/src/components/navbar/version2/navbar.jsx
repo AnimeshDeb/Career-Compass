@@ -2,7 +2,7 @@ import largImage from "../../../images/logos/large_v1.png";
 
 export default function NavbarWhite() {
   return (
-    <nav className="bg-white py-7">
+    <nav className="bg-white">
       <div className="flex justify-between items-center mx-auto px-4">
         <a href="/" className="flex items-center">
           <img src={largImage} alt="medium_logo" className="h-24" />

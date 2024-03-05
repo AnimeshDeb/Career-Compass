@@ -99,7 +99,7 @@ function SeekerSignup() {
         </form>
         <div className="text-center mt-4">
           Already have an account?{" "}
-          <Link to="/SeekerLogin" className="text-blue-500 hover:text-blue-800">
+          <Link to="/" className="text-blue-500 hover:text-blue-800">
             Log In
           </Link>
         </div>
