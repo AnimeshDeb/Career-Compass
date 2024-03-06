@@ -3,6 +3,7 @@ import { Card, Form, Button } from "react-bootstrap";
 import { db } from "../../../../firebase";
 import { collection, addDoc, doc } from "firebase/firestore";
 import PropTypes from "prop-types";
+import placeholderAI from "../../../../images/placeholderAI.png";
 function SeekerEducation({ handleNextStep, handlePrevStep, name }) {
   const [seekerSchoolNameTxt, setSeekerSchoolNameTxt] = useState("");
   const [seekerMajor, setSeekerMajor] = useState("");
@@ -44,20 +45,35 @@ function SeekerEducation({ handleNextStep, handlePrevStep, name }) {
   }
   return (
     <>
-      <div className="bg-primary text-white p-5 pl-10">
-        <h1 className="text-4xl font-bold mb-4">Education</h1>
+      <div className="bg-primary text-white flex items-center pl-10">
+        <h1 className="text-xl md:text-2xl lg:text-4xl font-bold p-2 flex-grow">
+          Education
+        </h1>
       </div>
-      <p className="text-left text-2xl pl-10 pt-10">
-        Where did you go to <span className="text-secondary">school</span>? Tell
-        us your education.
-      </p>
-      <div className="max-w-4xl mx-auto p-6 space-y-6 bg-white rounded-lg shadow-md">
+      <div className="maybolin-talk flex items-center mb-0 my-8 mx-auto max-w-4xl">
+        <div className="flex-shrink-0 max-w-40 w-1/4 mr-5 ml-5">
+          <img
+            src={placeholderAI}
+            alt="Maybolin AI"
+            className="w-full object-cover"
+          />
+        </div>
+        <div className="bg-blue-100 px-6 py-4 shadow-lg relative text-left mb-6 mr-5 rounded-tr-lg rounded-bl-lg rounded-br-lg flex-grow">
+          <p className="text-sm md:text-xl lg:text-2xl">
+            Where did you go to{" "}
+            <span className="text-secondary font-semibold">school</span>? Tell
+            us your education.
+          </p>
+          <div className="absolute top-0 -left-2 w-10 h-0 border-l-[10px] border-l-transparent border-b-[10px] border-b-primary"></div>
+        </div>
+      </div>
+      <div className="max-w-4xl mx-auto p-6 space-y-6 bg-white rounded-lg ">
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="space-y-2">
             <input
               type="text"
               className="w-full p-2 border rounded-md"
-              placeholder="Type in your university name..."
+              placeholder="Type in the type of education..."
               value={seekerSchoolNameTxt}
               onChange={handleChangeSchool}
               required
@@ -65,7 +81,7 @@ function SeekerEducation({ handleNextStep, handlePrevStep, name }) {
             <input
               type="text"
               className="w-full p-2 border rounded-md"
-              placeholder="What degree are you going for..."
+              placeholder="What is the name of your diploma..."
               value={seekerEducationTypeTxt}
               onChange={handleChangeEducationType}
               required

@@ -6,7 +6,7 @@ import { storage } from "../../../../firebase";
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { v4 } from "uuid";
 import PropTypes from "prop-types";
-
+import placeholderAI from "../../../../images/placeholderAI.png";
 function SeekerSkills({ handleNextStep, handlePrevStep, name }) {
   // const name=location.state?.NameFull;
   const [images, setImages] = useState([]);
@@ -129,84 +129,77 @@ function SeekerSkills({ handleNextStep, handlePrevStep, name }) {
 
   return (
     <>
-      <div className="bg-primary text-white p-1 pt-5 pl-10">
-        <h1 className="text-4xl font-bold mb-4">Skills</h1>
+      <div className="bg-primary text-white flex items-center pl-10">
+        <h1 className="text-xl md:text-2xl lg:text-4xl font-bold p-2 flex-grow">
+          Skills
+        </h1>
       </div>
-      <p className="text-left mb-6 text-2xl pl-10 pt-10">
-        Include your <span className="text-secondary">skills</span> . Do it in
-        video or text format:
-      </p>
-      <div className="max-w-4xl mx-auto p-6 space-y-6 bg-white rounded-lg shadow-md">
-        <form onSubmit={handleSubmit}>
-          <div className="mb-4">
+      <div className="flex items-center my-8 mx-auto max-w-4xl">
+        <div className="flex-shrink-0 max-w-40 w-1/4 mr-5 ml-5">
+          <img
+            src={placeholderAI}
+            alt="Maybolin AI"
+            className="w-full object-cover"
+          />
+        </div>
+        <div className="bg-blue-100 px-6 py-4 shadow-lg relative text-left rounded-tr-lg rounded-bl-lg rounded-br-lg flex-grow">
+          <p className="text-sm md:text-xl lg:text-2xl">
+            Please share the skills you bring:
+            <br />
+            <span className="text-primary font-semibold">Record a video </span>
+            or
+            <span className="text-secondary font-semibold"> write</span> about
+            your skills.
+            <br />
+            If you prefer talking, you can
+            <span className="text-secondary font-semibold">
+              {""} speak about your skills.
+            </span>
+          </p>
+          <div className="absolute top-0 -left-2 w-10 h-0 border-l-[10px] border-l-transparent border-b-[10px] border-b-primary"></div>
+        </div>
+      </div>
+
+      <div className="max-w-4xl mx-auto p-4 bg-white rounded-lg shadow-md">
+        <form onSubmit={handleSubmit} className="space-y-4">
+          <div className="flex space-x-4">
             <textarea
-              className="w-full h-36 p-4 text-lg border rounded-md focus:ring-blue-500 focus:border-blue-500"
+              name="seekerIntroInput"
               onClick={handleTextClick}
               onChange={handleChange}
               placeholder="Type your skills here..."
               value={SeekTxtSkills}
+              className="w-1/2 h-48 p-4 text-lg border rounded-md focus:ring-blue-500 focus:border-blue-500"
             />
-          </div>
 
-          <div className="flex flex-wrap gap-4">
-            <div className="flex-1">
-              <div
-                className={`flex flex-col items-center justify-center h-48 p-4 border-2 border-dashed rounded-md cursor-pointer ${
-                  isDragging ? "border-blue-500" : "border-gray-300"
-                } hover:border-blue-500`}
-                onClick={selectFiles}
-                onDragOver={onDragOver}
-                onDragLeave={onDragLeave}
-                onDrop={onDrop}
-              >
-                {isDragging ? (
-                  <span className="text-blue-500">Drop files here</span>
-                ) : (
-                  <span className="text-blue-500">
-                    Click or drag & drop to upload
-                  </span>
-                )}
-                <input
-                  className="hidden"
-                  ref={fileInputRef}
-                  onChange={onFileSelect}
-                  type="file"
-                  multiple
-                />
-              </div>
-            </div>
-
-            {/* Thumbnails */}
-            <div className="flex-1 space-y-4">
-              {images.map((image, index) => (
-                <div key={index} className="relative">
-                  <button
-                    className="absolute top-0 right-0 p-1 text-white bg-red-600 rounded-full"
-                    onClick={() => deleteImage(index)}
-                  >
-                    &times;
-                  </button>
-                  {image.type && image.type.includes("video") ? (
-                    <video className="w-full h-auto rounded-md" controls>
-                      <source src={image.url} type={image.type} />
-                      Your browser does not support the video tag.
-                    </video>
-                  ) : (
-                    <img
-                      className="w-full h-auto rounded-md"
-                      src={image.url}
-                      alt={image.name}
-                    />
-                  )}
-                </div>
-              ))}
+            <div
+              className="w-1/2 h-48 p-10 border-2 border-dashed bg-white rounded-md cursor-pointer hover:border-primary flex items-center justify-center"
+              onClick={selectFiles}
+              onDragOver={onDragOver}
+              onDragLeave={onDragLeave}
+              onDrop={onDrop}
+            >
+              {isDragging ? (
+                <span className="text-primary">Drop files here</span>
+              ) : (
+                <span className="text-primary">
+                  Click or drag & drop to upload
+                </span>
+              )}
+              <input
+                className="hidden"
+                ref={fileInputRef}
+                onChange={onFileSelect}
+                type="file"
+                multiple
+              />
             </div>
           </div>
 
           <div className="flex justify-between mt-6">
             <button
-              className="px-6 py-2 text-lg text-white bg-blue-600 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
               type="button"
+              className="px-6 py-2 text-lg text-white bg-primary rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
               onClick={uploadImage}
             >
               Upload
@@ -220,8 +213,8 @@ function SeekerSkills({ handleNextStep, handlePrevStep, name }) {
                 Back
               </button>
               <button
-                className="px-6 py-2 text-lg text-white bg-green-600 rounded-md hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500"
                 type="submit"
+                className="px-6 py-2 text-lg text-white bg-secondary rounded-md hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500"
               >
                 Next
               </button>

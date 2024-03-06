@@ -130,9 +130,11 @@ function SeekerIntro({ handleNextStep, uid, username }) {
   return (
     <>
       <div className="bg-primary text-white flex items-center pl-10">
-        <h1 className="text-4xl font-bold p-2 flex-grow">Introductions</h1>
+        <h1 className="text-xl md:text-2xl lg:text-4xl font-bold p-2 flex-grow">
+          Introductions
+        </h1>
       </div>
-      <div className="maybolin-talk flex items-center my-8 mx-auto max-w-4xl">
+      <div className="maybolin-talk flex items-center mb-0 my-8 mx-auto max-w-4xl">
         <div className="flex-shrink-0 max-w-40 w-1/4 mr-5 ml-5">
           <img
             src={placeholderAI}
@@ -160,41 +162,45 @@ function SeekerIntro({ handleNextStep, uid, username }) {
         </div>
       </div>
 
-      <div className="max-w-4xl mx-auto pl-4 pr-4 space-y-6 bg-white rounded-lg">
+      <div className="mb-0 max-w-4xl mx-auto pl-4 pr-4 space-y-6 bg-white rounded-lg">
         <form onSubmit={handleSubmit}>
           <div className="flex justify-between">
-            <textarea
-              name="seekerIntroInput"
-              onClick={handleTextClick}
-              value={seekerTxtIntro}
-              onChange={handleChange}
-              placeholder="Type your introduction here..."
-              className="w-1/2 h-500 p-4 text-lg border rounded-md focus:ring-blue-500 focus:border-blue-500 mr-4"
-            />
-            <div
-              className="flex-1 h-48 p-4 border-2 border-dashed rounded-md cursor-pointer hover:border-blue-500 flex items-center justify-center"
-              onClick={selectFiles}
-              onDragOver={onDragOver}
-              onDragLeave={onDragLeave}
-              onDrop={onDrop}
-            >
-              {isDragging ? (
-                <span className="text-blue-500">Drop files here</span>
-              ) : (
-                <span className="text-blue-500">
-                  Click here to put your video
-                </span>
-              )}
-              <input
-                type="file"
-                ref={fileInputRef}
-                onChange={onFileSelect}
-                className="hidden"
+            <div className="bg-primary mb-0 w-full p-5 mr-5 mt-5 mb-5">
+              <textarea
+                name="seekerIntroInput"
+                onClick={handleTextClick}
+                value={seekerTxtIntro}
+                onChange={handleChange}
+                placeholder="Type your introduction here..."
+                className="w-full h-full p-4 text-lg border rounded-md focus:ring-blue-500 focus:border-blue-500 mr-4"
               />
+            </div>
+            <div className="bg-secondary w-full mb-0 p-5 mr-5 mt-5 mb-5">
+              <div
+                className="flex-1 h-48 p-10 border-2 border-dashed bg-white rounded-md cursor-pointer hover:border-primary flex items-center justify-center"
+                onClick={selectFiles}
+                onDragOver={onDragOver}
+                onDragLeave={onDragLeave}
+                onDrop={onDrop}
+              >
+                {isDragging ? (
+                  <span className="text-primary">Drop files here</span>
+                ) : (
+                  <span className="text-primary">
+                    Click here to put your video
+                  </span>
+                )}
+                <input
+                  type="file"
+                  ref={fileInputRef}
+                  onChange={onFileSelect}
+                  className="hidden"
+                />
+              </div>
             </div>
           </div>
 
-          <div className="flex justify-between mt-6">
+          <div className="flex justify-between mt-2">
             <button
               type="button"
               className="px-6 py-2 text-lg text-white bg-primary rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
