@@ -13,7 +13,8 @@ import anime from "animejs";
 function ParentComponent() {
   const navigate = useNavigate();
   const location = useLocation();
-  const name = location.state?.uid;
+  const uid = location.state?.uid;
+  const username = location.state?.username;
   const [step, setStep] = useState(0);
   const [showWelcome, setShowWelcome] = useState(true);
   const handleNextClick = () => {
@@ -32,7 +33,7 @@ function ParentComponent() {
       setStep(step + 1);
     } else {
       console.log(step);
-      navigate("/user", { state: { name: name } });
+      navigate("/user", { state: { name: uid } });
     }
   };
   const handlePrevStep = () => {
@@ -45,8 +46,8 @@ function ParentComponent() {
       <NavbarWhite />
       {showWelcome && (
         <div className="welcome-container fixed inset-x-0 h-full top-1/8 mx-auto flex items-center justify-center flex-col bg-primary text-white z-10 p-16">
-          <h3 className="text-5xl font-bold">Welcome!</h3>
-          <p className="text-xl mt-4">
+          <h3 className="text-5xl">Welcome, {username}!</h3>
+          <p className="text-xl font-bold mt-4">
             Let's finish <span className="text-secondary">your</span> profile
           </p>
           <button
@@ -58,40 +59,44 @@ function ParentComponent() {
         </div>
       )}
       {step === 0 && (
-        <SeekerIntro handleNextStep={handleNextStep} name={name} />
+        <SeekerIntro
+          handleNextStep={handleNextStep}
+          uid={uid}
+          username={username}
+        />
       )}
       {step === 1 && (
         <SeekerSkills
           handleNextStep={handleNextStep}
-          name={name}
+          name={uid}
           handlePrevStep={handlePrevStep}
         />
       )}
       {step === 2 && (
         <SeekerChallenges
           handleNextStep={handleNextStep}
-          name={name}
+          name={uid}
           handlePrevStep={handlePrevStep}
         />
       )}
       {step === 3 && (
         <SeekerEducation
           handleNextStep={handleNextStep}
-          name={name}
+          name={uid}
           handlePrevStep={handlePrevStep}
         />
       )}
       {step === 4 && (
         <SeekerJobs
           handleNextStep={handleNextStep}
-          name={name}
+          name={uid}
           handlePrevStep={handlePrevStep}
         />
       )}
       {step === 5 && (
         <SeekerProfilepic
           handleNextStep={handleNextStep}
-          name={name}
+          name={uid}
           handlePrevStep={handlePrevStep}
         />
       )}

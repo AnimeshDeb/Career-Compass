@@ -26,7 +26,12 @@ function SeekerSignup() {
         passwordRef.current.value,
         fullNameRef.current.value
       );
-      navigate("/parent", { state: { uid: userCredential.user.uid } });
+      navigate("/parent", {
+        state: {
+          uid: userCredential.user.uid,
+          username: fullNameRef.current.value,
+        },
+      });
     } catch (error) {
       setError(error.message);
     }
@@ -37,7 +42,9 @@ function SeekerSignup() {
     <>
       <Navbar />
       <div className="max-w-md mx-auto mt-10 bg-white p-8 border border-gray-200 rounded-lg shadow-md">
-        <h2 className="text-2xl font-bold text-center mb-4">Sign Up</h2>
+        <h2 className="text-4xl text-primary font-bold text-center mb-4">
+          Sign Up
+        </h2>
         {error && (
           <div className="bg-red-500 text-white p-3 rounded mb-4">{error}</div>
         )}
@@ -99,7 +106,7 @@ function SeekerSignup() {
         </form>
         <div className="text-center mt-4">
           Already have an account?{" "}
-          <Link to="/" className="text-blue-500 hover:text-blue-800">
+          <Link to="/" className="text-primary hover:text-blue-800">
             Log In
           </Link>
         </div>

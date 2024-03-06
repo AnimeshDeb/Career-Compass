@@ -5,8 +5,9 @@ import { storage } from "../../../../firebase";
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { v4 } from "uuid";
 import PropTypes from "prop-types";
+import placeholderAI from "../../../../images/placeholderAI.png";
 
-function SeekerIntro({ handleNextStep, name }) {
+function SeekerIntro({ handleNextStep, uid, username }) {
   const [seekerTxtIntro, setSeekerTxtIntro] = useState("");
   // const name = location.state?.fullName;
   const [images, setImages] = useState([]);
@@ -15,7 +16,7 @@ function SeekerIntro({ handleNextStep, name }) {
   const [imageUpload, setImageUpload] = useState(null);
   const [mode, setMode] = useState();
   const usersCollection = collection(db, "Seekers");
-  const docRef = doc(usersCollection, name);
+  const docRef = doc(usersCollection, uid);
 
   // const user=auth.currentUser
   function selectFiles() {
@@ -78,7 +79,7 @@ function SeekerIntro({ handleNextStep, name }) {
     if (imageUpload === null) return;
     const imageRef = ref(
       storage,
-      `Users/Seekers/ ${name}/${imageUpload.name + v4()}`
+      `Users/Seekers/ ${uid}/${imageUpload.name + v4()}`
     );
     console.log("Image upload value is: " + imageUpload);
 
@@ -128,93 +129,82 @@ function SeekerIntro({ handleNextStep, name }) {
 
   return (
     <>
-      <div className="bg-primary text-white pl-10">
-        <h1 className="text-4xl font-bold mb-4">Introductions</h1>
+      <div className="bg-primary text-white flex items-center pl-10">
+        <h1 className="text-4xl font-bold p-2 flex-grow">Introductions</h1>
       </div>
-      <p className="text-left mb-6 text-2xl pl-10 pt-10">
-        Introduce yourself with <span className="text-secondary">text</span> or
-        a <span className="text-primary">video</span>. Perhaps both.
-      </p>
+      <div className="maybolin-talk flex items-center my-8 mx-auto max-w-4xl">
+        <div className="flex-shrink-0 max-w-40 w-1/4 mr-5 ml-5">
+          <img
+            src={placeholderAI}
+            alt="Maybolin AI"
+            className="w-full object-cover"
+          />
+        </div>
+        <div className="bg-blue-100 px-6 py-4 shadow-lg relative text-left mb-6 mr-5 rounded-tr-lg rounded-bl-lg rounded-br-lg flex-grow">
+          <p className="text-sm md:text-xl lg:text-2xl">
+            We're excited to meet you! Please introduce yourself in the way you
+            like best:
+            <br />
+            <span className="text-primary font-semibold">
+              Record a video{" "}
+            </span>{" "}
+            or
+            <span className="text-secondary font-semibold"> write </span> about
+            yourself.
+            <br />
+            You can also{" "}
+            <span className="text-secondary font-semibold"> talk</span>, and
+            we'll help turn it into writing.
+          </p>
+          <div className="absolute top-0 -left-2 w-10 h-0 border-l-[10px] border-l-transparent border-b-[10px] border-b-primary"></div>
+        </div>
+      </div>
 
-      <div className="max-w-4xl mx-auto p-6 space-y-6 bg-white rounded-lg shadow-md">
+      <div className="max-w-4xl mx-auto pl-4 pr-4 space-y-6 bg-white rounded-lg">
         <form onSubmit={handleSubmit}>
-          <div className="mb-4">
+          <div className="flex justify-between">
             <textarea
               name="seekerIntroInput"
               onClick={handleTextClick}
               value={seekerTxtIntro}
               onChange={handleChange}
               placeholder="Type your introduction here..."
-              className="w-full h-20 p-4 text-lg border rounded-md focus:ring-blue-500 focus:border-blue-500"
+              className="w-1/2 h-500 p-4 text-lg border rounded-md focus:ring-blue-500 focus:border-blue-500 mr-4"
             />
-          </div>
-
-          <div className="flex space-x-4">
-            <div className="flex-1">
-              <div
-                className="flex flex-col items-center justify-center h-48 p-4 border-2 border-dashed rounded-md cursor-pointer hover:border-blue-500"
-                onClick={selectFiles}
-                onDragOver={onDragOver}
-                onDragLeave={onDragLeave}
-                onDrop={onDrop}
-              >
-                {isDragging ? (
-                  <span className="text-blue-500">Drop files here</span>
-                ) : (
-                  <span className="text-blue-500">
-                    Click here to put your video
-                  </span>
-                )}
-
-                <input
-                  type="file"
-                  ref={fileInputRef}
-                  onChange={onFileSelect}
-                  className="hidden"
-                />
-              </div>
-            </div>
-
-            {/* Thumbnails */}
-            <div className="flex-1 space-y-4">
-              {images.map((image, index) => (
-                <div key={index} className="relative">
-                  <button
-                    type="button"
-                    className="absolute top-0 right-0 p-1 text-white bg-red-600 rounded-full"
-                    onClick={() => deleteImage(index)}
-                  >
-                    &times;
-                  </button>
-                  {/* Ensure image.type is defined before calling includes */}
-                  {image.type && image.type.includes("video") ? (
-                    <video controls className="w-full h-auto rounded-md">
-                      <source src={image.url} type={image.type} />
-                      Your browser does not support the video tag.
-                    </video>
-                  ) : (
-                    <img
-                      src={image.url}
-                      alt={image.name}
-                      className="w-full h-auto rounded-md"
-                    />
-                  )}
-                </div>
-              ))}
+            <div
+              className="flex-1 h-48 p-4 border-2 border-dashed rounded-md cursor-pointer hover:border-blue-500 flex items-center justify-center"
+              onClick={selectFiles}
+              onDragOver={onDragOver}
+              onDragLeave={onDragLeave}
+              onDrop={onDrop}
+            >
+              {isDragging ? (
+                <span className="text-blue-500">Drop files here</span>
+              ) : (
+                <span className="text-blue-500">
+                  Click here to put your video
+                </span>
+              )}
+              <input
+                type="file"
+                ref={fileInputRef}
+                onChange={onFileSelect}
+                className="hidden"
+              />
             </div>
           </div>
 
           <div className="flex justify-between mt-6">
             <button
               type="button"
-              className="px-6 py-2 text-lg text-white bg-blue-600 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="px-6 py-2 text-lg text-white bg-primary rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
               onClick={uploadImage}
             >
               Upload
             </button>
             <button
               type="submit"
-              className="px-6 py-2 text-lg text-white bg-green-600 rounded-md hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500"
+              className="px-6 py-2 text-lg text-white bg-secondary rounded-md hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500"
             >
               Next
             </button>
@@ -227,7 +217,8 @@ function SeekerIntro({ handleNextStep, name }) {
 
 SeekerIntro.propTypes = {
   handleNextStep: PropTypes.func.isRequired,
-  name: PropTypes.string.isRequired,
+  uid: PropTypes.string.isRequired,
+  username: PropTypes.string.isRequired,
 };
 
 export default SeekerIntro;
