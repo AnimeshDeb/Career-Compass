@@ -6,6 +6,7 @@ import { storage } from "../../../../firebase";
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { v4 } from "uuid";
 import PropTypes from "prop-types";
+import placeholderAI from "../../../../images/placeholderAI.png";
 
 function SeekerProfilepic({ handlePrevStep, handleNextStep, name }) {
   const [images, setImages] = useState([]);
@@ -102,14 +103,27 @@ function SeekerProfilepic({ handlePrevStep, handleNextStep, name }) {
   }
   return (
     <>
-      <div className="bg-primary text-white p-1 pt-5 pl-10">
-        <h1 className="text-4xl font-bold mb-4">Picture</h1>
+            <div className="bg-primary text-white flex items-center pl-10">
+        <h1 className="text-xl md:text-2xl lg:text-4xl font-bold pt-4 p-2 flex-grow">
+          Picture
+        </h1>
       </div>
-      <p className="text-left mb-6 text-2xl pl-10 pt-10">
-        Include a <span className="text-secondary">picture</span>
+      <div className="maybolin-talk flex items-center  m-4 mx-auto max-w-4xl">
+        <div className="flex-shrink-0 max-w-40 w-1/4 mr-0 ml-5">
+          <img
+            src={placeholderAI}
+            alt="Maybolin AI"
+            className="w-3/4 object-cover"
+          />
+        </div>
+      <div className="bg-blue-100 px-6 py-4 mt-4 shadow-lg relative text-left mr-5 rounded-tr-lg rounded-bl-lg rounded-br-lg ">
+          <p className="text-lg md:text-xl lg:text-2xl">
+        Almost done! <span className="text-secondary">Add </span> a picture of yourself.
       </p>
-
-      <div className="max-w-md mx-auto bg-white p-6 rounded-lg shadow-md">
+      <div className="absolute top-0 -left-2 w-10 h-0 border-l-[10px] border-l-transparent border-b-[10px] border-b-primary"></div>
+      </div>
+      </div>
+      <div className="max-w-md mx-auto bg-white p-6 rounded-lg">
         <form onSubmit={handleSubmit}>
           <div className="space-y-4">
             <div
@@ -167,14 +181,14 @@ function SeekerProfilepic({ handlePrevStep, handleNextStep, name }) {
             </button>
             <button
               type="button"
-              className="bg-blue-600 text-white py-2 px-4 rounded hover:bg-blue-700"
+              className="px-6 py-2 text-lg text-white bg-primary rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
               onClick={uploadImage}
             >
               Upload
             </button>
             <button
               type="submit"
-              className="bg-primary text-white py-2 px-4 rounded hover:bg-primary-dark"
+              className="px-4 py-2 text-lg text-white bg-secondary rounded-md hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500"
             >
               Next
             </button>

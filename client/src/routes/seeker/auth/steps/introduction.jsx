@@ -129,21 +129,21 @@ function SeekerIntro({ handleNextStep, uid, username }) {
 
   return (
     <>
-      <div className="bg-primary text-white flex items-center pl-10">
-        <h1 className="text-xl md:text-2xl lg:text-4xl font-bold p-2 flex-grow">
+      <div className="bg-primary mb-0 text-white flex items-center pl-10">
+        <h1 className="mb-0 text-xl md:text-2xl lg:text-4xl font-bold pt-4 p-2 flex-grow">
           Introductions
         </h1>
       </div>
-      <div className="maybolin-talk flex items-center mb-0 my-8 mx-auto max-w-4xl">
-        <div className="flex-shrink-0 max-w-40 w-1/4 mr-5 ml-5">
+      <div className="maybolin-talk flex items-center  m-4 mx-auto max-w-4xl">
+        <div className="flex-shrink-0 max-w-40 w-1/4 mr-0 ml-5">
           <img
             src={placeholderAI}
             alt="Maybolin AI"
-            className="w-full object-cover"
+            className="w-3/4 object-cover"
           />
         </div>
-        <div className="bg-blue-100 px-6 py-4 shadow-lg relative text-left mb-6 mr-5 rounded-tr-lg rounded-bl-lg rounded-br-lg flex-grow">
-          <p className="text-sm md:text-xl lg:text-2xl">
+        <div className="bg-blue-100 px-6 py-4 mt-4 shadow-lg relative text-left mr-5 rounded-tr-lg rounded-bl-lg rounded-br-lg">
+          <p className="text-lg md:text-xl lg:text-2xl">
             We're excited to meet you! Please introduce yourself in the way you
             like best:
             <br />
@@ -165,7 +165,7 @@ function SeekerIntro({ handleNextStep, uid, username }) {
       <div className="mb-0 max-w-4xl mx-auto pl-4 pr-4 space-y-6 bg-white rounded-lg">
         <form onSubmit={handleSubmit}>
           <div className="flex justify-between">
-            <div className="bg-primary mb-0 w-full p-5 mr-5 mt-5 mb-5">
+            <div className="hover:bg-primary mb-0 w-full p-5 mr-5 mt-5 mb-5">
               <textarea
                 name="seekerIntroInput"
                 onClick={handleTextClick}
@@ -175,7 +175,7 @@ function SeekerIntro({ handleNextStep, uid, username }) {
                 className="w-full h-full p-4 text-lg border rounded-md focus:ring-blue-500 focus:border-blue-500 mr-4"
               />
             </div>
-            <div className="bg-secondary w-full mb-0 p-5 mr-5 mt-5 mb-5">
+            <div className="hover:bg-secondary w-full mb-0 p-5 mr-5 mt-5 mb-5">
               <div
                 className="flex-1 h-48 p-10 border-2 border-dashed bg-white rounded-md cursor-pointer hover:border-primary flex items-center justify-center"
                 onClick={selectFiles}
@@ -200,7 +200,7 @@ function SeekerIntro({ handleNextStep, uid, username }) {
             </div>
           </div>
 
-          <div className="flex justify-between mt-2">
+          <div className="flex justify-between">
             <button
               type="button"
               className="px-6 py-2 text-lg text-white bg-primary rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500"

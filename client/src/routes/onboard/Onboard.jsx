@@ -61,7 +61,6 @@ function Onboard() {
                 {tab === "signup" && (
                   <div className="flex flex-col space-y-2">
                     <h4 className="text-2xl">Choose what you are</h4>
-                    {/* Similarly, apply hover styles to Links */}
                     <Link
                       to="/SeekerSignup"
                       className="px-4 py-2 text-xl bg-primary rounded-md text-white text-center hover:bg-primaryDark hover:text-gray-200 hover:shadow-md transition-colors duration-300"

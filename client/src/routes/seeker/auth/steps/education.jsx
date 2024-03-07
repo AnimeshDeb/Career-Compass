@@ -4,12 +4,17 @@ import { db } from "../../../../firebase";
 import { collection, addDoc, doc } from "firebase/firestore";
 import PropTypes from "prop-types";
 import placeholderAI from "../../../../images/placeholderAI.png";
+import Audio_Btn from "../../../../components/Buttons/audio__btn/audio_btn"
 function SeekerEducation({ handleNextStep, handlePrevStep, name }) {
   const [seekerSchoolNameTxt, setSeekerSchoolNameTxt] = useState("");
   const [seekerMajor, setSeekerMajor] = useState("");
   const [seekerEducationTypeTxt, setSeekerEducationTypeTxt] = useState("");
   const [seekerGraduating, setSeekerGraduating] = useState("");
-  // const name = location.state?.fullName;
+  const educationTypes = ["High School", "Associate's", "Bachelor's", "Master's", "PhD"];
+  const currentYear = new Date().getFullYear();
+  const years = Array.from(new Array(50), (val, index) => currentYear + 10 - index);
+
+
 
   const handleChangeSchool = (e) => {
     setSeekerSchoolNameTxt(e.target.value);
@@ -46,62 +51,75 @@ function SeekerEducation({ handleNextStep, handlePrevStep, name }) {
   return (
     <>
       <div className="bg-primary text-white flex items-center pl-10">
-        <h1 className="text-xl md:text-2xl lg:text-4xl font-bold p-2 flex-grow">
+        <h1 className="text-xl md:text-2xl lg:text-4xl font-bold pt-4 p-2 flex-grow">
           Education
         </h1>
       </div>
-      <div className="maybolin-talk flex items-center mb-0 my-8 mx-auto max-w-4xl">
-        <div className="flex-shrink-0 max-w-40 w-1/4 mr-5 ml-5">
+      <div className="maybolin-talk flex items-center  m-4 mx-auto max-w-4xl">
+        <div className="flex-shrink-0 max-w-40 w-1/4 mr-0 ml-5">
           <img
             src={placeholderAI}
             alt="Maybolin AI"
-            className="w-full object-cover"
+            className="w-3/4 object-cover"
           />
         </div>
-        <div className="bg-blue-100 px-6 py-4 shadow-lg relative text-left mb-6 mr-5 rounded-tr-lg rounded-bl-lg rounded-br-lg flex-grow">
-          <p className="text-sm md:text-xl lg:text-2xl">
+        <div className="bg-blue-100 px-6 py-4 mt-4 shadow-lg relative text-left mr-5 rounded-tr-lg rounded-bl-lg rounded-br-lg ">
+          <p className="text-lg md:text-xl lg:text-2xl">
             Where did you go to{" "}
             <span className="text-secondary font-semibold">school</span>? Tell
-            us your education.
+            us your highest education.
           </p>
           <div className="absolute top-0 -left-2 w-10 h-0 border-l-[10px] border-l-transparent border-b-[10px] border-b-primary"></div>
+        <div className="pl-90">
+        <Audio_Btn/>
+        </div>
         </div>
       </div>
       <div className="max-w-4xl mx-auto p-6 space-y-6 bg-white rounded-lg ">
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="space-y-2">
-            <input
-              type="text"
-              className="w-full p-2 border rounded-md"
-              placeholder="Type in the type of education..."
-              value={seekerSchoolNameTxt}
-              onChange={handleChangeSchool}
-              required
-            />
-            <input
-              type="text"
-              className="w-full p-2 border rounded-md"
-              placeholder="What is the name of your diploma..."
-              value={seekerEducationTypeTxt}
-              onChange={handleChangeEducationType}
-              required
-            />
-            <input
-              type="text"
-              className="w-full p-2 border rounded-md"
-              placeholder="When are you graduating..."
-              value={seekerGraduating}
-              onChange={handleChangeGraduating}
-              required
-            />
-            <input
-              type="text"
-              className="w-full p-2 border rounded-md"
-              placeholder="What is your major..."
-              value={seekerMajor}
-              onChange={handleChangeMajor}
-              required
-            />
+            
+      <input
+        type="text"
+        className="w-full p-2 border rounded-md"
+        placeholder="School name..."
+        value={seekerSchoolNameTxt}
+        onChange={handleChangeSchool}
+        required
+      />
+
+      <select
+        className="w-full p-2 border rounded-md"
+        value={seekerEducationTypeTxt}
+        onChange={handleChangeEducationType}
+        required
+      >
+        <option value="">Select your education type</option>
+        {educationTypes.map((type) => (
+          <option value={type} key={type}>{type}</option>
+        ))}
+      </select>
+
+      <select
+        className="w-full p-2 border rounded-md"
+        value={seekerGraduating}
+        onChange={handleChangeGraduating}
+        required
+      >
+        <option value="">Select your graduation year</option>
+        {years.map((year) => (
+          <option value={year} key={year}>{year}</option>
+        ))}
+      </select>
+
+      <input
+        type="text"
+        className="w-full p-2 border rounded-md"
+        placeholder="Major..."
+        value={seekerMajor}
+        onChange={handleChangeMajor}
+      />
+
           </div>
           <div className="flex justify-between">
             <button
@@ -113,7 +131,7 @@ function SeekerEducation({ handleNextStep, handlePrevStep, name }) {
             </button>
             <button
               type="submit"
-              className="bg-primary text-white py-2 px-4 rounded hover:bg-primary-dark focus:outline-none focus:ring-2 focus:ring-primary"
+              className="bg-secondary text-white py-2 px-4 rounded hover:bg-primary-dark focus:outline-none focus:ring-2 focus:ring-primary"
             >
               Next
             </button>

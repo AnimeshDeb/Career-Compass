@@ -28,7 +28,6 @@ function SeekerUser() {
         <Card.Body>
           <h2 className="text-center mb-4">Profile</h2>
           {error && <Alert variant="danger">{error}</Alert>}
-          {/* Using  currentUser to access the email and display name of the current user and show it*/}
           <strong> Email: </strong> {currentUser.email}
           <strong> Password </strong> {currentUser.password}
           <Link

@@ -1,22 +1,23 @@
-import { db } from "../../../../firebase";
 import { useState, useRef } from "react";
 import { Card, Form, Button } from "react-bootstrap";
 import { collection, doc, setDoc } from "firebase/firestore";
+import { db } from "../../../../firebase";
 import { storage } from "../../../../firebase";
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { v4 } from "uuid";
 import PropTypes from "prop-types";
 import placeholderAI from "../../../../images/placeholderAI.png";
-function SeekerChallenges({ handleNextStep, handlePrevStep, name }) {
-  // const name = location.state?.fullName;
+function SeekerSkills({ handleNextStep, handlePrevStep, name }) {
+  // const name=location.state?.NameFull;
   const [images, setImages] = useState([]);
   const [isDragging, setIsDragging] = useState(false);
   const fileInputRef = useRef(null);
-  const [seekerTxtChallenges, setSeekerTxtChallenges] = useState("");
+  const [SeekTxtSkills, setSeekTxtSkills] = useState("");
   const [imageUpload, setImageUpload] = useState(null);
   const [mode, setMode] = useState();
   const usersCollection = collection(db, "Seekers");
   const docRef = doc(usersCollection, name);
+
   function selectFiles() {
     fileInputRef.current.click();
   }
@@ -53,6 +54,7 @@ function SeekerChallenges({ handleNextStep, handlePrevStep, name }) {
   }
 
   function onDrop(e) {
+    console.log("reaching hre!!!");
     e.preventDefault();
     if (images.length === 0) {
       setIsDragging(false);
@@ -65,15 +67,17 @@ function SeekerChallenges({ handleNextStep, handlePrevStep, name }) {
       ]);
       fileInputRef.current.disabled = true;
       setMode("video");
-      console.log("value of image is " + imageUpload);
+
+      console.log("value of mode is " + mode);
     }
   }
+
   function uploadImage() {
     console.log("Images: ", images);
     if (imageUpload === null) return;
     const imageRef = ref(
       storage,
-      `Users/Seekers/ ${name}/${imageUpload.name + v4()}`
+      `Users/Seekers/${name}/${imageUpload.name + v4()}`
     );
     console.log("Image upload value is: " + imageUpload);
 
@@ -87,104 +91,118 @@ function SeekerChallenges({ handleNextStep, handlePrevStep, name }) {
         //
         console.log("Download url:" + downloadURL);
         alert("image uploaded successfully");
-        const seekerChallangeData = {
-          challenges: downloadURL,
+        const seekerSkillsUpdatedData = {
+          skills: downloadURL,
         };
         if (mode === "video") {
-          setDoc(docRef, seekerChallangeData, { merge: true });
+          setDoc(docRef, seekerSkillsUpdatedData, { merge: true });
         }
       });
   }
-  function handleTextClick() {
-    setMode("text");
-  }
-  function handleVideoClick() {
-    setMode("video");
-  }
+
   async function handleSubmit(e) {
     e.preventDefault();
     try {
-      const seekerChallangeData = {
-        challenges: seekerTxtChallenges,
+      const seekerSkillsUpdatedData = {
+        skills: SeekTxtSkills,
       };
       if (mode === "text") {
-        await setDoc(docRef, seekerChallangeData, { merge: true });
+        await setDoc(docRef, seekerSkillsUpdatedData, { merge: true });
       }
+
       handleNextStep();
-      // navigate('/seekerEducation', { state: { fullName: name } });
+      // navigate("/seekerChallenges", {state: {fullName: name}});
     } catch (error) {
       console.log("The error is: " + error);
       console.error("ERROR: " + error);
     }
   }
   const handleChange = (e) => {
-    setSeekerTxtChallenges(e.target.value);
+    setSeekTxtSkills(e.target.value);
   };
+  function handleTextClick() {
+    setMode("text");
+  }
+  function handleVideoClick() {
+    setMode("video");
+  }
 
   return (
     <>
       <div className="bg-primary text-white flex items-center pl-10">
-        <h1 className="text-xl md:text-2xl lg:text-4xl font-bold p-2 flex-grow">
-          Challenges
+        <h1 className="text-xl md:text-2xl lg:text-4xl font-bold pt-4 p-2 flex-grow">
+          Skills
         </h1>
       </div>
-      <div className="maybolin-talk flex items-center mb-0 my-8 mx-auto max-w-4xl">
-        <div className="flex-shrink-0 max-w-40 w-1/4 mr-5 ml-5">
+      <div className="maybolin-talk flex items-center  m-4 mx-auto max-w-4xl">
+        <div className="flex-shrink-0 max-w-40 w-1/4 mr-0 ml-5">
           <img
             src={placeholderAI}
             alt="Maybolin AI"
-            className="w-full object-cover"
+            className="w-3/4 object-cover"
           />
         </div>
-        <div className="bg-blue-100 px-6 py-4 shadow-lg relative text-left mb-6 mr-5 rounded-tr-lg rounded-bl-lg rounded-br-lg flex-grow">
-          <p className="text-sm md:text-xl lg:text-2xl">
-            Any <span className="text-secondary font-semibold">challenges</span>{" "}
-            you want to share?
+        <div className="bg-blue-100 px-6 py-4 mt-4 shadow-lg relative text-left mr-5 rounded-tr-lg rounded-bl-lg rounded-br-lg">
+          <p className="text-lg md:text-xl lg:text-2xl">
+            Please share the skills you bring:
+            <br />
+            <span className="text-primary font-semibold">Record a video </span>
+            or
+            <span className="text-secondary font-semibold"> write</span> about
+            your skills.
+            <br />
+            If you prefer talking, you can
+            <span className="text-secondary font-semibold">
+              {""} speak about your skills.
+            </span>
           </p>
           <div className="absolute top-0 -left-2 w-10 h-0 border-l-[10px] border-l-transparent border-b-[10px] border-b-primary"></div>
         </div>
       </div>
-      <div className="max-w-4xl mx-auto p-6 mt-20 bg-white rounded-lg shadow-md">
-        <form onSubmit={handleSubmit} className="space-y-6">
-          <div className="flex space-x-4 items-center">
-            <textarea
-              className="flex-1 h-48 p-4 text-lg border rounded-md focus:ring-primary focus:border-primary"
-              onClick={handleTextClick}
-              onChange={handleChange}
-              placeholder="Type your challenges here..."
-              value={seekerTxtChallenges}
-            />
-            <div
-              className={`flex-1 h-48 p-4 border-2 border-dashed rounded-md cursor-pointer ${
-                isDragging ? "border-primary" : "border-gray-300"
-              } hover:border-primary flex items-center justify-center`}
-              onClick={selectFiles}
-              onDragOver={onDragOver}
-              onDragLeave={onDragLeave}
-              onDrop={onDrop}
-            >
+
+      <div className="mb-0 max-w-4xl mx-auto pl-4 pr-4 space-y-6 bg-white rounded-lg">
+        <form onSubmit={handleSubmit}>
+          <div className="flex justify-between">
+            <div className="hover:bg-primary mb-0 w-full p-5 mr-5 mt-5 mb-5">
+              <textarea
+                name="seekerIntroInput"
+                onClick={handleTextClick}
+                value={SeekTxtSkills}
+                onChange={handleChange}
+                placeholder="Type your introduction here..."
+                className="w-full h-full p-4 text-lg border rounded-md focus:ring-blue-500 focus:border-blue-500 mr-4"
+              />
+            </div>
+
+            <div className="hover:bg-secondary w-full mb-0 p-5 mr-5 mt-5 mb-5">
+              <div
+                className="flex-1 h-48 p-10 border-2 border-dashed bg-white rounded-md cursor-pointer hover:border-primary flex items-center justify-center"
+                onClick={selectFiles}
+                onDragOver={onDragOver}
+                onDragLeave={onDragLeave}
+                onDrop={onDrop}
+              >
               {isDragging ? (
                 <span className="text-primary">Drop files here</span>
               ) : (
-                <>
-                  Drag & Drop file here or{" "}
-                  <span className="text-primary cursor-pointer"> Browse</span>
-                </>
+                <span className="text-primary">
+                  Click or drag & drop to upload
+                </span>
               )}
               <input
-                name="file"
-                type="file"
-                multiple
+                className="hidden"
                 ref={fileInputRef}
                 onChange={onFileSelect}
-                className="hidden"
+                type="file"
+                multiple
               />
             </div>
           </div>
-          <div className="flex justify-between mt-6">
+</div>
+          <div className="flex justify-between">
             <button
               type="button"
-              className="px-6 py-2 text-lg text-white bg-primary rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-primary"
+              className="px-6 py-2 text-lg text-white bg-primary rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
               onClick={uploadImage}
             >
               Upload
@@ -210,9 +228,10 @@ function SeekerChallenges({ handleNextStep, handlePrevStep, name }) {
     </>
   );
 }
-SeekerChallenges.propTypes = {
+
+SeekerSkills.propTypes = {
   handleNextStep: PropTypes.func.isRequired,
   name: PropTypes.string.isRequired,
   handlePrevStep: PropTypes.func.isRequired,
 };
-export default SeekerChallenges;
+export default SeekerSkills;

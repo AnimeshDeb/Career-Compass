@@ -42,6 +42,7 @@ export default function Audio_Btn({ className, audioSrc, iconSize }) {
       className={`general-btn ${className}`}
       onClick={playAudio}
       style={buttonStyles}
+      title="Audio Button"
     >
       <FontAwesomeIcon icon={faHeadphones} size={iconSize} />
     </button>

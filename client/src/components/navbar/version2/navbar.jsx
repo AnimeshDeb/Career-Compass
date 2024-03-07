@@ -1,21 +1,22 @@
 import largImage from "../../../images/logos/large_v1.png";
+import { Link } from "react-router-dom";
 
 export default function NavbarWhite() {
   return (
     <nav className="bg-white">
       <div className="flex justify-between items-center mx-auto px-4">
-        <a href="/" className="flex items-center">
+        <Link href="/" className="flex items-center">
           <img
             src={largImage}
             alt="Career Compass"
-            className="max-h-24 w-auto object-contain"
+            className="max-h-20 w-auto object-contain"
           />
-        </a>
+        </Link>
         <div className="flex-grow text-center">
-          <h3 className="text-2xl md:text-3xl lg:text-4xl font-semibold text-primary">
+          <h3 className="text-lg md:text-xl lg:text-2xl font-semibold text-primary">
             Welcome!
           </h3>
-          <p className="text-sm md:text-lg lg:text-xl text-secondary">
+          <p className="text-sm md:text-base lg:text-lg text-secondary">
             Finish your profile
           </p>
         </div>
