@@ -6,8 +6,8 @@ import { storage } from "../../../../firebase";
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { v4 } from "uuid";
 import PropTypes from "prop-types";
-import placeholderAI from "../../../../images/placeholderAI.png";
-
+import Lottie from 'lottie-react';
+import animationData from '../../../../images/animatedAI.json';
 function SeekerProfilepic({ handlePrevStep, handleNextStep, name }) {
   const [images, setImages] = useState([]);
   const [isDragging, setIsDragging] = useState(false);
@@ -108,33 +108,28 @@ function SeekerProfilepic({ handlePrevStep, handleNextStep, name }) {
           Picture
         </h1>
       </div>
-      <div className="maybolin-talk flex items-center  m-4 mx-auto max-w-4xl">
-        <div className="flex-shrink-0 max-w-40 w-1/4 mr-0 ml-5">
-          <img
-            src={placeholderAI}
-            alt="Maybolin AI"
-            className="w-3/4 object-cover"
-          />
+      <div className="maybolin-talk flex flex-col md:flex-row items-center justify-center m-4 mx-auto max-w-4xl">
+        <div className="flex-1 flex-shrink-0 max-w-60 w-1/2 mr-0 ml-5 sm:p-0 sm:m-0">
+          <Lottie animationData={animationData} className="w-48 md:w-60 lg:w-full max-w-sm sm:p-0 sm:m-0" />
         </div>
-      <div className="bg-blue-100 px-6 py-4 mt-4 shadow-lg relative text-left mr-5 rounded-tr-lg rounded-bl-lg rounded-br-lg ">
+        <div className="flex-1 bg-blue-100 px-6 py-4 mt-4 shadow-lg relative text-left mx-5 rounded-tr-lg rounded-bl-lg rounded-br-lg ">
           <p className="text-lg md:text-xl lg:text-2xl">
-        Almost done! <span className="text-secondary">Add </span> a picture of yourself.
-      </p>
-      <div className="absolute top-0 -left-2 w-10 h-0 border-l-[10px] border-l-transparent border-b-[10px] border-b-primary"></div>
-      </div>
+            Almost done! <span className="text-secondary">Add </span> a picture with your face below.
+          </p>
+          <div className="absolute top-0 -left-2 w-10 h-0 border-l-[10px] border-l-transparent border-b-[10px] border-b-primary"></div>
+        </div>
       </div>
       <div className="max-w-md mx-auto bg-white p-6 rounded-lg">
         <form onSubmit={handleSubmit}>
           <div className="space-y-4">
-            <div
-              className={`border-2 border-dashed rounded-full w-36 h-36 flex items-center justify-center mx-auto cursor-pointer ${
+            <div 
+            className={`border-2 border-dashed rounded-full w-36 h-36 flex items-center justify-center mx-auto cursor-pointer ${
                 isDragging ? "border-primary" : "border-gray-300"
               } hover:border-primary bg-secondary`}
               onDragOver={onDragOver}
               onDragLeave={onDragLeave}
               onDrop={onDrop}
-              onClick={selectFiles}
-            >
+              onClick={selectFiles}>
               {isDragging ? (
                 <span className="text-primary">Drop image here</span>
               ) : (

@@ -28,16 +28,15 @@ function ParentComponent() {
   ];
 
   useEffect(() => {
-    anime({
-      targets: ".progress-bar-fill",
-      width: [
-        (((step - 1) / steps.length) * 100).toFixed(0) + "%",
-        ((step / steps.length) * 100).toFixed(0) + "%",
-      ],
-      easing: "easeInOutQuad",
-      duration: 1000,
-    });
-  }, [step]);
+  const targetWidth = ((step / steps.length) * 100).toFixed(0) + "%";
+
+  anime({
+    targets: ".progress-bar-fill",
+    width: targetWidth,
+    easing: "easeInOutQuad",
+    duration: 1000, 
+  });
+}, [step]); 
 
   useEffect(() => {
     positionWelcomeContainer();

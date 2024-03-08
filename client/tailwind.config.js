@@ -16,6 +16,7 @@ export default {
     },
     spacing: {
       '1/10': '10%',
+      'middle-process': '47%',
     },},
   },
   plugins: [],

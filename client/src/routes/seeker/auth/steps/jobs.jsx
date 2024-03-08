@@ -6,6 +6,8 @@ import PropTypes from "prop-types";
 import placeholderAI from "../../../../images/placeholderAI.png";
 import Audio_Btn from "../../../../components/Buttons/audio__btn/audio_btn"
 import Select from 'react-select'
+import Lottie from 'lottie-react';
+import animationData from '../../../../images/animatedAI.json';
 const stateOptions = [
   { value: 'AL', label: 'Alabama' },
   { value: 'AK', label: 'Alaska' },
@@ -100,23 +102,22 @@ function SeekerJobs({ handleNextStep, handlePrevStep, name }) {
           Jobs
         </h1>
       </div>
-      <div className="maybolin-talk flex items-center  m-4 mx-auto max-w-4xl">
-        <div className="flex-shrink-0 max-w-40 w-1/4 mr-0 ml-5">
-          <img
-            src={placeholderAI}
-            alt="Maybolin AI"
-            className="w-3/4 object-cover"
-          />
+      <div className="maybolin-talk flex flex-col md:flex-row items-center justify-center m-4 mx-auto max-w-4xl">
+        <div className="flex-1 flex-shrink-0 max-w-60 w-1/2 mr-0 ml-5 sm:p-0 sm:m-0">
+          <Lottie animationData={animationData} className="w-48 md:w-60 lg:w-full max-w-sm sm:p-0 sm:m-0" />
         </div>
-      <div className="bg-blue-100 px-6 py-4 mt-4 shadow-lg relative text-left mr-5 rounded-tr-lg rounded-bl-lg rounded-br-lg ">
-          <p className="text-lg md:text-xl lg:text-2xl">
-        What <span className="text-secondary">jobs</span> have you done in the
-        past?
-      </p>
-      <div className="absolute top-0 -left-2 w-10 h-0 border-l-[10px] border-l-transparent border-b-[10px] border-b-primary"></div>
+        <div className="flex-1 bg-blue-100 px-6 py-4 mt-4 shadow-lg relative text-left mr-5 rounded-tr-lg rounded-bl-lg rounded-br-lg ">
+            <p className="sm:m-0 sm:m-0 text-lg md:text-xl lg:text-2xl">
+              What <span className="text-secondary">jobs</span> have you done in the
+              past?
+            </p>
+        <div className="absolute top-0 -left-2 w-10 h-0 border-l-[10px] border-l-transparent border-b-[10px] border-b-primary"></div>
+          <div className="flex justify-end mt-2">
+              <Audio_Btn/>
+          </div>
+        </div>
       </div>
-      </div>
-      <div className="max-w-4xl mx-auto p-6 space-y-6 bg-white rounded-lg ">
+      <div className="max-w-4xl mx-auto p-6 space-y-6 bg-white rounded-lg">
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="space-y-2">
             <input
@@ -144,7 +145,7 @@ function SeekerJobs({ handleNextStep, handlePrevStep, name }) {
               className="mb-4"
             />
             
-        <h1 className="text-xl md:text-2xl lg:text-4xl font-bold p-2 flex-grow">
+        <h1 className="text-lg md:text-xl lg:text-2xl font-bold p-2 flex-grow text-primary">
           United States
         </h1>
           </div>

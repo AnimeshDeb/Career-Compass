@@ -7,6 +7,9 @@ import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { v4 } from "uuid";
 import PropTypes from "prop-types";
 import placeholderAI from "../../../../images/placeholderAI.png";
+import Audio_Btn from "../../../../components/Buttons/audio__btn/audio_btn";
+import Lottie from 'lottie-react';
+import animationData from '../../../../images/animatedAI.json';
 function SeekerSkills({ handleNextStep, handlePrevStep, name }) {
   // const name=location.state?.NameFull;
   const [images, setImages] = useState([]);
@@ -134,15 +137,11 @@ function SeekerSkills({ handleNextStep, handlePrevStep, name }) {
           Skills
         </h1>
       </div>
-      <div className="maybolin-talk flex items-center  m-4 mx-auto max-w-4xl">
-        <div className="flex-shrink-0 max-w-40 w-1/4 mr-0 ml-5">
-          <img
-            src={placeholderAI}
-            alt="Maybolin AI"
-            className="w-3/4 object-cover"
-          />
+      <div className="maybolin-talk flex flex-col md:flex-row items-center justify-center m-4 mx-auto max-w-4xl">
+        <div className="flex-1 flex-shrink-0 max-w-60 w-1/2 mr-0 ml-5 sm:p-0 sm:m-0">
+          <Lottie animationData={animationData} className="w-48 md:w-60 lg:w-full max-w-sm sm:p-0 sm:m-0" />
         </div>
-        <div className="bg-blue-100 px-6 py-4 mt-4 shadow-lg relative text-left mr-5 rounded-tr-lg rounded-bl-lg rounded-br-lg">
+        <div className="flex-1 bg-blue-100 px-6 py-4 mt-4 shadow-lg relative text-left mx-5 rounded-tr-lg rounded-bl-lg rounded-br-lg ">
           <p className="text-lg md:text-xl lg:text-2xl">
             Please share the skills you bring:
             <br />
@@ -157,13 +156,16 @@ function SeekerSkills({ handleNextStep, handlePrevStep, name }) {
             </span>
           </p>
           <div className="absolute top-0 -left-2 w-10 h-0 border-l-[10px] border-l-transparent border-b-[10px] border-b-primary"></div>
+          <div className="flex justify-end mt-0">
+              <Audio_Btn/>
+          </div>
         </div>
       </div>
 
-      <div className="mb-0 max-w-4xl mx-auto pl-4 pr-4 space-y-6 bg-white rounded-lg">
+      <div className="mt-0 mb-0 max-w-4xl mx-auto pl-4 pr-4 space-y-6 bg-white rounded-lg">
         <form onSubmit={handleSubmit}>
-          <div className="flex justify-between">
-            <div className="hover:bg-primary mb-0 w-full p-5 mr-5 mt-5 mb-5">
+          <div className="flex h-60 md:h-56 lg:h-60 justify-between">
+            <div className="hover:bg-primary mb-5 w-full p-5">
               <textarea
                 name="seekerIntroInput"
                 onClick={handleTextClick}
@@ -173,10 +175,15 @@ function SeekerSkills({ handleNextStep, handlePrevStep, name }) {
                 className="w-full h-full p-4 text-lg border rounded-md focus:ring-blue-500 focus:border-blue-500 mr-4"
               />
             </div>
+            <div className="flex flex-col h-10 mt-0 items-center pl-0 pr-0 mr-0 ml-0 mb-5">
+              <div className="border-l-2 h-2 opacity-100 m-0 p-0"></div>
+              <span className="text-md font-semibold mb-0 ml-1 mr-1 opacity-70">OR</span>
+              <div className="border-l-2 h-5 opacity-100 m-0 p-0"></div>
+            </div>
 
-            <div className="hover:bg-secondary w-full mb-0 p-5 mr-5 mt-5 mb-5">
+            <div className="hover:bg-secondary w-full p-5 ml-0 mr-0 mt-0 mb-5">
               <div
-                className="flex-1 h-48 p-10 border-2 border-dashed bg-white rounded-md cursor-pointer hover:border-primary flex items-center justify-center"
+                className="flex-1 h-full p-10 border-2 border-dashed bg-white rounded-md cursor-pointer hover:border-primary flex items-center justify-center"
                 onClick={selectFiles}
                 onDragOver={onDragOver}
                 onDragLeave={onDragLeave}
