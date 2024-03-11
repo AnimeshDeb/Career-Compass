@@ -5,7 +5,7 @@ export default function NavbarWhite() {
   return (
     <nav className="bg-white">
       <div className="flex justify-between items-center mx-auto px-4">
-        <Link href="/" className="flex items-center">
+        <Link to="/" className="flex items-center">
           <img
             src={largImage}
             alt="Career Compass"

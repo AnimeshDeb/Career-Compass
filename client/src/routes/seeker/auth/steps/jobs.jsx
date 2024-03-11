@@ -1,9 +1,7 @@
 import { useState } from "react";
 import { collection, addDoc, doc } from "firebase/firestore";
 import { db } from "../../../../firebase";
-import { Card, Form } from "react-bootstrap";
 import PropTypes from "prop-types";
-import placeholderAI from "../../../../images/placeholderAI.png";
 import Audio_Btn from "../../../../components/Buttons/audio__btn/audio_btn"
 import Select from 'react-select'
 import Lottie from 'lottie-react';

@@ -5,11 +5,10 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCloudUploadAlt, faTimesCircle, faCheckCircle, faFile } from '@fortawesome/free-solid-svg-icons';
 import { storage } from '../../firebase';
 import { ref, uploadBytesResumable, getDownloadURL } from 'firebase/storage';
-import './DropFile.css';
 
-const DropFile = ({ onFileChange, maxFiles }) => {
+
+const DropFile = ({ onFileChange, maxFiles, acceptedFileTypes }) => {
     const [fileList, setFileList] = useState([]);
-
     const onDrop = useCallback((acceptedFiles) => {
         const updatedList = [...fileList, ...acceptedFiles].slice(0, maxFiles);
         setFileList(updatedList);
@@ -33,7 +32,7 @@ const DropFile = ({ onFileChange, maxFiles }) => {
                 () => {
                     // Handle successful uploads on complete
                     getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
-                        console.log('Shit works. URL for file ->', downloadURL);
+                        console.log( downloadURL);
                         // Here you can call a function to update the state or inform the parent component
                     });
                 }
@@ -41,7 +40,7 @@ const DropFile = ({ onFileChange, maxFiles }) => {
         }
     }, [fileList, onFileChange, maxFiles]);
 
-    const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop });
+    const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop, accept: acceptedFileTypes, });
 
     const fileRemove = (file) => {
         const updatedList = fileList.filter((f) => f !== file);
@@ -50,37 +49,46 @@ const DropFile = ({ onFileChange, maxFiles }) => {
     };
 
     return (
-        <>
-            <div {...getRootProps()} className={`drop-file-input ${isDragActive ? 'dragover' : ''} ${fileList.length >= maxFiles ? 'max-files-reached' : ''}`}>
+        <div className="flex space-x-4">
+            <div
+                {...getRootProps()}
+                className={`flex-1 border-dashed border-2 p-5 text-center cursor-pointer rounded-lg ${
+                isDragActive ? "bg-gray-100" : "bg-white"
+                } ${fileList.length >= maxFiles ? "border-green-500" : "border-gray-300"}`}
+            >
                 <input {...getInputProps()} />
-                <div className="drop-file-input__label">
-                    {fileList.length >= maxFiles ? <FontAwesomeIcon icon={faCheckCircle} size="3x" className="checkmark-icon" /> : <FontAwesomeIcon icon={faCloudUploadAlt} size="3x" />}
-                    <p>Drag & Drop your files here</p>
-                </div>
+                <FontAwesomeIcon icon={fileList.length >= maxFiles ? faCheckCircle : faCloudUploadAlt} size="3x" className={`${fileList.length >= maxFiles ? "text-green-500" : "text-blue-500"} mb-3`} />
+                <p>Drag & Drop your files here</p>
             </div>
             {fileList.length > 0 && (
-                <div className="drop-file-preview">
-                    <p className="drop-file-preview__title">Ready to upload</p>
-                    {fileList.map((item, index) => (
-                        <div key={index} className="drop-file-preview__item">
-                            {/* Display file icon based on type or use a default */}
-                            <FontAwesomeIcon icon={faFile} size="2x" />
-                            <div className="drop-file-preview__item__info">
-                                <p>{item.name}</p>
-                                <p>{item.size} bytes</p>
+                <div className="flex-1 overflow-hidden">
+                    <div className="whitespace-nowrap transition duration-300 ease-in-out">
+                        {fileList.map((file, index) => (
+                            <div key={index} className="inline-block p-2 align-middle">
+                                <div className="relative">
+                                    <FontAwesomeIcon icon={faFile} size="3x" className="text-gray-500" />
+                                    <p className="text-sm">{file.name}</p>
+                                    <p className="text-xs">{file.size} bytes</p>
+                                    <button
+                                        className="absolute top-0 right-0 bg-red-500 rounded-full p-1"
+                                        onClick={() => fileRemove(file)}
+                                    >
+                                        <FontAwesomeIcon icon={faTimesCircle} size="1x" className="text-white" />
+                                    </button>
+                                </div>
                             </div>
-                            <FontAwesomeIcon icon={faTimesCircle} size="2x" className="drop-file-preview__item__del" onClick={() => fileRemove(item)} />
-                        </div>
-                    ))}
+                        ))}
+                    </div>
                 </div>
             )}
-        </>
+        </div>
     );
 };
 
 DropFile.propTypes = {
     onFileChange: PropTypes.func.isRequired,
     maxFiles: PropTypes.number,
+    acceptedFileTypes: PropTypes.arrayOf(PropTypes.string),
 };
 
 

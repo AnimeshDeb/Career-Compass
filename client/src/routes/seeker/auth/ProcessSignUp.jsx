@@ -67,7 +67,6 @@ function ParentComponent() {
     if (step < 5) {
       setStep(step + 1);
     } else {
-      console.log(step);
       navigate("/user", { state: { name: uid } });
     }
   };

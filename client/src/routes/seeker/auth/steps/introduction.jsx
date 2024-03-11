@@ -8,7 +8,14 @@ import PropTypes from "prop-types";
 import Audio_Btn from "../../../../components/Buttons/audio__btn/audio_btn";
 import Lottie from 'lottie-react';
 import animationData from '../../../../images/animatedAI.json';
-function SeekerIntro({ handleNextStep, uid, username }) {
+import DropFile from "../../../../components/DropFile/DropFile";
+
+const acceptedIntroVideoTypes = {
+  'video/mp4': [],
+  'video/webm': [],
+  'video/ogg': [],
+};
+function SeekerIntro({ handleNextStep, uid }) {
   const [seekerTxtIntro, setSeekerTxtIntro] = useState("");
   // const name = location.state?.fullName;
   const [images, setImages] = useState([]);
@@ -19,60 +26,34 @@ function SeekerIntro({ handleNextStep, uid, username }) {
   const usersCollection = collection(db, "Seekers");
   const docRef = doc(usersCollection, uid);
 
-  // const user=auth.currentUser
-  function selectFiles() {
-    fileInputRef.current.click();
-  }
-  function onFileSelect(e) {
-    const file = e.target.files[0];
-    if (file && file.type.startsWith("video/")) {
-      // Check if the selected file is a video
-      setImageUpload(file);
-      setImages([
-        { name: file.name, url: URL.createObjectURL(file), type: file.type },
-      ]);
-      fileInputRef.current.disabled = true;
-      setMode("video");
-    } else {
-      // Handle the case where a non-video file is selected
-      alert("Please select a video file.");
+  function uploadVideo() {
+    if (!imageUpload) {
+      console.error("No file selected for upload.");
+      return;
     }
-  }
-  function deleteImage(index) {
-    setImages((prevImages) => prevImages.filter((_, i) => i !== index));
 
-    fileInputRef.current.disabled = false;
-  }
+    const fileRef = ref(storage, `Users/Seekers/${uid}/${imageUpload.name + v4()}`);
+    const uploadTask = uploadBytes(fileRef, imageUpload);
 
-  function onDragOver(e) {
-    e.preventDefault();
-    if (images.length === 0) {
-      setIsDragging(true);
-      e.dataTransfer.dropEffect = "copy";
-    }
-  }
-  function onDragLeave(e) {
-    e.preventDefault();
-    if (images.length === 0) {
-      setIsDragging(false);
-    }
-  }
-
-  function onDrop(e) {
-    e.preventDefault();
-    if (images.length === 0) {
-      setIsDragging(false);
-      const files = e.dataTransfer.files;
-      setImageUpload(files[0]);
-
-      setImages((prevImages) => [
-        ...prevImages,
-        { name: files[0].name, url: URL.createObjectURL(files[0]) },
-      ]);
-      fileInputRef.current.disabled = true;
-      setMode("video");
-      console.log("value of image is " + imageUpload);
-    }
+    uploadTask.then((snapshot) => {
+      getDownloadURL(snapshot.ref)
+        .then((downloadURL) => {
+          console.log("Video uploaded successfully: ", downloadURL);
+          setDoc(docRef, { introductionVideoURL: downloadURL }, { merge: true })
+            .then(() => {
+              console.log("Firestore updated with video URL.");
+              handleNextStep();
+            })
+            .catch((error) => {
+              console.error("Error updating Firestore: ", error);
+            });
+        })
+        .catch((error) => {
+          console.error("Error getting video URL: ", error);
+        });
+    }).catch((error) => {
+      console.error("Error uploading video: ", error);
+    });
   }
 
   function uploadImage() {
@@ -105,9 +86,6 @@ function SeekerIntro({ handleNextStep, uid, username }) {
   function handleTextClick() {
     setMode("text");
   }
-  function handleVideoClick() {
-    setMode("video");
-  }
 
   async function handleSubmit(e) {
     e.preventDefault();
@@ -121,7 +99,6 @@ function SeekerIntro({ handleNextStep, uid, username }) {
       handleNextStep();
     } catch (error) {
       console.error("ERROR: ", error);
-      console.log("the error is:" + error);
     }
   }
   const handleChange = (e) => {
@@ -181,28 +158,8 @@ function SeekerIntro({ handleNextStep, uid, username }) {
               <div className="border-l-2 h-5 opacity-100 m-0 p-0"></div>
             </div>
 
-            <div className="hover:bg-secondary w-full p-5 ml-0 mr-0 mt-0 mb-5">
-              <div
-                className="flex-1 h-full p-10 border-2 border-dashed bg-white rounded-md cursor-pointer hover:border-primary flex items-center justify-center"
-                onClick={selectFiles}
-                onDragOver={onDragOver}
-                onDragLeave={onDragLeave}
-                onDrop={onDrop}
-              >
-                {isDragging ? (
-                  <span className="text-primary">Drop files here</span>
-                ) : (
-                  <span className="text-primary">
-                    Click here to put your video
-                  </span>
-                )}
-                <input
-                  type="file"
-                  ref={fileInputRef}
-                  onChange={onFileSelect}
-                  className="hidden"
-                />
-              </div>
+            <div className="hover:bg-secondary w-full py-10 px-4 ml-0 mr-0 mt-0 mb-5">
+              <DropFile onFileChange={uploadVideo} maxFiles={1} acceptedFileTypes={acceptedIntroVideoTypes}/>
             </div>
           </div>
 

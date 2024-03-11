@@ -1,17 +1,14 @@
 import { db } from "../../../../firebase";
 import { useState, useRef } from "react";
-import { Card, Form, Button } from "react-bootstrap";
 import { collection, doc, setDoc } from "firebase/firestore";
 import { storage } from "../../../../firebase";
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { v4 } from "uuid";
 import PropTypes from "prop-types";
-import placeholderAI from "../../../../images/placeholderAI.png";
 import Audio_Btn from "../../../../components/Buttons/audio__btn/audio_btn";
 import Lottie from 'lottie-react';
 import animationData from '../../../../images/animatedAI.json';
 function SeekerChallenges({ handleNextStep, handlePrevStep, name }) {
-  // const name = location.state?.fullName;
   const [images, setImages] = useState([]);
   const [isDragging, setIsDragging] = useState(false);
   const fileInputRef = useRef(null);
@@ -100,9 +97,6 @@ function SeekerChallenges({ handleNextStep, handlePrevStep, name }) {
   }
   function handleTextClick() {
     setMode("text");
-  }
-  function handleVideoClick() {
-    setMode("video");
   }
   async function handleSubmit(e) {
     e.preventDefault();

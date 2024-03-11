@@ -1,9 +1,7 @@
 import { useState } from "react";
-import { Card, Form, Button } from "react-bootstrap";
 import { db } from "../../../../firebase";
 import { collection, addDoc, doc } from "firebase/firestore";
 import PropTypes from "prop-types";
-import placeholderAI from "../../../../images/placeholderAI.png";
 import Audio_Btn from "../../../../components/Buttons/audio__btn/audio_btn"
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSchool, faUserGraduate, faBook, faHatWizard, faBrain } from '@fortawesome/free-solid-svg-icons';

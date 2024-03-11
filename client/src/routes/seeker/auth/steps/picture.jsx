@@ -1,5 +1,4 @@
 import { useState, useRef } from "react";
-import { Card, Form, Button } from "react-bootstrap";
 import { collection, doc, setDoc } from "firebase/firestore";
 import { db } from "../../../../firebase";
 import { storage } from "../../../../firebase";
@@ -71,18 +70,15 @@ function SeekerProfilepic({ handlePrevStep, handleNextStep, name }) {
         { name: files[0].name, url: URL.createObjectURL(files[0]) },
       ]);
       fileInputRef.current.disabled = true;
-      console.log("value of image is " + imageUpload);
     }
   }
 
   function uploadImage() {
-    console.log("Images: ", images);
     if (imageUpload === null) return;
     const imageRef = ref(
       storage,
       `Users/Seekers/ ${name}/${imageUpload.name + v4()}`
     );
-    console.log("Image upload value is: " + imageUpload);
 
     uploadBytes(imageRef, imageUpload)
       .then((snapshot) => {
@@ -92,7 +88,6 @@ function SeekerProfilepic({ handlePrevStep, handleNextStep, name }) {
       })
       .then((downloadURL) => {
         //
-        console.log("Download url:" + downloadURL);
         alert("image uploaded successfully");
         const seekerProfilepicData = {
           pictureURL: downloadURL,
@@ -121,22 +116,23 @@ function SeekerProfilepic({ handlePrevStep, handleNextStep, name }) {
       </div>
       <div className="max-w-md mx-auto bg-white p-6 rounded-lg">
         <form onSubmit={handleSubmit}>
-          <div className="space-y-4">
+          <div className="relative mx-auto w-36 h-36">
             <div 
-            className={`border-2 border-dashed rounded-full w-36 h-36 flex items-center justify-center mx-auto cursor-pointer ${
+              className={`absolute inset-0 border-2 border-dashed rounded-full flex items-center justify-center ${
                 isDragging ? "border-primary" : "border-gray-300"
-              } hover:border-primary bg-secondary`}
+              } hover:border-primary bg-secondary transition duration-300 ease-in-out`}
               onDragOver={onDragOver}
               onDragLeave={onDragLeave}
               onDrop={onDrop}
-              onClick={selectFiles}>
+              onClick={selectFiles}
+            >
               {isDragging ? (
                 <span className="text-primary">Drop image here</span>
-              ) : (
+              ) : images.length === 0 ? ( // Only show instruction if no image is selected
                 <span className="text-white text-center">
-                  Click here to put your picture
+                  Click or drag & drop to upload
                 </span>
-              )}
+              ) : null}
               <input
                 type="file"
                 ref={fileInputRef}
@@ -145,25 +141,26 @@ function SeekerProfilepic({ handlePrevStep, handleNextStep, name }) {
                 accept="image/*"
               />
             </div>
-
-            <div className="flex justify-center space-x-4">
-              {images.map((image, index) => (
-                <div key={index} className="relative">
-                  <button
-                    type="button"
-                    className="absolute top-0 right-0 bg-red-600 text-white rounded-full p-1"
-                    onClick={() => deleteImage(index)}
-                  >
-                    &times;
-                  </button>
-                  <img
-                    src={image.url}
-                    alt={image.name}
-                    className="rounded-full w-36 h-36 object-cover"
-                  />
-                </div>
-              ))}
-            </div>
+            {images.length > 0 && (
+              <div className="absolute inset-0 flex items-center justify-center p-1 bg-white">
+                {images.map((image, index) => (
+                  <div key={index} className="relative w-full h-full">
+                    <button
+                      type="button"
+                      className="absolute top-0 right-0 bg-red-600 text-white rounded-full p-1 z-20" // Ensure button is clickable
+                      onClick={() => deleteImage(index)}
+                    >
+                      &times;
+                    </button>
+                    <img
+                      src={image.url}
+                      alt={image.name}
+                      className="rounded-full w-full h-full object-cover"
+                    />
+                  </div>
+                ))}
+              </div>
+            )}
           </div>
 
           <div className="flex justify-between mt-6">

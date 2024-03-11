@@ -6,7 +6,6 @@ import { storage } from "../../../../firebase";
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { v4 } from "uuid";
 import PropTypes from "prop-types";
-import placeholderAI from "../../../../images/placeholderAI.png";
 import Audio_Btn from "../../../../components/Buttons/audio__btn/audio_btn";
 import Lottie from 'lottie-react';
 import animationData from '../../../../images/animatedAI.json';
@@ -36,10 +35,6 @@ function SeekerSkills({ handleNextStep, handlePrevStep, name }) {
       { name: file.name, url: URL.createObjectURL(file), type: file.type },
     ]);
     fileInputRef.current.disabled = true;
-  }
-  function deleteImage(index) {
-    setImages((prevImages) => prevImages.filter((_, i) => i !== index));
-    fileInputRef.current.disabled = false;
   }
 
   function onDragOver(e) {
@@ -125,9 +120,6 @@ function SeekerSkills({ handleNextStep, handlePrevStep, name }) {
   };
   function handleTextClick() {
     setMode("text");
-  }
-  function handleVideoClick() {
-    setMode("video");
   }
 
   return (

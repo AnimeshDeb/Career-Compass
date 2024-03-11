@@ -9,8 +9,24 @@ import DropFile from '../../../components/DropFile/DropFile';
 import '../../../components/DropFile/DropFile.css';
 import { storage, db } from '../../../firebase';
 import { ref, uploadBytesResumable, getDownloadURL } from 'firebase/storage';
-import { doc, setDoc, collection, addDoc } from 'firebase/firestore';
+import { doc, setDoc } from 'firebase/firestore';
+const acceptedProfilePictureTypes = {
+  'image/jpeg': [],
+  'image/png': [],
+  'image/gif': [],
+};
 
+const acceptedProfileGalleryTypes = {
+  'image/jpeg': [],
+  'image/png': [],
+  'image/gif': [],
+};
+
+const acceptedIntroVideoTypes = {
+  'video/mp4': [],
+  'video/webm': [],
+  'video/ogg': [],
+};
 function MentorSignup() {
   const emailRef = useRef();
   const passwordRef = useRef();
@@ -161,7 +177,7 @@ function MentorSignup() {
   return (
     <>
       <Navbar userType='None'/>
-      <div className="max-w-lg mx-auto mt-10 bg-white p-8 border border-gray-200 rounded-lg shadow-md">
+      <div className="max-w-lg mx-auto mt-10 bg-white p-8">
       <h2 className="text-4xl text-primary font-bold text-center mb-4">
           Sign Up
         </h2>
@@ -279,15 +295,15 @@ function MentorSignup() {
           </div>
           <div className="drop-group">
             <label>Upload a Profile Picture</label>
-            <DropFile onFileChange={setProfilePicture} maxFiles={1} />
+            <DropFile onFileChange={setProfilePicture} maxFiles={1} acceptedFileTypes={acceptedProfilePictureTypes}/>
           </div>
           <div className="drop-group">
             <label>Upload Photos/Videos for your Profile Gallery (Up to 10 Files)</label>
-            <DropFile onFileChange={setProfileGallery} maxFiles={10} />
+            <DropFile onFileChange={setProfileGallery} maxFiles={10} acceptedFileTypes={acceptedProfileGalleryTypes}/>
           </div>
           <div className="drop-group">
             <label>Upload an Introductory Video</label>
-            <DropFile onFileChange={setIntroVideo} maxFiles={1} />
+            <DropFile onFileChange={setIntroVideo} maxFiles={1} acceptedFileTypes={acceptedIntroVideoTypes}/>
           </div>
           <button
             disabled={loading}
