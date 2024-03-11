@@ -2,8 +2,6 @@ import Carousel from "react-multi-carousel";
 import "react-multi-carousel/lib/styles.css";
 import Audio_Btn from "../../../../components/Buttons/audio__btn/audio_btn";
 import PropTypes from "prop-types";
-import { useEffect } from "react";
-
 const responsive = {
   superLargeDesktop: {
     breakpoint: { max: 4000, min: 3000 },
@@ -24,21 +22,6 @@ const responsive = {
 };
 
 export default function UserMode({ userData, iconSize }) {
-
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const userId = window.location.pathname.split('/')[2]; // Get the user ID from the URL
-        const fetchedUserData = await getMentorById(userId);
-        setUserData(fetchedUserData);
-      } catch (error) {
-        console.error("Error fetching user by ID:", error.message);
-      }
-    };
-  
-    fetchData();
-  }, []);
-
   return (
     <div>
       {userData ? (

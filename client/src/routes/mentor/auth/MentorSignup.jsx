@@ -150,7 +150,7 @@ function MentorSignup() {
       }, { merge: true });
 
       // Navigate to the mentor profile page
-      navigate(`/mentor/${userId}`);
+      navigate("/mentor", { state: { name: userId } });
     } catch (error) {
       setError(error.message);
     }
@@ -160,7 +160,7 @@ function MentorSignup() {
 
   return (
     <>
-      <Navbar />
+      <Navbar userType='None'/>
       <div className="max-w-lg mx-auto mt-10 bg-white p-8 border border-gray-200 rounded-lg shadow-md">
       <h2 className="text-4xl text-primary font-bold text-center mb-4">
           Sign Up

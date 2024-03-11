@@ -7,16 +7,16 @@ import "react-multi-carousel/lib/styles.css";
 import UserBanner from "../../../components/UserBanner/UserBanner.jsx";
 import UserMode from "./userMode/userMode.jsx";
 import EditMode from "./editMode/editMode.jsx";
-import { useParams } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 
 export default function UserpageMentor() {
-  const { mentorId } = useParams();
+  const location = useLocation();
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
   const [iconSize, setIconSize] = useState("2x");
   const [editMode, setEditMode] = useState(false);
   const [userData, setUserData] = useState(null);
   const [pendingChanges, setPendingChanges] = useState({});
-
+  const mentorId = location.state?.name;
   useEffect(() => {
     const fetchData = async () => {
       try {
