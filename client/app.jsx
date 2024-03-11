@@ -15,6 +15,9 @@ import SeekerUser from "./src/routes/seeker/auth/steps/SeekerUser.jsx";
 import SeekerUpdateProfile from "./src/routes/seeker/auth/steps/SeekerUpdateProfile.jsx";
 import ParentComponent from "./src/routes/seeker/auth/ProcessSignUp.jsx";
 
+import MentorSignup from "./src/routes/mentor/auth/MentorSignup.jsx";
+import { MentorAuthProvider } from "./src/Contexts/MentorAuthContext.jsx";
+
 import JobList from "./src/routes/JobList/JobList.jsx";
 export const router = createBrowserRouter([
   {
@@ -58,6 +61,18 @@ export const router = createBrowserRouter([
         <SeekerSignup />
       </SeekerAuthProvider>
     ),
+  },
+  {
+    path: "/MentorSignup",
+    element: (
+      <MentorAuthProvider>
+        <MentorSignup />
+      </MentorAuthProvider>
+    ),
+  },
+  {
+    path: "/mentor/:mentorId",
+    element: <UserpageMentor />,
   },
   {
     path: "/SeekerUser",

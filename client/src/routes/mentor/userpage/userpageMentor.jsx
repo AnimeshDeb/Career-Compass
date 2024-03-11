@@ -7,13 +7,28 @@ import "react-multi-carousel/lib/styles.css";
 import UserBanner from "../../../components/UserBanner/UserBanner.jsx";
 import UserMode from "./userMode/userMode.jsx";
 import EditMode from "./editMode/editMode.jsx";
+import { useParams } from 'react-router-dom';
 
 export default function UserpageMentor() {
+  const { mentorId } = useParams();
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
   const [iconSize, setIconSize] = useState("2x");
   const [editMode, setEditMode] = useState(false);
   const [userData, setUserData] = useState(null);
   const [pendingChanges, setPendingChanges] = useState({});
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const fetchedUserData = await getMentorById(mentorId);
+        setUserData(fetchedUserData);
+      } catch (error) {
+        console.error("Error fetching user by ID:", error.message);
+      }
+    };
+
+    fetchData();
+  }, [mentorId]);
 
   const handlePendingChange = (field, value, type) => {
     setPendingChanges((prev) => ({

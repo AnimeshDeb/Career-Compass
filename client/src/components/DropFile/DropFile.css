@@ -1,19 +1,17 @@
 .drop-file-input {
-    border: 2px dashed #ccc; /* Dashed outline */
+    border: 2px dashed #ccc;
     padding: 20px;
     text-align: center;
     cursor: pointer;
     border-radius: 10px;
-    margin-bottom: 20px; /* Space between dropzones */
-}
-
-.drop-file-input.dragover {
-    background-color: #f0f0f0; /* Light background on drag over */
-}
-
-
-
-.drop-file-input input {
+    margin-bottom: 20px;
+  }
+  
+  .drop-file-input.dragover {
+    background-color: #f0f0f0;
+  }
+  
+  .drop-file-input input {
     opacity: 0;
     position: absolute;
     top: 0;
@@ -21,59 +19,53 @@
     width: 100%;
     height: 100%;
     cursor: pointer;
-    border: 2px dashed #ccc;
-}
-
-.drop-file-input__label {
+  }
+  
+  .drop-file-input__label {
     text-align: center;
-    color: var(--txt-second-color);
+    color: #555;
     font-weight: 600;
     padding: 10px;
-}
-
-.drop-file-input__label img {
-    width: 100px;
-}
-
-.drop-file-preview {
-    margin-top: 30px;
-}
-
-.drop-file-preview p {
+  }
+  
+  .drop-file-input__label svg {
+    color: #1e88e5;
+    margin-bottom: 10px;
+  }
+  
+  .drop-file-preview {
+    margin-top: 20px;
+  }
+  
+  .drop-file-preview__title {
+    font-size: 1.2rem;
     font-weight: 500;
-}
-
-.drop-file-preview__title {
-    margin-bottom: 20px;
-}
-
-.drop-file-preview__item {
+    margin-bottom: 10px;
+  }
+  
+  .drop-file-preview__item {
     display: flex;
     align-items: center;
     justify-content: space-between;
     padding: 10px;
-    margin-top: 10px;
+    margin-bottom: 10px;
     border-radius: 5px;
     background-color: #f9f9f9;
     border: 1px solid #ddd;
-}
-
-.drop-file-preview__item img {
-    width: 50px;
-    margin-right: 20px;
-}
-
-.drop-file-preview__item__info {
+  }
+  
+  .drop-file-preview__item__info {
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-}
-
-.drop-file-preview__item__del {
+  }
+  
+  .drop-file-preview__item__del {
     cursor: pointer;
-    color: #333; /* Adjust as needed */
-}
-
-.drop-file-preview__item:hover .drop-file-preview__item__del {
+    color: #e53935;
+    margin-left: 10px;
+  }
+  
+  .drop-file-preview__item:hover .drop-file-preview__item__del {
     opacity: 1;
-}
+  }
