@@ -65,7 +65,7 @@ export default function UserpageSeeker() {
   }, []);
 
   return (
-    <div className="main">
+    <div className="w-full max-w-[100%] mx-auto lg:max-w-[80%]">
       <Navbar
         className="nav"
         userId={name}
@@ -106,7 +106,3 @@ export default function UserpageSeeker() {
     </div>
   );
 }
-
-UserpageSeeker.propTypes = {
-  name: PropTypes.string.isRequired,
-};
