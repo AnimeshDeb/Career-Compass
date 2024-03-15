@@ -12,7 +12,6 @@ import animationLoading from "../../../../images/Loading.json";
 import DropFile from "../../../../components/DropFile/DropFile";
 import DOMPurify from "dompurify";
 import EditorTxt from "../../../../components/texteditor/Editor";
-// from "../../../../audio/introduce"
 
 const acceptedIntroVideoTypes = {
   "video/mp4": [],
@@ -27,6 +26,9 @@ function SeekerIntro({ handleNextStep, uid }) {
   const [activeArea, setActiveArea] = useState(null);
   const usersCollection = collection(db, "Seekers");
   const docRef = doc(usersCollection, uid);
+
+  const introAudio =
+    "https://firebasestorage.googleapis.com/v0/b/career-compass-77175.appspot.com/o/static%2Faudio%2F2024-03-15%2002-43-20.mp3?alt=media&token=5ae4dced-3bd7-4933-a09a-2ade24daf577";
 
   async function uploadVideo(file) {
     setIsUploading(true);
@@ -107,18 +109,18 @@ function SeekerIntro({ handleNextStep, uid }) {
           </p>
           <div className="absolute top-0 -left-2 w-10 h-0 border-l-[10px] border-l-transparent border-b-[10px] border-b-primary"></div>
           <div className="flex justify-end mt-0">
-            <Audio_Btn />
+            <Audio_Btn audioSrc={introAudio} />
           </div>
         </div>
       </div>
 
       <div className="mt-0 mb-0 max-w-7xl mx-auto pl-4 pr-4 space-y-6 bg-white rounded-lg">
         <form onSubmit={handleSubmit}>
-          <div className="flex flex-col md:flex-row items-center justify-between space-y-4 md:space-y-0 md:space-x-4 h-auto md:min-h-70 lg:min-h-80">
+          <div className="flex flex-col md:flex-row items-center justify-between space-y-4 md:space-y-0 md:space-x-4 h-auto md:min-h-120 lg:min-h-150">
             <div
               className={`w-full md:w-1/2 flex flex-col justify-between py-10 px-4 rounded-md ${
                 activeArea === "text" ? "bg-primary" : "hover:bg-primary"
-              }`}
+              } h-auto md:min-h-120 lg:min-h-150`}
               onClick={() => setActiveArea("text")}
             >
               <EditorTxt
@@ -134,9 +136,9 @@ function SeekerIntro({ handleNextStep, uid }) {
             </div>
 
             <div
-              className={`w-full h-full md:w-1/2 py-10 px-4 rounded-md ${
+              className={`w-full md:w-1/2 py-10 px-4 rounded-md ${
                 activeArea === "video" ? "bg-secondary" : "hover:bg-secondary"
-              }`}
+              } h-auto md:min-h-120 lg:min-h-150`}
               onClick={() => setActiveArea("video")}
             >
               <DropFile
@@ -149,7 +151,7 @@ function SeekerIntro({ handleNextStep, uid }) {
             </div>
           </div>
 
-          <div className="flex justify-between">
+          <div className="flex justify-between pt-2 pb-2">
             <button
               onClick={handleSubmit}
               className={`px-6 py-2 text-lg rounded-md focus:outline-none focus:ring-2 focus:ring-green-500 flex justify-center items-center ${

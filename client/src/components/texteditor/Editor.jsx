@@ -18,7 +18,7 @@ const EditorTxt = ({ seekerTxtIntro, handleEditorChange }) => {
         value={seekerTxtIntro}
         onTextChange={handleEditorChange}
         headerTemplate={header}
-        style={{ height: "100%" }}
+        style={{ height: "90px" }}
       />
     </div>
   );

@@ -86,6 +86,9 @@ function SeekerJobs({ handleNextStep, handlePrevStep, name }) {
     setJobLocation((prevState) => ({ ...prevState, city: e.target.value }));
   };
 
+  const jobAudio =
+    "https://firebasestorage.googleapis.com/v0/b/career-compass-77175.appspot.com/o/static%2Faudio%2F2024-03-15%2003-27-24.mp3?alt=media&token=0502b450-3730-4370-bf12-a8f8168cca0a";
+
   async function handleSubmit(e) {
     e.preventDefault();
     try {
@@ -121,7 +124,7 @@ function SeekerJobs({ handleNextStep, handlePrevStep, name }) {
           </p>
           <div className="absolute top-0 -left-2 w-10 h-0 border-l-[10px] border-l-transparent border-b-[10px] border-b-primary"></div>
           <div className="flex justify-end mt-2">
-            <Audio_Btn />
+            <Audio_Btn audioSrc={jobAudio} />
           </div>
         </div>
       </div>

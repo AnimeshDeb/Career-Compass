@@ -67,7 +67,8 @@ function ParentComponent() {
     if (step < 5) {
       setStep(step + 1);
     } else {
-      navigate("/user", { state: { name: uid } });
+      navigate("/testsuccess");
+      // navigate("/user", { state: { name: uid } });
     }
   };
   const handlePrevStep = () => {
@@ -135,7 +136,7 @@ function ParentComponent() {
       {step === 5 && (
         <SeekerProfilepic
           handleNextStep={handleNextStep}
-          uid={uid}
+          name={uid}
           handlePrevStep={handlePrevStep}
         />
       )}

@@ -14,10 +14,10 @@ import SeekerSignup from "./src/routes/seeker/auth/SeekerSignup.jsx";
 import SeekerUser from "./src/routes/seeker/auth/steps/SeekerUser.jsx";
 import SeekerUpdateProfile from "./src/routes/seeker/auth/steps/SeekerUpdateProfile.jsx";
 import ParentComponent from "./src/routes/seeker/auth/ProcessSignUp.jsx";
-
+import MentorSignupProcess from "./src/routes/mentor/auth/ProcessSignUp.jsx";
 import MentorSignup from "./src/routes/mentor/auth/MentorSignup.jsx";
 import { MentorAuthProvider } from "./src/Contexts/MentorAuthContext.jsx";
-
+import SuccessfulTesting from "./src/routes/SuccessfulTesting.jsx";
 import JobList from "./src/routes/JobList/JobList.jsx";
 export const router = createBrowserRouter([
   {
@@ -33,7 +33,7 @@ export const router = createBrowserRouter([
     element: (
       <AuthProvider>
         <SeekerAuthProvider>
-        <Onboard />
+          <Onboard />
         </SeekerAuthProvider>
       </AuthProvider>
     ),
@@ -67,6 +67,14 @@ export const router = createBrowserRouter([
     element: (
       <MentorAuthProvider>
         <MentorSignup />
+      </MentorAuthProvider>
+    ),
+  },
+  {
+    path: "/mentorprocess",
+    element: (
+      <MentorAuthProvider>
+        <MentorSignupProcess />
       </MentorAuthProvider>
     ),
   },
@@ -112,4 +120,5 @@ export const router = createBrowserRouter([
   { path: "/mentor", element: <UserpageMentor /> },
   { path: "/company", element: <UserpageCompany /> },
   { path: "/myjobs", element: <JobsApplied /> },
+  { path: "/testsuccess", element: <SuccessfulTesting /> },
 ]);

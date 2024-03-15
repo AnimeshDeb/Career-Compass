@@ -7,6 +7,8 @@ import { v4 } from "uuid";
 import PropTypes from "prop-types";
 import Lottie from "lottie-react";
 import animationData from "../../../../images/animatedAI.json";
+import Audio_Btn from "../../../../components/Buttons/audio__btn/audio_btn";
+
 function SeekerProfilepic({ handlePrevStep, handleNextStep, name }) {
   const [images, setImages] = useState([]);
   const [isDragging, setIsDragging] = useState(false);
@@ -15,6 +17,8 @@ function SeekerProfilepic({ handlePrevStep, handleNextStep, name }) {
   const [imageUpload, setImageUpload] = useState(null);
   const usersCollection = collection(db, "Seekers");
   const docRef = name ? doc(db, "Seekers", name) : null;
+  const doneAudio =
+    "https://firebasestorage.googleapis.com/v0/b/career-compass-77175.appspot.com/o/static%2Faudio%2F2024-03-15%2003-26-31.mp3?alt=media&token=e203dc02-265f-478a-9a73-e30bf81618e6";
   async function handleSubmit(e) {
     e.preventDefault();
     try {
@@ -123,6 +127,10 @@ function SeekerProfilepic({ handlePrevStep, handleNextStep, name }) {
             Almost done! <span className="text-secondary">Add </span> a picture
             with your face below.
           </p>
+          <div className="absolute top-0 -left-2 w-10 h-0 border-l-[10px] border-l-transparent border-b-[10px] border-b-primary"></div>
+          <div className="flex justify-end mt-2">
+            <Audio_Btn audioSrc={doneAudio} />
+          </div>
           <div className="absolute top-0 -left-2 w-10 h-0 border-l-[10px] border-l-transparent border-b-[10px] border-b-primary"></div>
         </div>
       </div>

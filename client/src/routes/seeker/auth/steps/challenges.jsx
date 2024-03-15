@@ -7,8 +7,11 @@ import { v4 } from "uuid";
 import PropTypes from "prop-types";
 import Audio_Btn from "../../../../components/Buttons/audio__btn/audio_btn";
 import Lottie from "lottie-react";
-import animationData from "../../../../images/animatedAI.json";
+import animationAI from "../../../../images/animatedAI.json";
+import animationLoading from "../../../../images/Loading.json";
 import DropFile from "../../../../components/DropFile/DropFile";
+import DOMPurify from "dompurify";
+import EditorTxt from "../../../../components/texteditor/Editor";
 
 const acceptedChallengesVideoTypes = {
   "video/mp4": [],
@@ -18,75 +21,60 @@ const acceptedChallengesVideoTypes = {
 
 function SeekerChallenges({ handleNextStep, handlePrevStep, name }) {
   const [seekerTxtChallenges, setSeekerTxtChallenges] = useState("");
-  const [isDragging, setIsDragging] = useState(false);
-  const [mode, setMode] = useState();
+  const [isUploading, setIsUploading] = useState(false);
+  const [uploadComplete, setUploadComplete] = useState(false);
+  const [activeArea, setActiveArea] = useState(null);
+  const usersCollection = collection(db, "Seekers");
+  const docRef = doc(usersCollection, name);
 
-  // Update the document reference to use the "name" field
-  const docRef = name ? doc(db, "Seekers", name) : null;
+  const challengesAudio =
+    "https://firebasestorage.googleapis.com/v0/b/career-compass-77175.appspot.com/o/static%2Faudio%2F2024-03-15%2002-59-24.mp3?alt=media&token=676559ff-55d1-44cf-85c5-35af86221b87";
 
-  function uploadVideo(file) {
+  async function uploadVideo(file) {
+    setIsUploading(true);
+    setActiveArea("video");
     if (!file) {
       console.error("No file selected for upload.");
+      setIsUploading(false);
       return;
     }
 
     const fileRef = ref(storage, `Users/Seekers/${name}/${file.name + v4()}`);
-    const uploadTask = uploadBytes(fileRef, file);
-
-    uploadTask
-      .then((snapshot) => {
-        getDownloadURL(snapshot.ref)
-          .then((downloadURL) => {
-            console.log("Video uploaded successfully: ", downloadURL);
-            setDoc(docRef, { challenges: downloadURL }, { merge: true })
-              .then(() => {
-                console.log("Firestore updated with video URL.");
-                handleNextStep();
-              })
-              .catch((error) => {
-                console.error("Error updating Firestore: ", error);
-              });
-          })
-          .catch((error) => {
-            console.error("Error getting video URL: ", error);
-          });
-      })
-      .catch((error) => {
-        console.error("Error uploading video: ", error);
-      });
-  }
-
-  function handleTextClick() {
-    setMode("text");
-  }
-
-  async function handleSubmit(e) {
-    e.preventDefault();
     try {
-      const seekerChallengesUpdatedData = {
-        challenges: seekerTxtChallenges,
-      };
-      if (mode === "text" && docRef) {
-        await setDoc(docRef, seekerChallengesUpdatedData, { merge: true });
-      }
-      handleNextStep();
+      const snapshot = await uploadBytes(fileRef, file);
+      const downloadURL = await getDownloadURL(snapshot.ref);
+      console.log("Video uploaded successfully: ", downloadURL);
+      await setDoc(docRef, { challenges: downloadURL }, { merge: true });
+      console.log("Firestore updated with video URL.");
+      setIsUploading(false);
+      setUploadComplete(true);
     } catch (error) {
-      console.error("ERROR: ", error);
+      console.error("Error handling video upload: ", error);
+      setIsUploading(false);
     }
   }
 
-  const handleChange = (e) => {
-    setSeekerTxtChallenges(e.target.value);
+  const handleEditorChange = (e) => {
+    const cleanHtml = DOMPurify.sanitize(e.htmlValue);
+    setSeekerTxtChallenges(cleanHtml);
+    if (activeArea !== "text") setActiveArea("text");
   };
 
-  if (!name) {
-    return (
-      <div className="text-center mt-8">
-        <p>User name not available. Please ensure you are logged in.</p>
-      </div>
-    );
-  }
-
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    if (seekerTxtChallenges.trim()) {
+      try {
+        await setDoc(
+          docRef,
+          { challenges: seekerTxtChallenges.trim() },
+          { merge: true }
+        );
+      } catch (error) {
+        console.error("Error saving text: ", error);
+      }
+    }
+    handleNextStep();
+  };
   return (
     <>
       <div className="bg-primary mb-0 text-white flex items-center pl-10">
@@ -97,7 +85,7 @@ function SeekerChallenges({ handleNextStep, handlePrevStep, name }) {
       <div className="maybolin-talk flex flex-col md:flex-row items-center justify-center m-4 mx-auto max-w-4xl">
         <div className="flex-1 flex-shrink-0 max-w-60 w-1/2 mr-0 ml-5 sm:p-0 sm:m-0">
           <Lottie
-            animationData={animationData}
+            animationData={animationAI}
             className="w-48 md:w-60 lg:w-full max-w-sm sm:p-0 sm:m-0"
           />
         </div>
@@ -108,54 +96,80 @@ function SeekerChallenges({ handleNextStep, handlePrevStep, name }) {
           </p>
           <div className="absolute top-0 -left-2 w-10 h-0 border-l-[10px] border-l-transparent border-b-[10px] border-b-primary"></div>
           <div className="flex justify-end mt-0">
-            <Audio_Btn />
+            <Audio_Btn audioSrc={challengesAudio} />
           </div>
         </div>
       </div>
 
       <div className="mt-0 mb-0 max-w-4xl mx-auto pl-4 pr-4 space-y-6 bg-white rounded-lg">
         <form onSubmit={handleSubmit}>
-          <div className="flex h-44 md:h-56 lg:h-60 justify-between">
-            <div className="hover:bg-primary mb-5 w-full p-5">
-              <textarea
-                name="seekerChallengesInput"
-                onClick={handleTextClick}
-                value={seekerTxtChallenges}
-                onChange={handleChange}
-                placeholder="Type your challenges here..."
-                className="w-full h-full p-4 text-lg border rounded-md focus:ring-blue-500 focus:border-blue-500 mr-4"
+          <div className="flex flex-col md:flex-row items-center justify-between space-y-4 md:space-y-0 md:space-x-4 h-auto md:min-h-120 lg:min-h-150">
+            <div
+              className={`w-full md:w-1/2 flex flex-col justify-between py-10 px-4 rounded-md ${
+                activeArea === "text" ? "bg-primary" : "hover:bg-primary"
+              } h-auto md:min-h-120 lg:min-h-150`}
+              onClick={() => setActiveArea("text")}
+            >
+              <EditorTxt
+                seekerTxtIntro={seekerTxtChallenges}
+                handleEditorChange={handleEditorChange}
               />
             </div>
-            <div className="flex flex-col h-10 mt-0 items-center pl-0 pr-0 mr-0 ml-0 mb-5">
-              <div className="border-l-2 h-2 opacity-100 m-0 p-0"></div>
-              <span className="text-md font-semibold mb-0 ml-1 mr-1 opacity-70">
-                OR
-              </span>
-              <div className="border-l-2 h-5 opacity-100 m-0 p-0"></div>
+
+            <div className="flex justify-center p-2 h-full items-center md:flex-col md:justify-center md:items-center space-x-2 md:space-x-0 ">
+              <div className="w-0.5 h-4 bg-gray-400 md:w-4 md:h-0.5"></div>
+              <span className="text-md font-semibold opacity-70">OR</span>
+              <div className="w-0.5 h-4 bg-gray-400 md:w-4 md:h-0.5"></div>
             </div>
 
-            <div className="hover:bg-secondary w-full py-10 px-4 ml-0 mr-0 mt-0 mb-5">
+            <div
+              className={`w-full md:w-1/2 py-10 px-4 rounded-md ${
+                activeArea === "video" ? "bg-secondary" : "hover:bg-secondary"
+              } h-auto md:min-h-120 lg:min-h-150`}
+              onClick={() => setActiveArea("video")}
+            >
               <DropFile
-                onFileChange={(file) => uploadVideo(file)}
+                onFileChange={(file) => {
+                  uploadVideo(file).catch(console.error);
+                }}
                 maxFiles={1}
                 acceptedFileTypes={acceptedChallengesVideoTypes}
               />
             </div>
           </div>
 
-          <div className="flex justify-between">
+          <div className="flex justify-between pt-2 pb-2">
             <button
               type="button"
-              className="px-6 py-2 text-lg text-white bg-gray-600 rounded-md hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-500"
+              className="bg-gray-600 text-white text-lg px-6 py-2 rounded-md hover:bg-gray-700"
               onClick={handlePrevStep}
             >
               Back
             </button>
             <button
-              type="submit"
-              className="px-6 py-2 text-lg text-white bg-secondary rounded-md hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500"
+              onClick={handleSubmit}
+              className={`px-6 py-2 text-lg rounded-md focus:outline-none focus:ring-2 focus:ring-green-500 flex justify-center items-center ${
+                isUploading
+                  ? "text-white bg-primary"
+                  : uploadComplete || seekerTxtChallenges.trim()
+                  ? "text-white bg-secondary hover:bg-green-800"
+                  : "text-white bg-gray-400"
+              }`}
+              type="button"
             >
-              Next
+              {isUploading ? (
+                <Lottie
+                  animationData={animationLoading}
+                  style={{ width: 50, height: 50 }}
+                  loop={true}
+                />
+              ) : (
+                <>
+                  {uploadComplete || seekerTxtChallenges.trim()
+                    ? "Next"
+                    : "Skip"}
+                </>
+              )}
             </button>
           </div>
         </form>
