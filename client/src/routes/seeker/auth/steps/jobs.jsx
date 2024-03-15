@@ -2,81 +2,88 @@ import { useState } from "react";
 import { collection, addDoc, doc } from "firebase/firestore";
 import { db } from "../../../../firebase";
 import PropTypes from "prop-types";
-import Audio_Btn from "../../../../components/Buttons/audio__btn/audio_btn"
-import Select from 'react-select'
-import Lottie from 'lottie-react';
-import animationData from '../../../../images/animatedAI.json';
+import Audio_Btn from "../../../../components/Buttons/audio__btn/audio_btn";
+import Select from "react-select";
+import Lottie from "lottie-react";
+import animationData from "../../../../images/animatedAI.json";
 const stateOptions = [
-  { value: 'AL', label: 'Alabama' },
-  { value: 'AK', label: 'Alaska' },
-  { value: 'AZ', label: 'Arizona' },
-  { value: 'AR', label: 'Arkansas' },
-  { value: 'CA', label: 'California' },
-  { value: 'CO', label: 'Colorado' },
-  { value: 'CT', label: 'Connecticut' },
-  { value: 'DE', label: 'Delaware' },
-  { value: 'FL', label: 'Florida' },
-  { value: 'GA', label: 'Georgia' },
-  { value: 'HI', label: 'Hawaii' },
-  { value: 'ID', label: 'Idaho' },
-  { value: 'IL', label: 'Illinois' },
-  { value: 'IN', label: 'Indiana' },
-  { value: 'IA', label: 'Iowa' },
-  { value: 'KS', label: 'Kansas' },
-  { value: 'KY', label: 'Kentucky' },
-  { value: 'LA', label: 'Louisiana' },
-  { value: 'ME', label: 'Maine' },
-  { value: 'MD', label: 'Maryland' },
-  { value: 'MA', label: 'Massachusetts' },
-  { value: 'MI', label: 'Michigan' },
-  { value: 'MN', label: 'Minnesota' },
-  { value: 'MS', label: 'Mississippi' },
-  { value: 'MO', label: 'Missouri' },
-  { value: 'MT', label: 'Montana' },
-  { value: 'NE', label: 'Nebraska' },
-  { value: 'NV', label: 'Nevada' },
-  { value: 'NH', label: 'New Hampshire' },
-  { value: 'NJ', label: 'New Jersey' },
-  { value: 'NM', label: 'New Mexico' },
-  { value: 'NY', label: 'New York' },
-  { value: 'NC', label: 'North Carolina' },
-  { value: 'ND', label: 'North Dakota' },
-  { value: 'OH', label: 'Ohio' },
-  { value: 'OK', label: 'Oklahoma' },
-  { value: 'OR', label: 'Oregon' },
-  { value: 'PA', label: 'Pennsylvania' },
-  { value: 'RI', label: 'Rhode Island' },
-  { value: 'SC', label: 'South Carolina' },
-  { value: 'SD', label: 'South Dakota' },
-  { value: 'TN', label: 'Tennessee' },
-  { value: 'TX', label: 'Texas' },
-  { value: 'UT', label: 'Utah' },
-  { value: 'VT', label: 'Vermont' },
-  { value: 'VA', label: 'Virginia' },
-  { value: 'WA', label: 'Washington' },
-  { value: 'WV', label: 'West Virginia' },
-  { value: 'WI', label: 'Wisconsin' },
-  { value: 'WY', label: 'Wyoming' },
-  { value: 'AS', label: 'American Samoa' },
-  { value: 'DC', label: 'District of Columbia' },
-  { value: 'FM', label: 'Federated States of Micronesia' },
-  { value: 'GU', label: 'Guam' },
-  { value: 'MH', label: 'Marshall Islands' },
-  { value: 'MP', label: 'Northern Mariana Islands' },
-  { value: 'PW', label: 'Palau' },
-  { value: 'PR', label: 'Puerto Rico' },
-  { value: 'VI', label: 'Virgin Islands' }
+  { value: "AL", label: "Alabama" },
+  { value: "AK", label: "Alaska" },
+  { value: "AZ", label: "Arizona" },
+  { value: "AR", label: "Arkansas" },
+  { value: "CA", label: "California" },
+  { value: "CO", label: "Colorado" },
+  { value: "CT", label: "Connecticut" },
+  { value: "DE", label: "Delaware" },
+  { value: "FL", label: "Florida" },
+  { value: "GA", label: "Georgia" },
+  { value: "HI", label: "Hawaii" },
+  { value: "ID", label: "Idaho" },
+  { value: "IL", label: "Illinois" },
+  { value: "IN", label: "Indiana" },
+  { value: "IA", label: "Iowa" },
+  { value: "KS", label: "Kansas" },
+  { value: "KY", label: "Kentucky" },
+  { value: "LA", label: "Louisiana" },
+  { value: "ME", label: "Maine" },
+  { value: "MD", label: "Maryland" },
+  { value: "MA", label: "Massachusetts" },
+  { value: "MI", label: "Michigan" },
+  { value: "MN", label: "Minnesota" },
+  { value: "MS", label: "Mississippi" },
+  { value: "MO", label: "Missouri" },
+  { value: "MT", label: "Montana" },
+  { value: "NE", label: "Nebraska" },
+  { value: "NV", label: "Nevada" },
+  { value: "NH", label: "New Hampshire" },
+  { value: "NJ", label: "New Jersey" },
+  { value: "NM", label: "New Mexico" },
+  { value: "NY", label: "New York" },
+  { value: "NC", label: "North Carolina" },
+  { value: "ND", label: "North Dakota" },
+  { value: "OH", label: "Ohio" },
+  { value: "OK", label: "Oklahoma" },
+  { value: "OR", label: "Oregon" },
+  { value: "PA", label: "Pennsylvania" },
+  { value: "RI", label: "Rhode Island" },
+  { value: "SC", label: "South Carolina" },
+  { value: "SD", label: "South Dakota" },
+  { value: "TN", label: "Tennessee" },
+  { value: "TX", label: "Texas" },
+  { value: "UT", label: "Utah" },
+  { value: "VT", label: "Vermont" },
+  { value: "VA", label: "Virginia" },
+  { value: "WA", label: "Washington" },
+  { value: "WV", label: "West Virginia" },
+  { value: "WI", label: "Wisconsin" },
+  { value: "WY", label: "Wyoming" },
+  { value: "AS", label: "American Samoa" },
+  { value: "DC", label: "District of Columbia" },
+  { value: "FM", label: "Federated States of Micronesia" },
+  { value: "GU", label: "Guam" },
+  { value: "MH", label: "Marshall Islands" },
+  { value: "MP", label: "Northern Mariana Islands" },
+  { value: "PW", label: "Palau" },
+  { value: "PR", label: "Puerto Rico" },
+  { value: "VI", label: "Virgin Islands" },
 ];
 function SeekerJobs({ handleNextStep, handlePrevStep, name }) {
-  const [jobLocation, setJobLocation] = useState({ city: "", state: "", country: "United States" });
+  const [jobLocation, setJobLocation] = useState({
+    city: "",
+    state: "",
+    country: "United States",
+  });
   const [jobName, setJobName] = useState("");
 
   const handleStateChange = (selectedOption) => {
-    setJobLocation(prevState => ({ ...prevState, state: selectedOption.value }));
+    setJobLocation((prevState) => ({
+      ...prevState,
+      state: selectedOption.value,
+    }));
   };
 
   const handleCityChange = (e) => {
-    setJobLocation(prevState => ({ ...prevState, city: e.target.value }));
+    setJobLocation((prevState) => ({ ...prevState, city: e.target.value }));
   };
 
   async function handleSubmit(e) {
@@ -102,16 +109,19 @@ function SeekerJobs({ handleNextStep, handlePrevStep, name }) {
       </div>
       <div className="maybolin-talk flex flex-col md:flex-row items-center justify-center m-4 mx-auto max-w-4xl">
         <div className="flex-1 flex-shrink-0 max-w-60 w-1/2 mr-0 ml-5 sm:p-0 sm:m-0">
-          <Lottie animationData={animationData} className="w-48 md:w-60 lg:w-full max-w-sm sm:p-0 sm:m-0" />
+          <Lottie
+            animationData={animationData}
+            className="w-48 md:w-60 lg:w-full max-w-sm sm:p-0 sm:m-0"
+          />
         </div>
         <div className="flex-1 bg-blue-100 px-6 py-4 mt-4 shadow-lg relative text-left mr-5 rounded-tr-lg rounded-bl-lg rounded-br-lg ">
-            <p className="sm:m-0 sm:m-0 text-lg md:text-xl lg:text-2xl">
-              What <span className="text-secondary">jobs</span> have you done in the
-              past?
-            </p>
-        <div className="absolute top-0 -left-2 w-10 h-0 border-l-[10px] border-l-transparent border-b-[10px] border-b-primary"></div>
+          <p className="sm:m-0 sm:m-0 text-lg md:text-xl lg:text-2xl">
+            What <span className="text-secondary">jobs</span> have you done in
+            the past?
+          </p>
+          <div className="absolute top-0 -left-2 w-10 h-0 border-l-[10px] border-l-transparent border-b-[10px] border-b-primary"></div>
           <div className="flex justify-end mt-2">
-              <Audio_Btn/>
+            <Audio_Btn />
           </div>
         </div>
       </div>
@@ -126,7 +136,7 @@ function SeekerJobs({ handleNextStep, handlePrevStep, name }) {
               onChange={(e) => setJobName(e.target.value)}
               required
             />
-            
+
             <input
               type="text"
               className="w-full p-2 border rounded-md"
@@ -142,10 +152,10 @@ function SeekerJobs({ handleNextStep, handlePrevStep, name }) {
               isClearable={true}
               className="mb-4"
             />
-            
-        <h1 className="text-lg md:text-xl lg:text-2xl font-bold p-2 flex-grow text-primary">
-          United States
-        </h1>
+
+            <h1 className="text-lg md:text-xl lg:text-2xl font-bold p-2 flex-grow text-primary">
+              United States
+            </h1>
           </div>
           <div className="flex justify-between mt-4">
             <button

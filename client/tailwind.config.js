@@ -14,6 +14,9 @@ export default {
       fourth: '#6aa84f',
       white: '#f0f0f0',
     },
+    height: {
+      '128': '32rem',
+    },
     spacing: {
       '1/10': '10%',
       'middle-process': '47%',

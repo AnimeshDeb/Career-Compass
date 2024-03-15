@@ -28,15 +28,15 @@ function ParentComponent() {
   ];
 
   useEffect(() => {
-  const targetWidth = ((step / steps.length) * 100).toFixed(0) + "%";
+    const targetWidth = ((step / steps.length) * 100).toFixed(0) + "%";
 
-  anime({
-    targets: ".progress-bar-fill",
-    width: targetWidth,
-    easing: "easeInOutQuad",
-    duration: 1000, 
-  });
-}, [step]); 
+    anime({
+      targets: ".progress-bar-fill",
+      width: targetWidth,
+      easing: "easeInOutQuad",
+      duration: 1000,
+    });
+  }, [step]);
 
   useEffect(() => {
     positionWelcomeContainer();
@@ -107,7 +107,7 @@ function ParentComponent() {
       {step === 1 && (
         <SeekerSkills
           handleNextStep={handleNextStep}
-          name={uid}
+          uid={uid}
           handlePrevStep={handlePrevStep}
         />
       )}
@@ -135,7 +135,7 @@ function ParentComponent() {
       {step === 5 && (
         <SeekerProfilepic
           handleNextStep={handleNextStep}
-          name={uid}
+          uid={uid}
           handlePrevStep={handlePrevStep}
         />
       )}
