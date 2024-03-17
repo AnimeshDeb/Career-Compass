@@ -1,169 +1,131 @@
-// Import necessary hooks from React library
 import { useEffect, useState } from "react";
-// Import a function to fetch job listings from a relative path
 import { getJobListings } from "../../functions/jobFunctions";
 
-// Define a functional component to display individual job listings
+// Array of all 50 U.S. states
+const states = [
+  "Alabama", "Alaska", "Arizona", "Arkansas", "California", "Colorado",
+  "Connecticut", "Delaware", "Florida", "Georgia", "Hawaii", "Idaho",
+  "Illinois", "Indiana", "Iowa", "Kansas", "Kentucky", "Louisiana",
+  "Maine", "Maryland", "Massachusetts", "Michigan", "Minnesota",
+  "Mississippi", "Missouri", "Montana", "Nebraska", "Nevada",
+  "New Hampshire", "New Jersey", "New Mexico", "New York",
+  "North Carolina", "North Dakota", "Ohio", "Oklahoma", "Oregon",
+  "Pennsylvania", "Rhode Island", "South Carolina", "South Dakota",
+  "Tennessee", "Texas", "Utah", "Vermont", "Virginia", "Washington",
+  "West Virginia", "Wisconsin", "Wyoming"
+];
+
 const JobListing = ({ job, onJobClick }) => {
-  // Style for the job listing container with a border
-  const jobListingStyle = {
-    cursor: "pointer",
-    border: "1px solid #ddd",
-    padding: "16px",
-    margin: "8px 0",
-    backgroundColor: "#2e318e",
-    borderRadius: "10px",
-    color: "white",
-    boxShadow: "0 2px 4px rgba(0, 0, 0, 0.1)",
-  };
-
-  const greenBoxStyle = {
-    display: "flex",
-    justifyContent: "center", // Center content horizontally
-    alignItems: "center", // Center content vertically
-    minWidth: "10px", // A minimum width for the green box to contain the "Details" text
-    backgroundColor: "green", // Green color for the box
-    color: "white", // Text color
-    border: "none",
-    borderRadius: "40px",
-    padding: "10px", // Padding inside the green box
-    marginLeft: "1700px", // Space between the green box and the job title
-    cursor: "pointer", // Change cursor to pointer when hovering over the box
-  };
-
-  const applyButtonStyle = {
-    backgroundColor: "blue", // Blue color for the apply button
-    color: "white", // Text color for the apply button
-    padding: "10px 125px", // Padding inside the apply button
-    minWidth: "10px",
-    border: "none", // No border for the apply button
-    borderRadius: "40px", // Rounded corners for the apply button
-    cursor: "pointer", // Change cursor to pointer when hovering over the button
-    marginLeft: "1700px",
-    textDecoration: "none", // No underline for the text
-  };
-
   return (
-    <div style={jobListingStyle} onClick={() => onJobClick(job)}>
-      <div>
-        <div style={greenBoxStyle}>
-          Details {/* Text inside the green box */}
-        </div>
+    <div
+      className="cursor-pointer border border-gray-300 p-4 my-2 bg-blue-800 rounded-lg text-white shadow hover:shadow-md relative"
+      onClick={() => onJobClick(job)}
+    >
+      <div className="flex justify-between items-center">
         <div>
-          {" "}
-          {/* Job details */}
           <h1>{job.id}</h1>
           <h2>{job.Description}</h2>
         </div>
+        <div className="flex flex-col items-end space-y-2">
+          <div
+            className="bg-green-500 text-white px-10 py-2 rounded-full cursor-pointer text-center"
+            onClick={(event) => {
+              event.stopPropagation();
+              onJobClick(job);
+            }}
+          >
+            Details
+          </div>
+          <button
+            className="bg-blue-500 text-white px-10 py-2 rounded-full cursor-pointer"
+            onClick={(event) => event.stopPropagation()}
+          >
+            Apply
+          </button>
+        </div>
       </div>
-      {/* Apply button */}
-      <button
-        style={applyButtonStyle}
-        onClick={(event) => handleApplyClick(event, job)}
-      >
-        Apply
-      </button>
     </div>
   );
 };
 
-// Define the main functional component to display the job list
 const JobList = () => {
-  // Initialize state for search term with default empty string
   const [searchTerm, setSearchTerm] = useState("");
-  // Initialize state for storing jobs with default empty array
   const [jobs, setJobs] = useState([]);
-  // Initialize state for selected job with default null
   const [selectedJob, setSelectedJob] = useState(null);
-  // Initialize state for showing the location submenu
-  const [showLocationSubMenu, setShowLocationSubMenu] = useState(false);
-  const [locationFilter, setLocationFilter] = useState(""); // Added state for location filter
+  const [locationFilter, setLocationFilter] = useState("");
+  const [isPartTime, setIsPartTime] = useState(false);
 
-  // Placeholder for the location submenu action
-  const handleLocationClick = (location) => {
-    console.log("Location filter to be implemented:", location);
-    // Here you would filter the jobs by the selected location
-  };
-
-  // Use useEffect hook to fetch job listings when the component mounts
   useEffect(() => {
     const fetchData = async () => {
       try {
         const fetchedJobs = await getJobListings();
         setJobs(fetchedJobs);
       } catch (error) {
-        console.error("Error fetching jobs:", error.message);
+        console.error("Error fetching jobs:", error);
       }
     };
 
     fetchData();
   }, []);
 
-  // Define a function to handle clicks on job listings
   const handleJobClick = (job) => {
     setSelectedJob(job);
   };
 
-  // Define a function to filter jobs based on the search term
-  const filterJobs = (jobs, searchTerm) => {
-    if (!searchTerm) return jobs;
+  const clearFilters = () => {
+    setSearchTerm("");
+    setLocationFilter("");
+    setIsPartTime(false);
+  };
+
+  const filterJobs = (jobs, searchTerm, locationFilter, isPartTime) => {
     return jobs.filter((job) => {
-      const idString = job.id.toString();
-      return idString.toLowerCase().includes(searchTerm.toLowerCase());
+      const idString = job.id ? job.id.toString().toLowerCase() : '';
+      const descriptionString = job.Description ? job.Description.toLowerCase() : '';
+      const matchesIdOrDescription = idString.includes(searchTerm.toLowerCase()) || descriptionString.includes(searchTerm.toLowerCase());
+      const matchesLocation = locationFilter ? job.Location === locationFilter : true;
+      const matchesPartTime = isPartTime ? job.Availability === "Part Time" : true;
+      return matchesIdOrDescription && matchesLocation && matchesPartTime;
     });
   };
 
-  // Toggle the location submenu
-  const toggleLocationSubMenu = () => {
-    setShowLocationSubMenu(!showLocationSubMenu);
-  };
+  const filteredJobs = filterJobs(jobs, searchTerm, locationFilter, isPartTime);
 
-  // Filter jobs using the search term
-  const filteredJobs = filterJobs(jobs, searchTerm);
-
-  // Render the JobList component
   return (
-    <div style={{ display: "flex", flexDirection: "column" }}>
-      <div style={{ flexGrow: 1, width: selectedJob ? "50%" : "100%" }}>
-        <h1>Job Listings</h1>
-        <div
-          style={{
-            display: "flex",
-            alignItems: "center",
-            marginBottom: "16px",
-          }}
-        >
+    <div className="flex flex-col">
+      <div className={`flex-grow ${selectedJob ? "w-1/2" : "w-full"}`}>
+        <h1 style={{ color: '#0086fe', fontSize: '40px' }}>Job Listings</h1>
+        <div className="flex items-center mb-4">
           <input
             type="text"
             placeholder="Search for jobs"
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
-            style={{ marginRight: "8px", width: "300px" }}
+            className="mr-2 w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm"
           />
-          <button onClick={toggleLocationSubMenu}>Filter</button>{" "}
-          {/* Toggles the location submenu */}
-        </div>
-        {showLocationSubMenu && (
-          <div
-            style={{
-              display: "flex",
-              flexDirection: "column",
-              padding: "8px",
-              border: "1px solid #ddd",
-            }}
+          <select
+            value={locationFilter}
+            onChange={(e) => setLocationFilter(e.target.value)}
+            className="mr-2 px-4 py-2 border border-gray-300 rounded-md shadow-sm"
           >
-            <button onClick={() => handleLocationClick("New York")}>
-              New York
-            </button>
-            <button onClick={() => handleLocationClick("San Francisco")}>
-              San Francisco
-            </button>
-            <button onClick={() => handleLocationClick("Austin")}>
-              Austin
-            </button>
-            {/* More locations can be added here */}
-          </div>
-        )}
+            <option value="">All Locations</option>
+            {states.map((state) => (
+              <option value={state} key={state}>{state}</option>
+            ))}
+          </select>
+          <button
+            className={`py-2 px-4 ${isPartTime ? 'bg-blue-600' : 'bg-blue-500'} text-white rounded-md mr-2`}
+            onClick={() => setIsPartTime(!isPartTime)}
+          >
+            {isPartTime ? 'Part-Time Only' : 'All Jobs'}
+          </button>
+          <button
+            className="py-2 px-4 bg-secondary text-white rounded-md"
+            onClick={clearFilters}
+          >
+            Clear
+          </button>
+        </div>
         {filteredJobs.length > 0 ? (
           filteredJobs.map((job) => (
             <JobListing key={job.id} job={job} onJobClick={handleJobClick} />
@@ -173,45 +135,24 @@ const JobList = () => {
         )}
       </div>
       {selectedJob && (
-        <div
-          style={{
-            width: "50%",
-            height: "100%",
-            position: "fixed",
-            top: 0,
-            right: 0,
-            backgroundColor: "#ADD8E6",
-            boxShadow: "-2px 0 5px rgba(0, 0, 0, 0.2)",
-            padding: "20px",
-            overflowY: "auto",
-          }}
-        >
+        <div className="w-1/2 h-full fixed top-0 right-0 bg-light-blue-500 shadow-lg p-5 overflow-y-auto">
           <h3>Job Details</h3>
-          <p>
-            <strong>ID:</strong> {selectedJob.id}
-          </p>
-          <p>
-            <strong>Title</strong> {selectedJob.Title}
-          </p>
-          <p>
-            <strong>Description:</strong> {selectedJob.Description}
-          </p>
-          <p>
-            <strong>Requirements:</strong> {selectedJob.Requirements}
-          </p>
-          <p>
-            <strong>Salary Range:</strong> {selectedJob.Salary}
-          </p>
-          <p>
-            <strong>Location:</strong> {selectedJob.Location}
-          </p>
-          {/* Additional job details can be displayed here */}
-          <button onClick={() => setSelectedJob(null)}>Close</button>
+          <p><strong>ID:</strong> {selectedJob.id}</p>
+          <p><strong>Description:</strong> {selectedJob.Description}</p>
+          <p><strong>Requirements:</strong> {selectedJob.Requirements}</p>
+          <p><strong>Salary:</strong> {selectedJob.Salary}</p>
+          <p><strong>Location:</strong> {selectedJob.Location}</p>
+          <p><strong>Availability:</strong> {selectedJob.Availability}</p>
+          <button
+            className="py-2 px-4 bg-red-500 text-white rounded-md"
+            onClick={() => setSelectedJob(null)}
+          >
+            Close
+          </button>
         </div>
       )}
     </div>
   );
 };
 
-// Export the JobList component for use in other parts of the application
 export default JobList;
