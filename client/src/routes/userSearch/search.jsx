@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import { db } from '../../firebase';
-import { storage } from '../../firebase';
 import {
   collection,
   doc,
@@ -18,7 +17,7 @@ const SearchBar = () => {
 
   // const docRef=doc(usersCollection, name);
   const toggleExpand = () => {
-    setIsExpanded(!isExpanded);
+    setIsExpanded(!isExpanded); 
   };
   const handleChangeSearch = (e) => {
     setSearchName(e.target.value);
@@ -35,7 +34,10 @@ const SearchBar = () => {
     // console.log(dataHolder);
     setUsers(dataHolder);
   };
+  const handleNext=()=>{
+    
 
+  }
   return (
     <>
       <div className="flex justify-center items-center h-screen">
@@ -68,9 +70,11 @@ const SearchBar = () => {
         <h2>Search Results: </h2>
         <ul>
           {users.map((user, index) => (
-            <li key={index}>
+            
+            <li key={index} onClick={()=>handleNext(user.UID)}>
               <strong>{user.displayName}</strong>: {user.email}
             </li>
+           
           ))}
         </ul>
       </div>
