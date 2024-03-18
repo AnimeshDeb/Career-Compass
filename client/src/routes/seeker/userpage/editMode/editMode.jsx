@@ -13,50 +13,127 @@ import DropFile from "../../../../components/DropFile/DropFile";
 import EditorTxt from "../../../../components/texteditor/Editor";
 import ReactPlayer from "react-player";
 import DOMPurify from "dompurify";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import {
+  faSchool,
+  faUserGraduate,
+  faBook,
+  faHatWizard,
+  faBrain,
+} from '@fortawesome/free-solid-svg-icons';
+import Select from 'react-select';
+
+const stateOptions = [
+  { value: "AL", label: "Alabama" },
+  { value: "AK", label: "Alaska" },
+  { value: "AZ", label: "Arizona" },
+  { value: "AR", label: "Arkansas" },
+  { value: "CA", label: "California" },
+  { value: "CO", label: "Colorado" },
+  { value: "CT", label: "Connecticut" },
+  { value: "DE", label: "Delaware" },
+  { value: "FL", label: "Florida" },
+  { value: "GA", label: "Georgia" },
+  { value: "HI", label: "Hawaii" },
+  { value: "ID", label: "Idaho" },
+  { value: "IL", label: "Illinois" },
+  { value: "IN", label: "Indiana" },
+  { value: "IA", label: "Iowa" },
+  { value: "KS", label: "Kansas" },
+  { value: "KY", label: "Kentucky" },
+  { value: "LA", label: "Louisiana" },
+  { value: "ME", label: "Maine" },
+  { value: "MD", label: "Maryland" },
+  { value: "MA", label: "Massachusetts" },
+  { value: "MI", label: "Michigan" },
+  { value: "MN", label: "Minnesota" },
+  { value: "MS", label: "Mississippi" },
+  { value: "MO", label: "Missouri" },
+  { value: "MT", label: "Montana" },
+  { value: "NE", label: "Nebraska" },
+  { value: "NV", label: "Nevada" },
+  { value: "NH", label: "New Hampshire" },
+  { value: "NJ", label: "New Jersey" },
+  { value: "NM", label: "New Mexico" },
+  { value: "NY", label: "New York" },
+  { value: "NC", label: "North Carolina" },
+  { value: "ND", label: "North Dakota" },
+  { value: "OH", label: "Ohio" },
+  { value: "OK", label: "Oklahoma" },
+  { value: "OR", label: "Oregon" },
+  { value: "PA", label: "Pennsylvania" },
+  { value: "RI", label: "Rhode Island" },
+  { value: "SC", label: "South Carolina" },
+  { value: "SD", label: "South Dakota" },
+  { value: "TN", label: "Tennessee" },
+  { value: "TX", label: "Texas" },
+  { value: "UT", label: "Utah" },
+  { value: "VT", label: "Vermont" },
+  { value: "VA", label: "Virginia" },
+  { value: "WA", label: "Washington" },
+  { value: "WV", label: "West Virginia" },
+  { value: "WI", label: "Wisconsin" },
+  { value: "WY", label: "Wyoming" },
+  { value: "AS", label: "American Samoa" },
+  { value: "DC", label: "District of Columbia" },
+  { value: "FM", label: "Federated States of Micronesia" },
+  { value: "GU", label: "Guam" },
+  { value: "MH", label: "Marshall Islands" },
+  { value: "MP", label: "Northern Mariana Islands" },
+  { value: "PW", label: "Palau" },
+  { value: "PR", label: "Puerto Rico" },
+  { value: "VI", label: "Virgin Islands" },
+];
 const textSize = "text-base md:text-lg lg:text-xl xl:text-2xl";
 const JobItem = React.memo(({ job, index, handleChange }) => {
-  const jobNameValue = job.Job_Name;
-  const jobLocationValue = job.Job_location;
+  const [location, setLocation] = useState(() => {
+    const parts = job.Job_Location.split(', ');
+    return {
+      city: parts[0] || '',
+      state: parts[1] || '',
+      country: parts[2] || 'United States',
+    };
+  });
+
+  const handleCityChange = (e) => {
+    const newLocation = { ...location, city: e.target.value };
+    setLocation(newLocation);
+    handleChange(e, 'text', `jobs[${index}].Job_Location`, `${newLocation.city}, ${newLocation.state}, ${newLocation.country}`);
+  };
+
+  const handleStateChange = (selectedOption) => {
+    const newLocation = { ...location, state: selectedOption ? selectedOption.value : '' };
+    setLocation(newLocation);
+    handleChange({ target: { value: `${newLocation.city}, ${newLocation.state}, ${newLocation.country}` } }, 'text', `jobs[${index}].Job_Location`);
+  };
 
   return (
-    <div className="flex flex-col gap-2 ">
+    <div className="flex flex-col gap-2 p-5">
       <input
         type="text"
         className="form-input p-2 border border-gray-300 rounded-md"
         placeholder="Job Name"
-        value={jobNameValue}
-        onChange={(e) => handleChange(e, "text", `jobs[${index}].Job_Name`)}
+        value={job.Job_Name}
+        onChange={(e) => handleChange(e, 'text', `jobs[${index}].Job_Name`)}
       />
       <input
         type="text"
         className="form-input p-2 border border-gray-300 rounded-md"
-        placeholder="Job Location"
-        value={jobLocationValue}
-        onChange={(e) => handleChange(e, "text", `jobs[${index}].Job_location`)}
+        placeholder="City"
+        value={location.city}
+        onChange={handleCityChange}
       />
-    </div>
-  );
-});
-const ReferenceItem = React.memo(({ reference, handleDelete, index }) => {
-  const { name, company, email, desc } = reference;
-
-  return (
-    <div className="my-2 md:px-20 md:py-5 py-1 px-5 " key={index}>
-      <button
-        onClick={() => handleDelete(index)}
-        className="bg-red-500 text-white px-2 ml-0 rounded-full hover:bg-red-700 transition-colors"
-      >
-        Eliminate
-      </button>
-      <div className="flex items-center space-x-1">
-        <h3 className={`${textSize} text-primary font-semibold`}>
-          {name ? `${name}, ${company},` : "Reference name not provided"}
-        </h3>
-        <h3 className={`${textSize} text-secondary pl-2 ml-0 font-normal pt-1`}>
-          {email || "Email not provided"}
-        </h3>
-      </div>
-      <p className="font-semibold">{desc || "Description not provided"}</p>
+      <Select
+        options={stateOptions}
+        onChange={handleStateChange}
+        value={stateOptions.find(option => option.value === location.state)}
+        placeholder="Select State"
+        isClearable={true}
+        className="mb-4"
+      />
+      <h1 className="text-lg md:text-xl lg:text-2xl font-bold p-2 flex-grow text-primary">
+              United States
+            </h1>
     </div>
   );
 });
@@ -70,7 +147,6 @@ const VideoOrTextItem = React.memo(
       if (videoData instanceof File) {
         const fileUrl = URL.createObjectURL(videoData);
         setPreviewUrl(fileUrl);
-        console.log(fileUrl);
       } else if (isUrl) {
         setPreviewUrl(videoData);
       } else {
@@ -156,65 +232,87 @@ const EducationItem = React.memo(
     classOfValue,
     handleChange,
   }) => {
-    const degreeOptions = [
-      "Associate",
-      "High School",
-      "Bachelor's",
-      "Master's",
-      "PhD",
-    ];
-    const currentYear = new Date().getFullYear();
-    const years = Array.from({ length: 50 }, (_, i) => currentYear - i);
+    const educationIcons = {
+    "High School": faSchool,
+    "Associate's": faUserGraduate,
+    "Bachelor's": faBook,
+    "Master's": faHatWizard,
+    "PhD": faBrain,
+  };
 
-    return (
-      <div className="flex flex-col gap-2 mb-4">
-        <input
-          type="text"
-          className="form-input w-full p-2 border border-gray-300 rounded-md"
-          placeholder="University"
-          value={universityValue}
-          onChange={(e) =>
-            handleChange(e, "text", `education[${index}].University`)
-          }
-        />
-        <select
-          className="form-select w-full p-2 border border-gray-300 rounded-md"
-          value={degreeTypeValue}
-          onChange={(e) =>
-            handleChange(e, "text", `education[${index}].DegreeType`)
-          }
-        >
-          {degreeOptions.map((degree, idx) => (
-            <option key={idx} value={degree}>
-              {degree}
-            </option>
-          ))}
-        </select>
-        <input
-          type="text"
-          className="form-input w-full p-2 border border-gray-300 rounded-md"
-          placeholder="Major"
-          value={majorValue}
-          onChange={(e) => handleChange(e, "text", `education[${index}].Major`)}
-        />
-        <select
-          className="form-select w-full p-2 border border-gray-300 rounded-md"
-          value={classOfValue}
-          onChange={(e) =>
-            handleChange(e, "text", `education[${index}].ClassOf`)
-          }
-        >
-          {years.map((year, idx) => (
-            <option key={idx} value={year}>
-              {year}
-            </option>
-          ))}
-        </select>
+  const currentYear = new Date().getFullYear();
+  const years = Array.from({ length: 50 }, (_, i) => currentYear - i);
+  
+  const [selectedEducationType, setSelectedEducationType] = useState(degreeTypeValue);
+
+  const handleEducationTypeClick = (type) => {
+    setSelectedEducationType(type);
+    handleChange({ target: { value: type } }, 'text', `education[${index}].DegreeType`);
+  };
+
+  return (
+    <div className="flex flex-col gap-2 mb-4 p-5">
+      <input
+        type="text"
+        className="form-input w-full p-2 border border-gray-300 rounded-md"
+        placeholder="University"
+        value={universityValue}
+        onChange={(e) => handleChange(e, 'text', `education[${index}].University`)}
+      />
+      <div className="grid grid-cols-2 xl:grid-cols-5 gap-2">
+        {Object.entries(educationIcons).map(([type, icon]) => (
+          <button
+            key={type}
+            className={`py-2 px-4 border rounded-md ${selectedEducationType === type ? "bg-primary text-white" : "bg-white text-primary border-gray-400"} flex items-center justify-center`}
+            onClick={() => handleEducationTypeClick(type)}
+          >
+            <FontAwesomeIcon icon={icon} className="mr-2" />
+            {type}
+          </button>
+        ))}
       </div>
-    );
-  }
-);
+      <input
+        type="text"
+        className="form-input w-full p-2 border border-gray-300 rounded-md"
+        placeholder="Major"
+        value={majorValue}
+        onChange={(e) => handleChange(e, 'text', `education[${index}].Major`)}
+      />
+      <select
+        className="form-select w-full p-2 border border-gray-300 rounded-md"
+        value={classOfValue}
+        onChange={(e) => handleChange(e, 'text', `education[${index}].ClassOf`)}
+      >
+        {years.map((year, idx) => (
+          <option key={idx} value={year}>{year}</option>
+        ))}
+      </select>
+    </div>
+  );
+});
+const ReferenceItem = React.memo(({ reference, handleDelete, index }) => {
+  const { name, company, email, desc } = reference;
 
+  return (
+    <div className="my-2 md:px-20 md:py-5 py-1 px-5 " key={index}>
+      <button
+        onClick={() => handleDelete(index)}
+        className="bg-red-500 text-white px-2 ml-0 rounded-full hover:bg-red-700 transition-colors"
+      >
+        Eliminate
+      </button>
+      <div className="flex items-center space-x-1">
+        <h3 className={`${textSize} text-primary font-semibold`}>
+          {name ? `${name}, ${company},` : "Reference name not provided"}
+        </h3>
+        <h3 className={`${textSize} text-secondary pl-2 ml-0 font-normal pt-1`}>
+          {email || "Email not provided"}
+        </h3>
+      </div>
+      <p className="font-semibold">{desc || "Description not provided"}</p>
+    </div>
+  );
+});
 VideoOrTextItem.displayName = "VideoOrTextItem";
 ReferenceItem.displayName = "ReferenceItem";
 EducationItem.displayName = "EducationItem";
@@ -290,7 +388,7 @@ export default function EditMode({
         ...prev,
         [key]: { value, type },
       }));
-      console.log(pendingChanges);
+      console.log("Pending Changes", pendingChanges);
     },
     [setPendingChanges]
   );
@@ -312,6 +410,7 @@ export default function EditMode({
       const updates = Object.entries(pendingChanges).map(
         async ([field, { value, type }]) => {
           const updateObject = {};
+          console.log(field,value,type)
           if (type === "text") {
             updateObject[field] = value;
           } else {
@@ -426,8 +525,7 @@ export default function EditMode({
               </div>
               <div className="flex-1 bg-blue-100 px-2 py-2 ml-0 mr-4 shadow-lg relative text-left mx-5 my-5 rounded-tr-lg rounded-bl-lg rounded-br-lg ">
                 <p className={`${textSize} text-primary`}>
-                  Keep on looking. You will find it! -{" "}
-                  <span className="text-secondary font-bold">Maybolin AI</span>
+                  Keep on looking. You will find it!
                 </p>
                 <div className="absolute top-0 -left-2 w-10 h-0 border-l-transparent border-b-[10px] border-b-primary"></div>
                 <div className="flex justify-end mt-0"></div>
@@ -483,8 +581,8 @@ export default function EditMode({
                   pendingChanges[`jobs[${index}].Job_Name`]?.value ||
                   job.Job_Name;
                 const jobLocationValue =
-                  pendingChanges[`jobs[${index}].Job_location`]?.value ||
-                  job.Job_location;
+                  pendingChanges[`jobs[${index}].Job_Location`]?.value ||
+                  job.Job_Location;
 
                 return (
                   <JobItem
@@ -493,7 +591,7 @@ export default function EditMode({
                     job={{
                       ...job,
                       Job_Name: jobNameValue,
-                      Job_location: jobLocationValue,
+                      Job_Location: jobLocationValue,
                     }}
                     handleChange={handleChange}
                   />
@@ -549,4 +647,36 @@ EditMode.propTypes = {
   userId: PropTypes.string.isRequired,
   pendingChanges: PropTypes.object.isRequired,
   setPendingChanges: PropTypes.func.isRequired,
+};
+JobItem.propTypes = {
+  job: PropTypes.shape({
+    Job_Name: PropTypes.string.isRequired,
+    Job_location: PropTypes.string.isRequired,
+  }).isRequired,
+  index: PropTypes.number.isRequired,
+  handleChange: PropTypes.func.isRequired,
+};
+VideoOrTextItem.propTypes = {
+  videoData: PropTypes.oneOfType([PropTypes.string, PropTypes.instanceOf(File)]).isRequired,
+  handleChange: PropTypes.func.isRequired,
+  field: PropTypes.string.isRequired,
+  index: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
+};
+EducationItem.propTypes = {
+  index: PropTypes.number.isRequired,
+  universityValue: PropTypes.string.isRequired,
+  degreeTypeValue: PropTypes.string.isRequired,
+  majorValue: PropTypes.string.isRequired,
+  classOfValue: PropTypes.string.isRequired,
+  handleChange: PropTypes.func.isRequired,
+};
+ReferenceItem.propTypes = {
+  reference: PropTypes.shape({
+    name: PropTypes.string,
+    company: PropTypes.string,
+    email: PropTypes.string,
+    desc: PropTypes.string,
+  }).isRequired,
+  handleDelete: PropTypes.func.isRequired,
+  index: PropTypes.number.isRequired,
 };
