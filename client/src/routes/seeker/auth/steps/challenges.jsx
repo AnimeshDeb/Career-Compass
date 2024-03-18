@@ -134,6 +134,7 @@ function SeekerChallenges({ handleNextStep, handlePrevStep, name }) {
                 }}
                 maxFiles={1}
                 acceptedFileTypes={acceptedChallengesVideoTypes}
+                showFile={true}
               />
             </div>
           </div>

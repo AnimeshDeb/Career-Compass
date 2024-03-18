@@ -145,6 +145,7 @@ function SeekerSkills({ handleNextStep, handlePrevStep, uid }) {
                 }}
                 maxFiles={1}
                 acceptedFileTypes={acceptedSkillsVideoTypes}
+                showFile={true}
               />
             </div>
           </div>
