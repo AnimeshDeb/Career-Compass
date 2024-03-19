@@ -1,4 +1,3 @@
-import "./userpageSeeker.css";
 import Navbar from "../../../components/navbar/version1/navbar.jsx";
 import { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
@@ -7,7 +6,6 @@ import Footer from "../../../components/footer/footer.jsx";
 import UserBanner from "../../../components/UserBanner/UserBanner.jsx";
 import UserMode from "./userMode/userMode.jsx";
 import EditMode from "./editMode/editMode.jsx";
-import PropTypes from "prop-types";
 export default function UserpageSeeker() {
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
   const [iconSize, setIconSize] = useState("2x");
@@ -65,44 +63,46 @@ export default function UserpageSeeker() {
   }, []);
 
   return (
-    <div className="w-full max-w-[100%] mx-auto lg:max-w-[80%]">
-      <Navbar
-        className="nav"
-        userId={name}
-        userType={"seeker"}
-        iconSize={iconSize}
-      />
-      {userData && (
-        <UserBanner
+    <div className="bg-primary-dark">
+      <div className="w-full bg-white max-w-[100%] mx-auto lg:max-w-[80%] shadow-md">
+        <Navbar
+          className="nav"
+          userId={name}
+          userType={"seeker"}
           iconSize={iconSize}
-          banner={userData.banner}
-          picture={userData.pictureURL}
-          name={userData.displayName}
-          onEdit={toggleEditMode}
-          editMode={editMode}
-          handlePendingChange={handlePendingChange}
-          pendingChanges={pendingChanges}
         />
-      )}
-      {editMode ? (
-        // Edit Mode
-        <>
-          <EditMode
-            pendingChanges={pendingChanges}
-            setPendingChanges={setPendingChanges}
-            userId={name}
+        {userData && (
+          <UserBanner
             iconSize={iconSize}
-            userData={userData}
+            banner={userData.banner}
+            picture={userData.pictureURL}
+            name={userData.displayName}
+            onEdit={toggleEditMode}
+            editMode={editMode}
+            handlePendingChange={handlePendingChange}
+            pendingChanges={pendingChanges}
           />
-        </>
-      ) : (
-        // Normal page
-        <>
-          <UserMode iconSize={iconSize} userData={userData} />
-        </>
-      )}
+        )}
+        {editMode ? (
+          // Edit Mode
+          <>
+            <EditMode
+              pendingChanges={pendingChanges}
+              setPendingChanges={setPendingChanges}
+              userId={name}
+              iconSize={iconSize}
+              userData={userData}
+            />
+          </>
+        ) : (
+          // Normal page
+          <>
+            <UserMode iconSize={iconSize} userData={userData} />
+          </>
+        )}
 
-      <Footer className="seek-footer" />
+        <Footer className="seek-footer" />
+      </div>
     </div>
   );
 }

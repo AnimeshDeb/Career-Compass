@@ -7,7 +7,6 @@ import SeekerEducation from "./steps/education";
 import SeekerJobs from "./steps/jobs";
 import SeekerProfilepic from "./steps/picture";
 import { useNavigate } from "react-router-dom";
-import "../../../styling/UploadImages.css";
 import NavbarWhite from "../../../components/navbar/version2/navbar";
 import anime from "animejs";
 

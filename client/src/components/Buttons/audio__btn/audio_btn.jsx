@@ -39,7 +39,7 @@ export default function Audio_Btn({ className, audioSrc, iconSize }) {
 
   return (
     <button
-      className={`general-btn ${className}`}
+      className="flex flex-col items-center absolute z-10 justify-center p-2.5 text-xs rounded-sm mt-2.5 ml-5 transition-colors duration-700 hover:bg-white hover:text-primary general-btn"
       onClick={playAudio}
       style={buttonStyles}
       title="Audio Button"

@@ -147,6 +147,7 @@ function SeekerIntro({ handleNextStep, uid }) {
                 }}
                 maxFiles={1}
                 acceptedFileTypes={acceptedIntroVideoTypes}
+                showFile={true}
               />
             </div>
           </div>

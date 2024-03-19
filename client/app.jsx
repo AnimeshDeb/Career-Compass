@@ -19,6 +19,8 @@ import MentorSignup from "./src/routes/mentor/auth/MentorSignup.jsx";
 import { MentorAuthProvider } from "./src/Contexts/MentorAuthContext.jsx";
 import SuccessfulTesting from "./src/routes/SuccessfulTesting.jsx";
 import JobList from "./src/routes/JobList/JobList.jsx";
+import PrivateRoute from "./src/Contexts/PrivateRoute.jsx";
+
 export const router = createBrowserRouter([
   {
     path: "/parent",
@@ -121,10 +123,64 @@ export const router = createBrowserRouter([
       </SeekerAuthProvider>
     ),
   },
-  { path: "/searchUsers", element: <SearchUser /> },
-  { path: "/user", element: <UserpageSeeker /> },
-  { path: "/mentor", element: <UserpageMentor /> },
-  { path: "/company", element: <UserpageCompany /> },
-  { path: "/myjobs", element: <JobsApplied /> },
-  { path: "/testsuccess", element: <SuccessfulTesting /> },
+  {
+    path: "/searchUsers",
+    element: (
+      <AuthProvider>
+        <SeekerAuthProvider>
+          <SearchUser />
+        </SeekerAuthProvider>
+      </AuthProvider>
+    ),
+  },
+  {
+    path: "/user",
+    element: (
+      <AuthProvider>
+        <SeekerAuthProvider>
+          <UserpageSeeker />
+        </SeekerAuthProvider>
+      </AuthProvider>
+    ),
+  },
+  {
+    path: "/mentor",
+    element: (
+      <AuthProvider>
+        <SeekerAuthProvider>
+          <UserpageMentor />{" "}
+        </SeekerAuthProvider>
+      </AuthProvider>
+    ),
+  },
+  {
+    path: "/company",
+    element: (
+      <AuthProvider>
+        <SeekerAuthProvider>
+          <UserpageCompany />{" "}
+        </SeekerAuthProvider>
+      </AuthProvider>
+    ),
+  },
+  {
+    path: "/myjobs",
+    element: (
+      <AuthProvider>
+        <SeekerAuthProvider>
+          <JobsApplied />{" "}
+        </SeekerAuthProvider>
+      </AuthProvider>
+    ),
+  },
+  {
+    path: "/testsuccess",
+    element: (
+      <AuthProvider>
+        <SeekerAuthProvider>
+          <SuccessfulTesting />
+        </SeekerAuthProvider>
+      </AuthProvider>
+    ),
+  },
 ]);
