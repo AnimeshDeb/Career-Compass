@@ -16,6 +16,7 @@ export default function Navbar({ userType, userId, iconSize }) {
         {(userType === "mentor" || userType === "seeker") && (
           <SearchButton
             userId={userId}
+            userType={userType}
             className="one-btn"
             iconSize={iconSize}
           />

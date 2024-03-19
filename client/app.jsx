@@ -104,9 +104,15 @@ export const router = createBrowserRouter([
     ),
   },
   {
+    path: "Seeker/Joblist",
+    element: <JobList />,
+  },
+  
+  {
     path: "/Joblist",
     element: <JobList />,
   },
+
   {
     path: "/SeekerForgotPassword",
     element: (

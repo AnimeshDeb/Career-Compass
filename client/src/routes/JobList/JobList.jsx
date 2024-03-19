@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { getJobListings } from "../../functions/jobFunctions";
-
+import Navbar from "../../components/navbar/version1/navbar";
+import { useLocation } from "react-router-dom";
 // Array of all 50 U.S. states
 const states = [
   "Alabama", "Alaska", "Arizona", "Arkansas", "California", "Colorado",
@@ -15,38 +16,54 @@ const states = [
   "West Virginia", "Wisconsin", "Wyoming"
 ];
 
-const JobListing = ({ job, onJobClick }) => {
-  return (
-    <div
-      className="cursor-pointer border border-gray-300 p-4 my-2 bg-blue-800 rounded-lg text-white shadow hover:shadow-md relative"
-      onClick={() => onJobClick(job)}
-    >
-      <div className="flex justify-between items-center">
-        <div>
-          <h1>{job.id}</h1>
-          <h2>{job.Description}</h2>
+const JobListing = ({ job, onJobClick,}) => {
+  const location = useLocation()
+const uid = location.state?.uid;
+const userType = location.state?.userType;
+const lowerCaseUserType = userType?.toLowerCase();
+console.log("User type in JobListing is:", userType );
+
+return (
+  <div
+    className="cursor-pointer border border-gray-300 p-4 my-2 bg-blue-800 rounded-lg text-white shadow hover:shadow-md relative"
+    onClick={() => onJobClick(job)}
+  >
+    <div className="flex justify-between items-center">
+      <div>
+        <h1>{job.id}</h1>
+        <h2>{job.Description}</h2>
+      </div>
+      <div className="flex flex-col items-end space-y-2">
+        <div
+          className="bg-green-500 text-white px-10 py-2 rounded-full cursor-pointer text-center"
+          onClick={(event) => {
+            event.stopPropagation();
+            onJobClick(job);
+          }}
+        >
+          Details
         </div>
-        <div className="flex flex-col items-end space-y-2">
-          <div
-            className="bg-green-500 text-white px-10 py-2 rounded-full cursor-pointer text-center"
-            onClick={(event) => {
-              event.stopPropagation();
-              onJobClick(job);
-            }}
+        {lowerCaseUserType === "mentor" ? (
+          <button
+            className="bg-blue-500 text-white px-10 py-2 rounded-full cursor-pointer"
+            onClick={(event) => event.stopPropagation()}
           >
-            Details
-          </div>
+            Recommend
+          </button>
+        ) : lowerCaseUserType === "seeker" ? (
           <button
             className="bg-blue-500 text-white px-10 py-2 rounded-full cursor-pointer"
             onClick={(event) => event.stopPropagation()}
           >
             Apply
           </button>
-        </div>
+        ) : null}
       </div>
     </div>
-  );
+  </div>
+);
 };
+
 
 const JobList = () => {
   const [searchTerm, setSearchTerm] = useState("");
@@ -94,6 +111,7 @@ const JobList = () => {
   return (
     <div className="flex flex-col">
       <div className={`flex-grow ${selectedJob ? "w-1/2" : "w-full"}`}>
+        < Navbar userType="seeker"/> 
         <h1 style={{ color: '#0086fe', fontSize: '40px' }}>Job Listings</h1>
         <div className="flex items-center mb-4">
           <input
