@@ -3,16 +3,56 @@ import { getJobListings } from "../../functions/jobFunctions";
 
 // Array of all 50 U.S. states
 const states = [
-  "Alabama", "Alaska", "Arizona", "Arkansas", "California", "Colorado",
-  "Connecticut", "Delaware", "Florida", "Georgia", "Hawaii", "Idaho",
-  "Illinois", "Indiana", "Iowa", "Kansas", "Kentucky", "Louisiana",
-  "Maine", "Maryland", "Massachusetts", "Michigan", "Minnesota",
-  "Mississippi", "Missouri", "Montana", "Nebraska", "Nevada",
-  "New Hampshire", "New Jersey", "New Mexico", "New York",
-  "North Carolina", "North Dakota", "Ohio", "Oklahoma", "Oregon",
-  "Pennsylvania", "Rhode Island", "South Carolina", "South Dakota",
-  "Tennessee", "Texas", "Utah", "Vermont", "Virginia", "Washington",
-  "West Virginia", "Wisconsin", "Wyoming"
+  "Alabama",
+  "Alaska",
+  "Arizona",
+  "Arkansas",
+  "California",
+  "Colorado",
+  "Connecticut",
+  "Delaware",
+  "Florida",
+  "Georgia",
+  "Hawaii",
+  "Idaho",
+  "Illinois",
+  "Indiana",
+  "Iowa",
+  "Kansas",
+  "Kentucky",
+  "Louisiana",
+  "Maine",
+  "Maryland",
+  "Massachusetts",
+  "Michigan",
+  "Minnesota",
+  "Mississippi",
+  "Missouri",
+  "Montana",
+  "Nebraska",
+  "Nevada",
+  "New Hampshire",
+  "New Jersey",
+  "New Mexico",
+  "New York",
+  "North Carolina",
+  "North Dakota",
+  "Ohio",
+  "Oklahoma",
+  "Oregon",
+  "Pennsylvania",
+  "Rhode Island",
+  "South Carolina",
+  "South Dakota",
+  "Tennessee",
+  "Texas",
+  "Utah",
+  "Vermont",
+  "Virginia",
+  "Washington",
+  "West Virginia",
+  "Wisconsin",
+  "Wyoming",
 ];
 
 const JobListing = ({ job, onJobClick }) => {
@@ -80,11 +120,19 @@ const JobList = () => {
 
   const filterJobs = (jobs, searchTerm, locationFilter, isPartTime) => {
     return jobs.filter((job) => {
-      const idString = job.id ? job.id.toString().toLowerCase() : '';
-      const descriptionString = job.Description ? job.Description.toLowerCase() : '';
-      const matchesIdOrDescription = idString.includes(searchTerm.toLowerCase()) || descriptionString.includes(searchTerm.toLowerCase());
-      const matchesLocation = locationFilter ? job.Location === locationFilter : true;
-      const matchesPartTime = isPartTime ? job.Availability === "Part Time" : true;
+      const idString = job.id ? job.id.toString().toLowerCase() : "";
+      const descriptionString = job.Description
+        ? job.Description.toLowerCase()
+        : "";
+      const matchesIdOrDescription =
+        idString.includes(searchTerm.toLowerCase()) ||
+        descriptionString.includes(searchTerm.toLowerCase());
+      const matchesLocation = locationFilter
+        ? job.Location === locationFilter
+        : true;
+      const matchesPartTime = isPartTime
+        ? job.Availability === "Part Time"
+        : true;
       return matchesIdOrDescription && matchesLocation && matchesPartTime;
     });
   };
@@ -94,7 +142,7 @@ const JobList = () => {
   return (
     <div className="flex flex-col">
       <div className={`flex-grow ${selectedJob ? "w-1/2" : "w-full"}`}>
-        <h1 style={{ color: '#0086fe', fontSize: '40px' }}>Job Listings</h1>
+        <h1 style={{ color: "#0086fe", fontSize: "40px" }}>Job Listings</h1>
         <div className="flex items-center mb-4">
           <input
             type="text"
@@ -110,14 +158,18 @@ const JobList = () => {
           >
             <option value="">All Locations</option>
             {states.map((state) => (
-              <option value={state} key={state}>{state}</option>
+              <option value={state} key={state}>
+                {state}
+              </option>
             ))}
           </select>
           <button
-            className={`py-2 px-4 ${isPartTime ? 'bg-blue-600' : 'bg-blue-500'} text-white rounded-md mr-2`}
+            className={`py-2 px-4 ${
+              isPartTime ? "bg-blue-600" : "bg-blue-500"
+            } text-white rounded-md mr-2`}
             onClick={() => setIsPartTime(!isPartTime)}
           >
-            {isPartTime ? 'Part-Time Only' : 'All Jobs'}
+            {isPartTime ? "Part-Time Only" : "All Jobs"}
           </button>
           <button
             className="py-2 px-4 bg-secondary text-white rounded-md"
@@ -137,12 +189,24 @@ const JobList = () => {
       {selectedJob && (
         <div className="w-1/2 h-full fixed top-0 right-0 bg-light-blue-500 shadow-lg p-5 overflow-y-auto">
           <h3>Job Details</h3>
-          <p><strong>ID:</strong> {selectedJob.id}</p>
-          <p><strong>Description:</strong> {selectedJob.Description}</p>
-          <p><strong>Requirements:</strong> {selectedJob.Requirements}</p>
-          <p><strong>Salary:</strong> {selectedJob.Salary}</p>
-          <p><strong>Location:</strong> {selectedJob.Location}</p>
-          <p><strong>Availability:</strong> {selectedJob.Availability}</p>
+          <p>
+            <strong>ID:</strong> {selectedJob.id}
+          </p>
+          <p>
+            <strong>Description:</strong> {selectedJob.Description}
+          </p>
+          <p>
+            <strong>Requirements:</strong> {selectedJob.Requirements}
+          </p>
+          <p>
+            <strong>Salary:</strong> {selectedJob.Salary}
+          </p>
+          <p>
+            <strong>Location:</strong> {selectedJob.Location}
+          </p>
+          <p>
+            <strong>Availability:</strong> {selectedJob.Availability}
+          </p>
           <button
             className="py-2 px-4 bg-red-500 text-white rounded-md"
             onClick={() => setSelectedJob(null)}

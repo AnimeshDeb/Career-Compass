@@ -33,7 +33,7 @@ const DropFile = ({ onFileChange, maxFiles, acceptedFileTypes, showFile }) => {
           },
           () => {
             getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
-              console.log(downloadURL);
+              onFileChange(downloadURL);
             });
           }
         );

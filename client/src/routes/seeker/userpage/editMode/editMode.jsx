@@ -13,15 +13,15 @@ import DropFile from "../../../../components/DropFile/DropFile";
 import EditorTxt from "../../../../components/texteditor/Editor";
 import ReactPlayer from "react-player";
 import DOMPurify from "dompurify";
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faSchool,
   faUserGraduate,
   faBook,
   faHatWizard,
   faBrain,
-} from '@fortawesome/free-solid-svg-icons';
-import Select from 'react-select';
+} from "@fortawesome/free-solid-svg-icons";
+import Select from "react-select";
 
 const stateOptions = [
   { value: "AL", label: "Alabama" },
@@ -87,24 +87,35 @@ const stateOptions = [
 const textSize = "text-base md:text-lg lg:text-xl xl:text-2xl";
 const JobItem = React.memo(({ job, index, handleChange }) => {
   const [location, setLocation] = useState(() => {
-    const parts = job.Job_Location.split(', ');
+    const parts = job.Job_Location.split(", ");
     return {
-      city: parts[0] || '',
-      state: parts[1] || '',
-      country: parts[2] || 'United States',
+      city: parts[0] || "",
+      state: parts[1] || "",
+      country: parts[2] || "United States",
     };
   });
 
   const handleCityChange = (e) => {
     const newLocation = { ...location, city: e.target.value };
     setLocation(newLocation);
-    handleChange(e, 'text', `jobs[${index}].Job_Location`, `${newLocation.city}, ${newLocation.state}, ${newLocation.country}`);
+    handleChange(e, "text", `jobs[${index}].Job_Location`);
   };
 
   const handleStateChange = (selectedOption) => {
-    const newLocation = { ...location, state: selectedOption ? selectedOption.value : '' };
+    const newLocation = {
+      ...location,
+      state: selectedOption ? selectedOption.value : "",
+    };
     setLocation(newLocation);
-    handleChange({ target: { value: `${newLocation.city}, ${newLocation.state}, ${newLocation.country}` } }, 'text', `jobs[${index}].Job_Location`);
+    handleChange(
+      {
+        target: {
+          value: `${newLocation.city}, ${newLocation.state}, ${newLocation.country}`,
+        },
+      },
+      "text",
+      `jobs[${index}].Job_Location`
+    );
   };
 
   return (
@@ -114,7 +125,7 @@ const JobItem = React.memo(({ job, index, handleChange }) => {
         className="form-input p-2 border border-gray-300 rounded-md"
         placeholder="Job Name"
         value={job.Job_Name}
-        onChange={(e) => handleChange(e, 'text', `jobs[${index}].Job_Name`)}
+        onChange={(e) => handleChange(e, "text", `jobs[${index}].Job_Name`)}
       />
       <input
         type="text"
@@ -126,19 +137,20 @@ const JobItem = React.memo(({ job, index, handleChange }) => {
       <Select
         options={stateOptions}
         onChange={handleStateChange}
-        value={stateOptions.find(option => option.value === location.state)}
+        value={stateOptions.find((option) => option.value === location.state)}
         placeholder="Select State"
         isClearable={true}
         className="mb-4"
       />
       <h1 className="text-lg md:text-xl lg:text-2xl font-bold p-2 flex-grow text-primary">
-              United States
-            </h1>
+        United States
+      </h1>
     </div>
   );
 });
 const VideoOrTextItem = React.memo(
   ({ videoData, handleChange, field, index }) => {
+    console.log(videoData);
     const [previewUrl, setPreviewUrl] = useState("");
     const isUrl =
       typeof videoData === "string" && /^https?:\/\//.test(videoData);
@@ -233,63 +245,79 @@ const EducationItem = React.memo(
     handleChange,
   }) => {
     const educationIcons = {
-    "High School": faSchool,
-    "Associate's": faUserGraduate,
-    "Bachelor's": faBook,
-    "Master's": faHatWizard,
-    "PhD": faBrain,
-  };
+      "High School": faSchool,
+      "Associate's": faUserGraduate,
+      "Bachelor's": faBook,
+      "Master's": faHatWizard,
+      PhD: faBrain,
+    };
 
-  const currentYear = new Date().getFullYear();
-  const years = Array.from({ length: 50 }, (_, i) => currentYear - i);
-  
-  const [selectedEducationType, setSelectedEducationType] = useState(degreeTypeValue);
+    const currentYear = new Date().getFullYear();
+    const years = Array.from({ length: 50 }, (_, i) => currentYear - i);
 
-  const handleEducationTypeClick = (type) => {
-    setSelectedEducationType(type);
-    handleChange({ target: { value: type } }, 'text', `education[${index}].DegreeType`);
-  };
+    const [selectedEducationType, setSelectedEducationType] =
+      useState(degreeTypeValue);
 
-  return (
-    <div className="flex flex-col gap-2 mb-4 p-5">
-      <input
-        type="text"
-        className="form-input w-full p-2 border border-gray-300 rounded-md"
-        placeholder="University"
-        value={universityValue}
-        onChange={(e) => handleChange(e, 'text', `education[${index}].University`)}
-      />
-      <div className="grid grid-cols-2 xl:grid-cols-5 gap-2">
-        {Object.entries(educationIcons).map(([type, icon]) => (
-          <button
-            key={type}
-            className={`py-2 px-4 border rounded-md ${selectedEducationType === type ? "bg-primary text-white" : "bg-white text-primary border-gray-400"} flex items-center justify-center`}
-            onClick={() => handleEducationTypeClick(type)}
-          >
-            <FontAwesomeIcon icon={icon} className="mr-2" />
-            {type}
-          </button>
-        ))}
+    const handleEducationTypeClick = (type) => {
+      setSelectedEducationType(type);
+      handleChange(
+        { target: { value: type } },
+        "text",
+        `education[${index}].DegreeType`
+      );
+    };
+
+    return (
+      <div className="flex flex-col gap-2 mb-4 p-5">
+        <input
+          type="text"
+          className="form-input w-full p-2 border border-gray-300 rounded-md"
+          placeholder="University"
+          value={universityValue}
+          onChange={(e) =>
+            handleChange(e, "text", `education[${index}].University`)
+          }
+        />
+        <div className="grid grid-cols-2 xl:grid-cols-5 gap-2">
+          {Object.entries(educationIcons).map(([type, icon]) => (
+            <button
+              key={type}
+              className={`py-2 px-4 border rounded-md ${
+                selectedEducationType === type
+                  ? "bg-primary text-white"
+                  : "bg-white text-primary border-gray-400"
+              } flex items-center justify-center`}
+              onClick={() => handleEducationTypeClick(type)}
+            >
+              <FontAwesomeIcon icon={icon} className="mr-2" />
+              {type}
+            </button>
+          ))}
+        </div>
+        <input
+          type="text"
+          className="form-input w-full p-2 border border-gray-300 rounded-md"
+          placeholder="Major"
+          value={majorValue}
+          onChange={(e) => handleChange(e, "text", `education[${index}].Major`)}
+        />
+        <select
+          className="form-select w-full p-2 border border-gray-300 rounded-md"
+          value={classOfValue}
+          onChange={(e) =>
+            handleChange(e, "text", `education[${index}].ClassOf`)
+          }
+        >
+          {years.map((year, idx) => (
+            <option key={idx} value={year}>
+              {year}
+            </option>
+          ))}
+        </select>
       </div>
-      <input
-        type="text"
-        className="form-input w-full p-2 border border-gray-300 rounded-md"
-        placeholder="Major"
-        value={majorValue}
-        onChange={(e) => handleChange(e, 'text', `education[${index}].Major`)}
-      />
-      <select
-        className="form-select w-full p-2 border border-gray-300 rounded-md"
-        value={classOfValue}
-        onChange={(e) => handleChange(e, 'text', `education[${index}].ClassOf`)}
-      >
-        {years.map((year, idx) => (
-          <option key={idx} value={year}>{year}</option>
-        ))}
-      </select>
-    </div>
-  );
-});
+    );
+  }
+);
 const ReferenceItem = React.memo(({ reference, handleDelete, index }) => {
   const { name, company, email, desc } = reference;
 
@@ -381,9 +409,9 @@ export default function EditMode({
           URL.revokeObjectURL(pendingChanges[key].value);
         }
       } else if (type === "video") {
-        value = event.target.files[0];
+        value = event;
       }
-
+      console.log("Pending Changes", pendingChanges);
       setPendingChanges((prev) => ({
         ...prev,
         [key]: { value, type },
@@ -410,7 +438,6 @@ export default function EditMode({
       const updates = Object.entries(pendingChanges).map(
         async ([field, { value, type }]) => {
           const updateObject = {};
-          console.log(field,value,type)
           if (type === "text") {
             updateObject[field] = value;
           } else {
@@ -657,7 +684,8 @@ JobItem.propTypes = {
   handleChange: PropTypes.func.isRequired,
 };
 VideoOrTextItem.propTypes = {
-  videoData: PropTypes.oneOfType([PropTypes.string, PropTypes.instanceOf(File)]).isRequired,
+  videoData: PropTypes.oneOfType([PropTypes.string, PropTypes.instanceOf(File)])
+    .isRequired,
   handleChange: PropTypes.func.isRequired,
   field: PropTypes.string.isRequired,
   index: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
