@@ -16,11 +16,18 @@ export default function UserpageMentor() {
   const [userData, setUserData] = useState(null);
   const [pendingChanges, setPendingChanges] = useState({});
   const [isLoading, setIsLoading] = useState(true);
+  const [refreshUserData, setRefreshUserData] = useState(false);
+
+  const triggerUserDataRefresh = () => {
+    setRefreshUserData((prev) => !prev);
+  };
   // const mentorId = location.state?.name;
   const mentorId = "J8tVexeC8shTEFTDBQfL5evs4oy2";
   useEffect(() => {
     const fetchData = async () => {
       try {
+        setIsLoading(true);
+        // const userId = name;
         const fetchedUserData = await getMentorById(mentorId);
         setUserData(fetchedUserData);
       } catch (error) {
@@ -33,7 +40,7 @@ export default function UserpageMentor() {
     };
 
     fetchData();
-  }, [mentorId]);
+  }, [mentorId, refreshUserData]);
 
   const handlePendingChange = (field, value, type) => {
     setPendingChanges((prev) => ({
@@ -82,7 +89,7 @@ export default function UserpageMentor() {
   }, []);
   return (
     <div className="bg-primary-dark">
-      <div className="w-full bg-white max-w-[100%] mx-auto lg:max-w-[65%] shadow-md">
+      <div className="w-full bg-white max-w-[100%] mx-auto lg:max-w-[75%] shadow-md">
         <Navbar
           className="nav"
           userType={"mentor"}
@@ -112,6 +119,7 @@ export default function UserpageMentor() {
               userId={"a0MqGXB2hlJ5uJNheiKX"}
               iconSize={iconSize}
               userData={userData}
+              triggerUserDataRefresh={triggerUserDataRefresh}
             />
           </>
         ) : (

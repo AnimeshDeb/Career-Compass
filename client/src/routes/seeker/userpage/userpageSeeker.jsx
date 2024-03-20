@@ -74,7 +74,7 @@ export default function UserpageSeeker() {
 
   return (
     <div className="bg-primary-dark">
-      <div className="w-full bg-white max-w-[100%] mx-auto lg:max-w-[65%] shadow-md">
+      <div className="w-full bg-white max-w-[100%] mx-auto xl:max-w-[75%] shadow-md">
         <Navbar
           className="nav"
           userId={name}
@@ -117,7 +117,7 @@ export default function UserpageSeeker() {
           </>
         )}
 
-        <Footer />
+        <Footer userType="Seeker" />
       </div>
     </div>
   );

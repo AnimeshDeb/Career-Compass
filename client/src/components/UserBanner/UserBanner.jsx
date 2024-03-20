@@ -3,7 +3,7 @@ import Edit_Btn from "../Buttons/edit_btn/edit_btn";
 import DropFile from "../DropFile/DropFileEditMode";
 import Skeleton, { SkeletonTheme } from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
-
+const textSize = "text-sm md:text-base lg:text-lg xl:text-xl";
 export default function UserBanner({
   banner,
   picture,
@@ -52,7 +52,7 @@ export default function UserBanner({
           )}
         </div>
         <div className="absolute bottom-0 left-1/2 transform -translate-x-1/2 -translate-y-2 flex flex-col items-center">
-          <div className="rounded-full overflow-hidden border-4 border-primary bg-white flex justify-center items-center w-20 h-20 sm:w-24 sm:h-24 md:w-28 md:h-28 lg:w-32 lg:h-32 xl:w-36 xl:h-36">
+          <div className="rounded-full overflow-hidden border-4 border-primary bg-white flex justify-center items-center w-16 h-16 sm:w-24 sm:h-24 md:w-28 md:h-28 lg:w-30 lg:h-30 xl:w-36 xl:h-36">
             {isLoading ? (
               <Skeleton circle={true} width="100%" height="100%" />
             ) : (
@@ -72,8 +72,11 @@ export default function UserBanner({
           </h3>
         </div>
       </div>
-      {editMode && (
-        <div className="flex justify-center items-center pt-2 mx-8 space-x-10">
+      {editMode && (<>
+        <h2
+                className={`${textSize} bg-primary text-white px-8 py-2 w-full text-center`}
+              >Profile Picture</h2>
+        <div className="flex justify-center items-center pt-3  space-x-10">
           {/* <DropFile
             onFileChange={(file) => handleFileChange(file, "banner", "Banner")}
             maxFiles={1}
@@ -89,6 +92,7 @@ export default function UserBanner({
             label="Update Profile Picture"
           />
         </div>
+        </>
       )}
     </>
   );

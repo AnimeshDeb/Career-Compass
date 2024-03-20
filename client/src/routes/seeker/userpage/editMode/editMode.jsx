@@ -88,7 +88,7 @@ const stateOptions = [
   { value: "PR", label: "Puerto Rico" },
   { value: "VI", label: "Virgin Islands" },
 ];
-const textSize = "text-base md:text-lg lg:text-xl xl:text-2xl";
+const textSize = "text-sm md:text-base lg:text-lg xl:text-xl";
 const JobItem = React.memo(({ job, index, handleChange }) => {
   const [jobName, setJobName] = useState(job.Job_Name);
   const [location, setLocation] = useState(() => {
@@ -252,6 +252,11 @@ const VideoOrTextItem = React.memo(
             handleEditorChange={handleEditorChange}
             seekerTxtIntro={content.type === "text" ? content.value : ""}
           />
+          <div className="flex justify-center p-2 h-full items-center md:flex-col md:justify-center md:items-center space-x-2 md:space-x-0 ">
+              <div className="w-0.5 h-4 bg-gray-400 md:w-4 md:h-0.5"></div>
+              <span className="text-md font-semibold opacity-70">OR</span>
+              <div className="w-0.5 h-4 bg-gray-400 md:w-4 md:h-0.5"></div>
+            </div>
           <DropFile
             onFileChange={(downloadURL) => {
               handleChange(
@@ -624,7 +629,7 @@ export default function EditMode({
                           className="flex justify-between items-center bg-gray-100 p-2 space-x-2 rounded mt-1"
                         >
                           <span className="text-sm font-medium">
-                            {change.section} section: {displayValue}
+                            {change.section}: {displayValue}
                           </span>
                           <button
                             onClick={() => revertChange(key)}
@@ -722,7 +727,7 @@ export default function EditMode({
               </div>
               <div className="flex-1 bg-blue-100 px-2 py-2 ml-0 mr-4 shadow-lg relative text-left mx-5 my-5 rounded-tr-lg rounded-bl-lg rounded-br-lg ">
                 <p className={`${textSize} text-primary`}>
-                  Keep on looking. You will find it!
+                  Edit and show your best self to the world!
                 </p>
                 <div className="absolute top-0 -left-2 w-10 h-0 border-l-transparent border-b-[10px] border-b-primary"></div>
                 <div className="flex justify-end mt-0"></div>

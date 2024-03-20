@@ -1,7 +1,7 @@
 import Carousel from "react-multi-carousel";
 import "react-multi-carousel/lib/styles.css";
 import PropTypes from "prop-types";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import {
   deleteFilesInFolder,
   uploadFileToStorage,
@@ -9,6 +9,15 @@ import {
   updateUserGallery,
   deleteImageFromStorage,
 } from "../../../../functions/mentorFunctions";
+import DropFile from "../../../../components/DropFile/DropFileEditMode";
+import EditorTxt from "../../../../components/texteditor/Editor";
+import ReactPlayer from "react-player";
+import DOMPurify from "dompurify";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+  faChevronRight,
+  faChevronLeft,
+} from "@fortawesome/free-solid-svg-icons";
 const responsive = {
   superLargeDesktop: {
     breakpoint: { max: 4000, min: 3000 },
@@ -27,18 +36,24 @@ const responsive = {
     items: 1,
   },
 };
+const textSize = "text-base md:text-lg lg:text-xl xl:text-2xl";
 
 export default function EditMode({
   userData,
   userId,
   pendingChanges,
   setPendingChanges,
+  triggerUserDataRefresh
 }) {
   const [currentGallery, setCurrentGallery] = useState(userData.gallery);
-
+const [saveStatus, setSaveStatus] = useState("idle");
+  const [saveMessage, setSaveMessage] = useState("");
+  const [isExpanded, setIsExpanded] = useState(true);
+  const [content, setContent] = useState(userData.intro_text);
   const handleDeleteImage = (index) => {
     const imageToDelete = currentGallery[index];
     const newGallery = currentGallery.filter((_, i) => i !== index);
+    
     setCurrentGallery(newGallery);
     setPendingChanges((prevChanges) => ({
       ...prevChanges,
@@ -75,20 +90,36 @@ export default function EditMode({
       }));
     }
   };
+
   const renderEditableView = (dataType, data, field, index = null) => {
     const pendingKey = `${field}`;
     const pendingData = pendingChanges[pendingKey]
       ? pendingChanges[pendingKey].value
       : data;
+    let cleanHtml
+    const handleEditorChange = (e) => {
+      cleanHtml = DOMPurify.sanitize(e.htmlValue);
+      setContent(cleanHtml)
+      handleChange(
+        { target: { value: cleanHtml } },
+        "text",
+        field,
+        index
+      );
+    };
     switch (dataType) {
       case "text":
         return (
           <>
-            <input
-              type="text"
-              value={pendingData}
-              onChange={(e) => handleChange(e, dataType, field, index)}
+          <div
+              dangerouslySetInnerHTML={{ __html: content }}
+              className={`${textSize} overflow-auto`}
+              style={{ width: "100%", height: "100%" }}
             />
+            <EditorTxt
+            handleEditorChange={handleEditorChange}
+            seekerTxtIntro={pendingData}
+          />
           </>
         );
       case "video": {
@@ -101,17 +132,29 @@ export default function EditMode({
           <div className={`media-container ${dataType}`}>
             {dataType === "video" ? (
               <>
-                <video key={`${index}_${new Date().getTime()}`} controls>
-                  <source src={fileUrl} type="video/mp4" />
-                  Your browser does not support the video tag.
-                </video>
-                <label htmlFor={inputId}>Upload New Video</label>
-                <input
-                  id={inputId}
-                  type="file"
-                  onChange={(e) => handleChange(e, dataType, field, index)}
-                  accept="video/*"
-                />
+                <div className="w-full flex justify-center items-center p-5 mt-0">
+            <div className="max-w-lg w-full aspect-video">
+              <ReactPlayer
+                className="react-player"
+                url={fileUrl}
+                controls={true}
+                width="100%"
+                height="100%"
+              />
+            </div>
+          </div>
+          <div
+          className={`w-1/2 p-2 mt-0 flex  justify-center items-center space-y-2 rounded-md`}
+        >
+          <DropFile onFileChange={(downloadURL) => {
+              handleChange(
+                { target: { value: downloadURL } },
+                "video",
+                field,
+                index
+              );}} 
+              maxFiles={1}
+              acceptedFileTypes={{ "video/*": [] }}/></div>
               </>
             ) : (
               <img src={fileUrl} alt={field} />
@@ -140,7 +183,6 @@ export default function EditMode({
   const saveChanges = async () => {
     const updates = Object.entries(pendingChanges).map(
       async ([field, { value, type }]) => {
-        console.log(field, type, value);
         const updateObject = {};
         if (type === "text") {
           updateObject[field] = value;
@@ -197,35 +239,87 @@ export default function EditMode({
     setPendingChanges(updatedChanges);
   };
   return (
-    <div>
-      <button onClick={saveChanges}>Save changes</button>
-      <div className="pending-changes">
-        {Object.entries(pendingChanges).map(([key, change]) => {
-          const isDeletion = key.startsWith("delete_");
-          const isFileChange = change.type === "video" || "pictureURL";
-          const displayKey = isDeletion ? key.replace("delete_", "") : key;
-          let displayValue;
-          if (isDeletion) {
-            displayValue = "Marked for deletion - " + change.value.name;
-          } else if (isFileChange) {
-            displayValue = `File selected - ${change.value.name}`;
-          } else {
-            displayValue = change.value;
-          }
+    <>
+<div
+        className={`fixed top-1/10 right-0 z-50 ${
+          isExpanded ? "" : "-mr-4"
+        } transition-margin duration-300 ease-in-out -mr-0`}
+      >
+        <div className="flex flex-col items-end">
+          <div className="bg-white border-4 border-secondary shadow-lg ">
+            <button
+              className="absolute bg-primary p-10 hover:bg-primary-dark text-white font-bold py-2 px-4 rounded mb-0 flex items-center justify-center"
+              onClick={() => setIsExpanded(!isExpanded)}
+            >
+              <FontAwesomeIcon
+                icon={isExpanded ? faChevronRight : faChevronLeft}
+              />
+            </button>
+            {isExpanded && (
+              <>
+                <h2 className="w-full text-right pl-12 pb-2 pt-1 pr-2 bg-secondary text-white font-bold ">
+                  Pending Changes
+                </h2>
+                <div className="px-5 pb-5">
+                  <div
+                    className="mt-2 overflow-auto"
+                    style={{ maxHeight: "50vh" }}
+                  >
+                    {Object.entries(pendingChanges).map(([key, change]) => {
+                      let displayValue;
+                      if (change.type === "delete") {
+                        displayValue = `Eliminating - ${change.value.name}`;
+                      } else if (change.type === "text") {
+                        displayValue = "Text Change";
+                      } else if (change.type === "video") {
+                        displayValue = "Video Upload";
+                      } else {
+                        displayValue = "Picture Upload";
+                      }
+                      return (
+                        <div
+                          key={key}
+                          className="flex justify-between items-center bg-gray-100 p-2 space-x-2 rounded mt-1"
+                        >
+                          <span className="text-sm font-medium">
+                            {change.section}: {displayValue}
+                          </span>
+                          <button
+                            onClick={() => revertChange(key)}
+                            className="bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-2 rounded text-xs"
+                          >
+                            Revert
+                          </button>
+                        </div>
+                      );
+                    })}
+                  </div>
+                  <button
+                    onClick={saveChanges}
+                    disabled={saveStatus === "saving"}
+                    className="bg-secondary hover:bg-secondary-dark text-white font-bold py-2 px-4 rounded mt-4 w-full"
+                  >
+                    {saveStatus === "saving" ? "Updating..." : "Save changes"}
+                  </button>
 
-          return (
-            <div key={key} className="pending-change">
-              <span>
-                {displayKey}: {displayValue}
-              </span>
-              <button onClick={() => revertChange(key)}>X</button>
-            </div>
-          );
-        })}
+                  {saveMessage && (
+                    <div className="text-center font-medium mt-2">
+                      {saveMessage}
+                    </div>
+                  )}
+                </div>
+              </>
+            )}
+          </div>
+        </div>
       </div>
       {userData && (
-        <section className="men-sec men-intro-sec">
-          <h2>Introduction</h2>
+        <section className="pt-3 flex flex-col justify-center items-center pb-0">
+          <h2
+          className={`${textSize} bg-secondary text-white px-8 py-2 w-full text-center`}
+        >
+          Introduction
+        </h2>
           <div className="men-intro-content">
             {renderEditableView("text", userData.intro_text, "intro_text")}
           </div>
@@ -237,7 +331,11 @@ export default function EditMode({
         </section>
       )}
       <section className="men-sec gallery-sec">
-        <h2>Gallery</h2>
+       <h2
+          className={`${textSize} bg-secondary text-white px-8 py-2 w-full text-center`}
+        >
+          Gallery
+        </h2>
         {userData && (
           <Carousel
             responsive={responsive}
@@ -259,15 +357,19 @@ export default function EditMode({
             })}
           </Carousel>
         )}
-        <label htmlFor={1}>Upload New Image</label>
-        <input
-          id={1}
-          type="file"
-          onChange={(e) => handleNewImage(e)}
-          accept="image/*"
-        />
+        <div
+          className={`w-1/2 p-2 mt-0 flex  justify-center items-center space-y-2 rounded-md`}
+        >
+          <DropFile onFileChange={(downloadURL) => {
+              handleChange(
+                { target: { value: downloadURL } },
+                "file",
+              );}} 
+              maxFiles={10}
+              acceptedFileTypes={{ "image/*": [] }}/></div>
+
       </section>
-    </div>
+    </>
   );
 }
 EditMode.propTypes = {
