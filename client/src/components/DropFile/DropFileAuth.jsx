@@ -11,7 +11,12 @@ import {
 import { storage } from "../../firebase";
 import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 
-const DropFile = ({ onFileChange, maxFiles, acceptedFileTypes, showFile }) => {
+const DropFile = ({
+  onFileChange,
+  maxFiles,
+  acceptedFileTypes,
+  showFile = true,
+}) => {
   const [fileList, setFileList] = useState([]);
 
   const onDrop = useCallback(
@@ -32,9 +37,7 @@ const DropFile = ({ onFileChange, maxFiles, acceptedFileTypes, showFile }) => {
             console.error(error);
           },
           () => {
-            getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
-              onFileChange(downloadURL);
-            });
+            getDownloadURL(uploadTask.snapshot.ref);
           }
         );
       }

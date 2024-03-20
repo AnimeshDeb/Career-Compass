@@ -4,7 +4,7 @@ import PropTypes from "prop-types";
 import { useAuth } from "../../../../Contexts/SeekerAuthContext";
 import { useNavigate } from "react-router-dom";
 export default function LogoutButton({ className, iconSize }) {
-  const { logout } = useAuth();
+  // const { logout } = useAuth();
   const navigate = useNavigate();
   async function loggingOut() {
     try {

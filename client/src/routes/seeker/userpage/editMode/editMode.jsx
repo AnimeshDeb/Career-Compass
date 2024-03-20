@@ -3,13 +3,15 @@ import {
   deleteFilesInFolder,
   updateUserField,
   deleteReference,
+  updateJobField,
+  updateEducationField,
 } from "../../../../functions/seekerFunctions";
 import PropTypes from "prop-types";
 import { useCallback, useState, useEffect } from "react";
 import React from "react";
 import Lottie from "lottie-react";
 import animationAI from "../../../../images/animatedAI.json";
-import DropFile from "../../../../components/DropFile/DropFile";
+import DropFile from "../../../../components/DropFile/DropFileEditMode";
 import EditorTxt from "../../../../components/texteditor/Editor";
 import ReactPlayer from "react-player";
 import DOMPurify from "dompurify";
@@ -20,6 +22,8 @@ import {
   faBook,
   faHatWizard,
   faBrain,
+  faChevronRight,
+  faChevronLeft,
 } from "@fortawesome/free-solid-svg-icons";
 import Select from "react-select";
 
@@ -98,7 +102,7 @@ const JobItem = React.memo(({ job, index, handleChange }) => {
   const handleCityChange = (e) => {
     const newLocation = { ...location, city: e.target.value };
     setLocation(newLocation);
-    handleChange(e, "text", `jobs[${index}].Job_Location`);
+    handleChange(e, "text", `jobs.Job_Location`, "Job location", index);
   };
 
   const handleStateChange = (selectedOption) => {
@@ -114,7 +118,9 @@ const JobItem = React.memo(({ job, index, handleChange }) => {
         },
       },
       "text",
-      `jobs[${index}].Job_Location`
+      `jobs.Job_Location`,
+      "Job location",
+      index
     );
   };
 
@@ -125,7 +131,9 @@ const JobItem = React.memo(({ job, index, handleChange }) => {
         className="form-input p-2 border border-gray-300 rounded-md"
         placeholder="Job Name"
         value={job.Job_Name}
-        onChange={(e) => handleChange(e, "text", `jobs[${index}].Job_Name`)}
+        onChange={(e) =>
+          handleChange(e, "text", `jobs.Job_Name`, "Job name", null)
+        }
       />
       <input
         type="text"
@@ -149,29 +157,45 @@ const JobItem = React.memo(({ job, index, handleChange }) => {
   );
 });
 const VideoOrTextItem = React.memo(
-  ({ videoData, handleChange, field, index }) => {
-    console.log(videoData);
-    const [previewUrl, setPreviewUrl] = useState("");
-    const isUrl =
-      typeof videoData === "string" && /^https?:\/\//.test(videoData);
+  ({ videoData, handleChange, field, pendingChanges, section, index }) => {
+    // Determine initial content type. If videoData is a URL, we set it as a video, otherwise, it's text.
+    const initialContentType =
+      typeof videoData === "string" &&
+      (/^https?:\/\//.test(videoData) || /^blob:/.test(videoData))
+        ? "video"
+        : "text";
+    const [content, setContent] = useState({
+      type: initialContentType,
+      value: videoData,
+    });
 
     useEffect(() => {
-      if (videoData instanceof File) {
-        const fileUrl = URL.createObjectURL(videoData);
-        setPreviewUrl(fileUrl);
-      } else if (isUrl) {
-        setPreviewUrl(videoData);
-      } else {
-        setPreviewUrl("");
+      // Check for pending changes to update the local state accordingly
+      const pendingChange = pendingChanges[field];
+      if (pendingChange) {
+        setContent({
+          type: pendingChange.type,
+          value:
+            pendingChange.type === "video" &&
+            pendingChange.value.startsWith("blob:")
+              ? pendingChange.value
+              : pendingChange.value,
+        });
       }
-    }, [videoData]);
-    const handleFileChange = (file) => {
-      handleChange({ target: { files: [file] } }, "video", field, index);
-    };
+    }, [field, pendingChanges]);
 
     const handleEditorChange = (e) => {
       const cleanHtml = DOMPurify.sanitize(e.htmlValue);
-      handleChange({ target: { value: cleanHtml } }, "text", field, index);
+      // Update the local state to reflect the new text
+      setContent({ ...content, value: cleanHtml });
+      // Propagate the change up to the parent component
+      handleChange(
+        { target: { value: cleanHtml } },
+        "text",
+        field,
+        section,
+        index
+      );
     };
 
     return (
@@ -180,55 +204,42 @@ const VideoOrTextItem = React.memo(
           className="w-full max-w-lg px-5 pt-5 pb-0 mb-0 aspect-video "
           style={{ minHeight: "28vh", maxHeight: "28vh" }}
         >
-          {isUrl ? (
-            <div className="w-full max-w-lg pb-0 mb-0 aspect-video">
-              <ReactPlayer
-                url={previewUrl}
-                controls={true}
-                style={{ margin: "auto" }}
-                width="100%"
-                height="100%"
-              />
-            </div>
+          {content.type === "video" ? (
+            <ReactPlayer
+              url={content.value}
+              controls={true}
+              style={{ margin: "auto" }}
+              width="100%"
+              height="100%"
+            />
           ) : (
             <div
-              className={`${textSize} px-5 pt-5 pb-0 mb-0  overflow-auto`}
+              dangerouslySetInnerHTML={{ __html: content.value }}
+              className={`${textSize} overflow-auto`}
               style={{ width: "100%", height: "100%" }}
-              dangerouslySetInnerHTML={{ __html: videoData }}
             />
           )}
         </div>
-        <div className="flex justify-center items-center space-x-5 w-full pt-5 mt-0 pl-5 pr-5 pb-5">
-          <div
-            className={`w-full pt-0 mt-0 md:w-1/2 flex flex-col justify-between rounded-md`}
-          >
-            {isUrl ? (
-              <EditorTxt
-                seekerTxtIntro=""
-                handleEditorChange={handleEditorChange}
-              />
-            ) : (
-              <EditorTxt
-                seekerTxtIntro={videoData}
-                handleEditorChange={handleEditorChange}
-              />
-            )}
-          </div>
-          <div className="flex justify-center py-2 p-0 m-0 h-full items-center md:flex-col md:justify-center md:items-center space-x-2 md:space-x-0 ">
-            <div className="w-0.5 h-4 bg-gray-400 md:w-4 md:h-0.5"></div>
-            <span className="text-md font-semibold opacity-70">OR</span>
-            <div className="w-0.5 h-4 bg-gray-400 md:w-4 md:h-0.5"></div>
-          </div>
-          <div
-            className={`w-full md:w-1/2 pt-0 mt-0 px-4 rounded-md h-auto min-h-250 lg:min-h-250`}
-          >
-            <DropFile
-              onFileChange={handleFileChange}
-              maxFiles={1}
-              acceptedFileTypes={{ "video/*": [] }}
-              showFile={false}
-            />
-          </div>
+        <div
+          className={`w-full p-2 mt-0 flex flex-col justify-between space-y-2 rounded-md`}
+        >
+          <EditorTxt
+            handleEditorChange={handleEditorChange}
+            seekerTxtIntro={content.type === "text" ? content.value : ""}
+          />
+          <DropFile
+            onFileChange={(downloadURL) => {
+              handleChange(
+                { target: { value: downloadURL } },
+                "video",
+                field,
+                section,
+                index
+              );
+            }}
+            maxFiles={1}
+            acceptedFileTypes={{ "video/*": [] }}
+          />
         </div>
       </div>
     );
@@ -243,7 +254,33 @@ const EducationItem = React.memo(
     majorValue,
     classOfValue,
     handleChange,
+    id,
   }) => {
+    const [university, setUniversity] = useState(universityValue);
+    const [degreeType, setDegreeType] = useState(degreeTypeValue);
+    const [major, setMajor] = useState(majorValue);
+    const [classOf, setClassOf] = useState(classOfValue);
+
+    const handleInputChange = (setter, type) => (e) => {
+      const { value } = e.target;
+      setter(value);
+      // Depending on your implementation, you may wish to update parent state here
+      handleChange(e, "text", e.target.name, `Education ${type}`, id);
+    };
+
+    // For degree type, which is a special case since it's not directly linked to an input field
+    const handleDegreeTypeChange = (type) => {
+      setDegreeType(type);
+      // Update the parent state with the new degree type
+      handleChange(
+        { target: { value: type, name: "degreeType" } },
+        "text",
+        "education.DegreeType",
+        "Education Degree",
+        id
+      );
+    };
+
     const educationIcons = {
       "High School": faSchool,
       "Associate's": faUserGraduate,
@@ -255,61 +292,51 @@ const EducationItem = React.memo(
     const currentYear = new Date().getFullYear();
     const years = Array.from({ length: 50 }, (_, i) => currentYear - i);
 
-    const [selectedEducationType, setSelectedEducationType] =
-      useState(degreeTypeValue);
-
-    const handleEducationTypeClick = (type) => {
-      setSelectedEducationType(type);
-      handleChange(
-        { target: { value: type } },
-        "text",
-        `education[${index}].DegreeType`
-      );
-    };
-
     return (
       <div className="flex flex-col gap-2 mb-4 p-5">
         <input
           type="text"
+          name="education.University"
           className="form-input w-full p-2 border border-gray-300 rounded-md"
           placeholder="University"
-          value={universityValue}
-          onChange={(e) =>
-            handleChange(e, "text", `education[${index}].University`)
-          }
+          value={university}
+          onChange={handleInputChange(setUniversity, "Name")}
         />
+
         <div className="grid grid-cols-2 xl:grid-cols-5 gap-2">
           {Object.entries(educationIcons).map(([type, icon]) => (
             <button
               key={type}
               className={`py-2 px-4 border rounded-md ${
-                selectedEducationType === type
+                degreeType === type
                   ? "bg-primary text-white"
                   : "bg-white text-primary border-gray-400"
               } flex items-center justify-center`}
-              onClick={() => handleEducationTypeClick(type)}
+              onClick={() => handleDegreeTypeChange(type)}
             >
               <FontAwesomeIcon icon={icon} className="mr-2" />
               {type}
             </button>
           ))}
         </div>
+
         <input
           type="text"
+          name="education.Major"
           className="form-input w-full p-2 border border-gray-300 rounded-md"
           placeholder="Major"
-          value={majorValue}
-          onChange={(e) => handleChange(e, "text", `education[${index}].Major`)}
+          value={major}
+          onChange={handleInputChange(setMajor, "Major")}
         />
+
         <select
+          name="education.classOf"
           className="form-select w-full p-2 border border-gray-300 rounded-md"
-          value={classOfValue}
-          onChange={(e) =>
-            handleChange(e, "text", `education[${index}].ClassOf`)
-          }
+          value={classOf}
+          onChange={handleInputChange(setClassOf, "ClassOf")}
         >
-          {years.map((year, idx) => (
-            <option key={idx} value={year}>
+          {years.map((year) => (
+            <option key={year} value={year}>
               {year}
             </option>
           ))}
@@ -327,7 +354,7 @@ const ReferenceItem = React.memo(({ reference, handleDelete, index }) => {
         onClick={() => handleDelete(index)}
         className="bg-red-500 text-white px-2 ml-0 rounded-full hover:bg-red-700 transition-colors"
       >
-        Eliminate
+        Delete
       </button>
       <div className="flex items-center space-x-1">
         <h3 className={`${textSize} text-primary font-semibold`}>
@@ -351,8 +378,12 @@ export default function EditMode({
   userId,
   pendingChanges,
   setPendingChanges,
+  triggerUserDataRefresh,
 }) {
   const [markedForDeletion, setMarkedForDeletion] = useState([]);
+  const [saveStatus, setSaveStatus] = useState("idle");
+  const [saveMessage, setSaveMessage] = useState("");
+  const [isExpanded, setIsExpanded] = useState(true);
   const textSize = "text-base md:text-lg lg:text-xl xl:text-2xl";
   const markForDeletion = useCallback(
     (index) => {
@@ -365,6 +396,7 @@ export default function EditMode({
           [`delete_${identifier}`]: {
             type: "delete",
             value: referenceToDelete,
+            section: "Reference",
           },
         }));
       } else {
@@ -379,121 +411,221 @@ export default function EditMode({
     },
     [markForDeletion]
   );
-  const revertChange = (field) => {
-    if (field.startsWith("delete_")) {
-      const identifier = field.replace("delete_", "");
-      const referenceIndex = userData.references.findIndex(
-        (ref) => ref.email === identifier
-      );
-      if (referenceIndex !== -1) {
-        setMarkedForDeletion((current) =>
-          current.filter((index) => index !== referenceIndex)
+
+  const revertChange = useCallback(
+    (field) => {
+      if (
+        pendingChanges[field] &&
+        pendingChanges[field].type === "video" &&
+        pendingChanges[field].value.startsWith("blob:")
+      ) {
+        // Revoke the blob URL to free up resources
+        URL.revokeObjectURL(pendingChanges[field].value);
+      }
+      if (field.startsWith("delete_")) {
+        const identifier = field.replace("delete_", "");
+        const referenceIndex = userData.references.findIndex(
+          (ref) => ref.email === identifier
         );
-      }
-    }
-
-    setPendingChanges((currentChanges) => {
-      const updatedChanges = { ...currentChanges };
-      delete updatedChanges[field];
-      return updatedChanges;
-    });
-  };
-  const handleChange = useCallback(
-    (event, type, field, index) => {
-      let value;
-      const key = `${field}`;
-
-      if (type === "text") {
-        value = event.target.value;
-        if (pendingChanges[key] && pendingChanges[key].type === "video") {
-          URL.revokeObjectURL(pendingChanges[key].value);
+        if (referenceIndex !== -1) {
+          setMarkedForDeletion((current) =>
+            current.filter((index) => index !== referenceIndex)
+          );
         }
-      } else if (type === "video") {
-        value = event;
       }
-      console.log("Pending Changes", pendingChanges);
-      setPendingChanges((prev) => ({
-        ...prev,
-        [key]: { value, type },
+      setPendingChanges((currentChanges) => {
+        const updatedChanges = { ...currentChanges };
+        delete updatedChanges[field];
+        return updatedChanges;
+      });
+    },
+    [pendingChanges, setPendingChanges]
+  );
+  const handleChange = useCallback(
+    (event, type, field, section, index) => {
+      let newValue = event.target.value;
+
+      if (pendingChanges[field] && pendingChanges[field].type !== type) {
+        if (type === "video") {
+          newValue = event.target.value;
+        } else {
+          newValue = DOMPurify.sanitize(event.target.value);
+        }
+
+        // Revoke previous blob URL if switching away from a video
+        if (
+          pendingChanges[field].type === "video" &&
+          pendingChanges[field].value.startsWith("blob:")
+        ) {
+          URL.revokeObjectURL(pendingChanges[field].value);
+        }
+      }
+      setPendingChanges((prevChanges) => ({
+        ...prevChanges,
+        [field]: {
+          value: newValue,
+          type: type,
+          section: section,
+          index: index,
+        },
       }));
-      console.log("Pending Changes", pendingChanges);
     },
     [setPendingChanges]
   );
-
   const saveChanges = async () => {
-    const updatedReferences = userData.references.filter(
-      (ref, index) => !markedForDeletion.includes(index)
-    );
-
+    setSaveStatus("saving");
     try {
+      // Prepare deletion promises for marked references
       const deletionPromises = markedForDeletion.map(async (index) => {
         const refFields = userData.references[index];
         if (refFields) {
-          await deleteReference(userId, refFields);
-        } else {
-          console.error("Invalid reference fields:", refFields);
+          return deleteReference(userId, refFields);
         }
+        console.error("Invalid reference fields:", refFields);
       });
-      const updates = Object.entries(pendingChanges).map(
+      const educationChanges = Object.entries(pendingChanges).filter(
+        ([field]) => field.startsWith("education")
+      );
+      // Handle Education changes
+      for (const [field, change] of educationChanges) {
+        if (field.includes("education")) {
+          const { index, ...updateData } = change;
+          await updateEducationField(userId, field, index, updateData);
+        }
+      }
+      // Handle Job changes
+      const jobChanges = Object.entries(pendingChanges).filter(([field]) =>
+        field.startsWith("jobs")
+      );
+      for (const [field, change] of jobChanges) {
+        console.log(field, change);
+        if (field.includes("jobs")) {
+          const { index, ...updateData } = change;
+          await updateJobField(userId, field, index, updateData);
+        }
+      }
+      // Prepare update operations for pending changes
+      const updateOperations = Object.entries(pendingChanges).map(
         async ([field, { value, type }]) => {
-          const updateObject = {};
-          if (type === "text") {
-            updateObject[field] = value;
-          } else {
-            const deletePrevious = `Users/Seekers/${userData.displayName}/${field}/`;
-            await deleteFilesInFolder(deletePrevious);
-            const storeChange = `${deletePrevious}/${field}_${userData.displayName}`;
-            const newPath = await uploadFileToStorage(value, storeChange);
-            updateObject[field] = newPath;
+          if (type === "text" && field != "jobs" && field != "education") {
+            return { [field]: value };
           }
-          updateUserField(updateObject, userId);
+
+          const filename = `${field}_${userData.displayName}.mp4`;
+          const deletePrevious = `Users/Seekers/${userId}/${field}/`;
+          await deleteFilesInFolder(deletePrevious);
+          const storeChange = `${deletePrevious}${filename}`;
+
+          if (type === "video" || type === "image") {
+            const response = await fetch(value);
+            const blob = await response.blob();
+            const file = new File([blob], filename, { type: blob.type });
+            value = await uploadFileToStorage(file, storeChange);
+          }
+          return { [field]: value };
         }
       );
 
-      await Promise.all([...updates, ...deletionPromises]);
+      await Promise.all(deletionPromises);
+
+      const updates = await Promise.all(updateOperations);
+      for (const update of updates) {
+        await updateUserField(update, userId);
+      }
 
       console.log("All changes saved successfully.");
       setPendingChanges({});
+      triggerUserDataRefresh();
+      await new Promise((resolve) => setTimeout(resolve, 2000));
+      setSaveStatus("success");
+      setSaveMessage("Successfully Updated");
+      setTimeout(() => setSaveMessage(""), 3000);
+      setSaveStatus("idle");
     } catch (error) {
+      setSaveStatus("error");
+      setSaveMessage("An error occurred. Please try again.");
       console.error("Error saving changes:", error);
     }
   };
 
   return (
     <>
-      <button onClick={saveChanges}>Save changes</button>
-      <div className="pending-changes">
-        {Object.entries(pendingChanges).map(([key, change]) => {
-          const isDeletion = key.startsWith("delete_");
-          const isFileChange = change.type === "video" || "pictureURL";
-          const displayKey = isDeletion ? key.replace("delete_", "") : key;
-          let displayValue;
-          if (isDeletion) {
-            displayValue = "Marked for deletion - " + change.value.name;
-          } else if (isFileChange) {
-            displayValue = `File selected - ${change.value.name}`;
-          } else {
-            if (key.includes("education")) {
-              displayValue = `${key.split(".")[1]}: ${change.value}`;
-            } else {
-              displayValue = change.value;
-            }
-          }
+      <div
+        className={`fixed top-1/10 right-0 z-50 ${
+          isExpanded ? "" : "-mr-4"
+        } transition-margin duration-300 ease-in-out -mr-0`}
+      >
+        <div className="flex flex-col items-end">
+          <div className="bg-white border-4 border-secondary shadow-lg ">
+            <button
+              className="absolute bg-primary p-10 hover:bg-primary-dark text-white font-bold py-2 px-4 rounded mb-0 flex items-center justify-center"
+              onClick={() => setIsExpanded(!isExpanded)}
+            >
+              <FontAwesomeIcon
+                icon={isExpanded ? faChevronRight : faChevronLeft}
+              />
+            </button>
+            {isExpanded && (
+              <>
+                <h2 className="w-full text-right pl-12 pb-2 pt-1 pr-2 bg-secondary text-white font-bold ">
+                  Pending Changes
+                </h2>
+                <div className="px-5 pb-5">
+                  <div
+                    className="mt-2 overflow-auto"
+                    style={{ maxHeight: "50vh" }}
+                  >
+                    {Object.entries(pendingChanges).map(([key, change]) => {
+                      let displayValue;
+                      if (change.type === "delete") {
+                        displayValue = `Eliminating - ${change.value.name}`;
+                      } else if (change.type === "text") {
+                        displayValue = "Text Change";
+                      } else if (change.type === "video") {
+                        displayValue = "Video Upload";
+                      } else {
+                        displayValue = "Picture Upload";
+                      }
+                      return (
+                        <div
+                          key={key}
+                          className="flex justify-between items-center bg-gray-100 p-2 space-x-2 rounded mt-1"
+                        >
+                          <span className="text-sm font-medium">
+                            {change.section} section: {displayValue}
+                          </span>
+                          <button
+                            onClick={() => revertChange(key)}
+                            className="bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-2 rounded text-xs"
+                          >
+                            Revert
+                          </button>
+                        </div>
+                      );
+                    })}
+                  </div>
+                  <button
+                    onClick={saveChanges}
+                    disabled={saveStatus === "saving"}
+                    className="bg-secondary hover:bg-secondary-dark text-white font-bold py-2 px-4 rounded mt-4 w-full"
+                  >
+                    {saveStatus === "saving" ? "Updating..." : "Save changes"}
+                  </button>
 
-          return (
-            <div key={key} className="pending-change">
-              <span>
-                {displayKey}: {displayValue}
-              </span>
-              <button onClick={() => revertChange(key)}>X</button>
-            </div>
-          );
-        })}
+                  {saveMessage && (
+                    <div className="text-center font-medium mt-2">
+                      {saveMessage}
+                    </div>
+                  )}
+                </div>
+              </>
+            )}
+          </div>
+        </div>
       </div>
       {userData && (
         <>
-          <section className="flex flex-wrap justify-center pb-0">
+          <section className="flex flex-wrap justify-center pb-0 mt-3">
             <div className="w-full md:w-1/2 flex flex-col items-center">
               <h2
                 className={`${textSize} bg-primary text-white px-8 py-2 w-full text-center`}
@@ -506,7 +638,9 @@ export default function EditMode({
                 }
                 handleChange={handleChange}
                 field="introduction"
-                index="testseeker"
+                index={null}
+                section="Introduction"
+                pendingChanges={pendingChanges}
               />
             </div>
 
@@ -520,7 +654,9 @@ export default function EditMode({
                 videoData={pendingChanges["skills"]?.value || userData.skills}
                 handleChange={handleChange}
                 field="skills"
-                index="testseeker"
+                index={null}
+                section="Skills"
+                pendingChanges={pendingChanges}
               />
             </div>
           </section>
@@ -539,6 +675,8 @@ export default function EditMode({
                 handleChange={handleChange}
                 field="challenges"
                 index="testseeker"
+                section="Challenges"
+                pendingChanges={pendingChanges}
               />
             </div>
             <aside
@@ -592,6 +730,7 @@ export default function EditMode({
                     degreeTypeValue={degreeTypeValue}
                     majorValue={majorValue}
                     classOfValue={classOfValue}
+                    id={education.id}
                     handleChange={handleChange}
                   />
                 );
@@ -614,7 +753,7 @@ export default function EditMode({
                 return (
                   <JobItem
                     key={index}
-                    index={index}
+                    index={job.id}
                     job={{
                       ...job,
                       Job_Name: jobNameValue,

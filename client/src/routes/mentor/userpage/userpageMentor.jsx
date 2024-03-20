@@ -7,7 +7,7 @@ import "react-multi-carousel/lib/styles.css";
 import UserBanner from "../../../components/UserBanner/UserBanner.jsx";
 import UserMode from "./userMode/userMode.jsx";
 import EditMode from "./editMode/editMode.jsx";
-import { useLocation } from 'react-router-dom';
+import { useLocation } from "react-router-dom";
 
 export default function UserpageMentor() {
   const location = useLocation();
@@ -16,7 +16,9 @@ export default function UserpageMentor() {
   const [editMode, setEditMode] = useState(false);
   const [userData, setUserData] = useState(null);
   const [pendingChanges, setPendingChanges] = useState({});
-  const mentorId = location.state?.name;
+  const [isLoading, setIsLoading] = useState(true);
+  // const mentorId = location.state?.name;
+  const mentorId = "J8tVexeC8shTEFTDBQfL5evs4oy2";
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -24,6 +26,10 @@ export default function UserpageMentor() {
         setUserData(fetchedUserData);
       } catch (error) {
         console.error("Error fetching user by ID:", error.message);
+      } finally {
+        setTimeout(() => {
+          setIsLoading(false);
+        }, 750);
       }
     };
 
@@ -82,6 +88,7 @@ export default function UserpageMentor() {
           className="men-navbar"
           userType={"mentor"}
           iconSize={iconSize}
+          userId={mentorId}
         />
       </div>
       {userData && (
@@ -94,6 +101,7 @@ export default function UserpageMentor() {
           name={userData.displayName}
           handlePendingChange={handlePendingChange}
           pendingChanges={pendingChanges}
+          isLoading={isLoading}
         />
       )}
       {editMode ? (

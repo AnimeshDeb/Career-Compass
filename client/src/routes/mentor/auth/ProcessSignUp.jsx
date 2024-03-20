@@ -5,7 +5,7 @@ import { useAuth } from "../../../Contexts/MentorAuthContext";
 import NavbarWhite from "../../../components/navbar/version2/navbar";
 import Lottie from "lottie-react";
 import animationAI from "../../../images/animatedAI.json";
-import DropFile from "../../../components/DropFile/DropFile";
+import DropFile from "../../../components/DropFile/DropFileAuth";
 import { storage, db } from "../../../firebase";
 import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 import { doc, setDoc } from "firebase/firestore";
@@ -43,6 +43,7 @@ export default function MentorSignupProcess() {
   const [profilePicture, setProfilePicture] = useState([]);
   const [introVideo, setIntroVideo] = useState([]);
   const [profileGallery, setProfileGallery] = useState([]);
+  const [userId, setId] = useState();
   const { signup } = useAuth();
   const [error, setError] = useState("");
   const navigate = useNavigate();
@@ -62,8 +63,7 @@ export default function MentorSignupProcess() {
         fullNameRef.current.value
       );
 
-      const userId = userCredential.user.uid;
-
+      setId(userCredential.user.uid);
       // Upload files to Firebase Storage
       const storageRef = ref(storage);
 
@@ -72,7 +72,7 @@ export default function MentorSignupProcess() {
       if (profilePicture.length > 0) {
         const profilePictureRef = ref(
           storage,
-          `Mentors/${userId}/profilePicture.jpg`
+          `Users/Mentors/${userId}/profilePicture.jpg`
         );
         const uploadTask = uploadBytesResumable(
           profilePictureRef,
@@ -107,7 +107,10 @@ export default function MentorSignupProcess() {
       // Upload intro video
       let introVideoUrl = "";
       if (introVideo.length > 0) {
-        const introVideoRef = ref(storage, `Mentors/${userId}/introVideo.mp4`);
+        const introVideoRef = ref(
+          storage,
+          `Users/Mentors/${userId}/introVideo.mp4`
+        );
         const uploadTaskVideo = uploadBytesResumable(
           introVideoRef,
           introVideo[0]
@@ -145,7 +148,7 @@ export default function MentorSignupProcess() {
           profileGallery.map(async (file, index) => {
             const galleryRef = ref(
               storage,
-              `Mentors/${userId}/gallery/${file.name}-${index}`
+              `Users/Mentors/${userId}/gallery/${file.name}-${index}`
             );
             const uploadTaskGallery = uploadBytesResumable(galleryRef, file);
 
@@ -309,6 +312,8 @@ export default function MentorSignupProcess() {
               onFileChange={setProfilePicture}
               maxFiles={1}
               acceptedFileTypes={acceptedProfilePictureTypes}
+              userType={"Mentor"}
+              userId={userId}
             />
           </div>
           <div className="drop-group">
@@ -321,6 +326,8 @@ export default function MentorSignupProcess() {
               onFileChange={setProfileGallery}
               maxFiles={10}
               acceptedFileTypes={acceptedProfileGalleryTypes}
+              userType={"Mentor"}
+              userId={userId}
             />
           </div>
           <div className="drop-group">
@@ -331,6 +338,8 @@ export default function MentorSignupProcess() {
               onFileChange={setIntroVideo}
               maxFiles={1}
               acceptedFileTypes={acceptedIntroVideoTypes}
+              userType={"Mentor"}
+              userId={userId}
             />
           </div>
           {/* <button

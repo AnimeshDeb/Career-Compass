@@ -9,7 +9,7 @@ import Audio_Btn from "../../../../components/Buttons/audio__btn/audio_btn";
 import Lottie from "lottie-react";
 import animationAI from "../../../../images/animatedAI.json";
 import animationLoading from "../../../../images/Loading.json";
-import DropFile from "../../../../components/DropFile/DropFile";
+import DropFile from "../../../../components/DropFile/DropFileAuth";
 import DOMPurify from "dompurify";
 import EditorTxt from "../../../../components/texteditor/Editor";
 
@@ -108,7 +108,7 @@ function SeekerIntro({ handleNextStep, uid }) {
             we'll help turn it into writing.
           </p>
           <div className="absolute top-0 -left-2 w-10 h-0 border-l-[10px] border-l-transparent border-b-[10px] border-b-primary"></div>
-          <div className="flex justify-end mt-0">
+          <div className="flex z-0 justify-end mt-0">
             <Audio_Btn audioSrc={introAudio} />
           </div>
         </div>

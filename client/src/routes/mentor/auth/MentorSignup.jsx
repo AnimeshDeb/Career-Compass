@@ -5,7 +5,7 @@ import { useAuth } from "../../../Contexts/MentorAuthContext";
 import Navbar from "../../../components/navbar/version1/navbar";
 import Lottie from "lottie-react";
 import animationData from "../assets/Animation - 1707811919582.json";
-import DropFile from "../../../components/DropFile/DropFile";
+import DropFile from "../../../components/DropFile/DropFileAuth";
 import { storage, db } from "../../../firebase";
 import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 import { doc, setDoc } from "firebase/firestore";
@@ -444,6 +444,7 @@ function MentorSignup1() {
               onFileChange={setProfilePicture}
               maxFiles={1}
               acceptedFileTypes={acceptedProfilePictureTypes}
+              userType={"Mentor"}
             />
           </div>
           <div className="drop-group">
@@ -456,6 +457,7 @@ function MentorSignup1() {
               onFileChange={setProfileGallery}
               maxFiles={10}
               acceptedFileTypes={acceptedProfileGalleryTypes}
+              userType={"Mentor"}
             />
           </div>
           <div className="drop-group">
@@ -466,6 +468,7 @@ function MentorSignup1() {
               onFileChange={setIntroVideo}
               maxFiles={1}
               acceptedFileTypes={acceptedIntroVideoTypes}
+              userType={"Mentor"}
             />
           </div>
           <button

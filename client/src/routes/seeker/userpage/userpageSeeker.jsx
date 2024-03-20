@@ -12,12 +12,18 @@ export default function UserpageSeeker() {
   const [editMode, setEditMode] = useState(false);
   const [userData, setUserData] = useState(null);
   const [pendingChanges, setPendingChanges] = useState({});
+  const [isLoading, setIsLoading] = useState(true);
   const location = useLocation();
   const name = location.state?.name;
-  const handlePendingChange = (field, value, type) => {
+  const [refreshUserData, setRefreshUserData] = useState(false);
+
+  const triggerUserDataRefresh = () => {
+    setRefreshUserData((prev) => !prev);
+  };
+  const handlePendingChange = (field, value, type, section) => {
     setPendingChanges((prev) => ({
       ...prev,
-      [field]: { value, type },
+      [field]: { value, type, section },
     }));
   };
   //Edit Mode
@@ -47,24 +53,28 @@ export default function UserpageSeeker() {
     }
   }, [windowWidth]);
 
-  //Get User Data
   useEffect(() => {
     const fetchData = async () => {
       try {
+        setIsLoading(true);
         const userId = name;
         const fetchedUserData = await getSeekerById(userId);
         setUserData(fetchedUserData);
       } catch (error) {
         console.error("Error fetching user by ID:", error.message);
+      } finally {
+        setTimeout(() => {
+          setIsLoading(false);
+        }, 750);
       }
     };
 
     fetchData();
-  }, []);
+  }, [name, refreshUserData]);
 
   return (
     <div className="bg-primary-dark">
-      <div className="w-full bg-white max-w-[100%] mx-auto lg:max-w-[80%] shadow-md">
+      <div className="w-full bg-white max-w-[100%] mx-auto lg:max-w-[65%] shadow-md">
         <Navbar
           className="nav"
           userId={name}
@@ -81,6 +91,7 @@ export default function UserpageSeeker() {
             editMode={editMode}
             handlePendingChange={handlePendingChange}
             pendingChanges={pendingChanges}
+            isLoading={isLoading}
           />
         )}
         {editMode ? (
@@ -92,12 +103,17 @@ export default function UserpageSeeker() {
               userId={name}
               iconSize={iconSize}
               userData={userData}
+              triggerUserDataRefresh={triggerUserDataRefresh}
             />
           </>
         ) : (
           // Normal page
           <>
-            <UserMode iconSize={iconSize} userData={userData} />
+            <UserMode
+              iconSize={iconSize}
+              userData={userData}
+              isLoading={isLoading}
+            />
           </>
         )}
 

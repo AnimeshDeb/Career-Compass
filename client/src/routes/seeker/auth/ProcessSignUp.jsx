@@ -77,10 +77,10 @@ function ParentComponent() {
   };
   return (
     <>
-      <div className="navbar sticky top-0 z-50 p-0 bg-white">
+      <div className="navbar sticky top-0 z-1000 p-0 bg-white">
         <NavbarWhite />
       </div>
-      <div className="w-full bg-gray-200 h-4 overflow-hidden">
+      <div className="w-full bg-gray-200 h-3 overflow-hidden">
         <div className="progress-bar-fill bg-secondary h-4"></div>
       </div>
       {showWelcome && (

@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { getJobListings } from "../../functions/jobFunctions";
 import Navbar from "../../components/navbar/version1/navbar";
 import { useLocation } from "react-router-dom";
+import PropTypes from "prop-types";
 // Array of all 50 U.S. states
 const states = [
   "Alabama",
@@ -58,7 +59,6 @@ const states = [
 
 const JobListing = ({ job, onJobClick }) => {
   const location = useLocation();
-  const uid = location.state?.uid;
   const userType = location.state?.userType;
   const lowerCaseUserType = userType?.toLowerCase();
   console.log("User type in JobListing is:", userType);
@@ -237,3 +237,13 @@ const JobList = () => {
 };
 
 export default JobList;
+JobListing.propTypes = {
+  job: PropTypes.shape({
+    id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
+    Description: PropTypes.string,
+    Location: PropTypes.string,
+    Availability: PropTypes.string,
+    // etc...
+  }).isRequired,
+  onJobClick: PropTypes.func.isRequired,
+};
