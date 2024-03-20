@@ -19,8 +19,7 @@ import MentorSignup from "./src/routes/mentor/auth/MentorSignup.jsx";
 import { MentorAuthProvider } from "./src/Contexts/MentorAuthContext.jsx";
 import SuccessfulTesting from "./src/routes/SuccessfulTesting.jsx";
 import JobList from "./src/routes/JobList/JobList.jsx";
-import PrivateRoute from "./src/Contexts/PrivateRoute.jsx";
-
+import SearchBar from "./src/routes/userSearch/SearchBar.jsx";
 export const router = createBrowserRouter([
   {
     path: "/parent",
@@ -30,7 +29,14 @@ export const router = createBrowserRouter([
       </SeekerAuthProvider>
     ),
   },
-  
+  {
+    path: "/searchUser",
+    element: (
+      <SeekerAuthProvider>
+        <SearchBar/>
+      </SeekerAuthProvider>
+    )
+  },
   {
     path: "/",
     element: (
