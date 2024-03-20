@@ -90,6 +90,7 @@ const stateOptions = [
 ];
 const textSize = "text-base md:text-lg lg:text-xl xl:text-2xl";
 const JobItem = React.memo(({ job, index, handleChange }) => {
+  const [jobName, setJobName] = useState(job.Job_Name);
   const [location, setLocation] = useState(() => {
     const parts = job.Job_Location.split(", ");
     return {
@@ -98,27 +99,53 @@ const JobItem = React.memo(({ job, index, handleChange }) => {
       country: parts[2] || "United States",
     };
   });
-
+  const handleJobNameChange = (e) => {
+    // Extract the new value from the event.
+    const newValue = e.target.value;
+    setJobName(newValue);
+    // Call handleChange with the updated value.
+    handleChange(
+      {
+        target: {
+          value: newValue,
+        },
+      },
+      "text",
+      `jobs[${index}].Job_Name`,
+      "Job name",
+      index
+    );
+  };
   const handleCityChange = (e) => {
     const newLocation = { ...location, city: e.target.value };
     setLocation(newLocation);
-    handleChange(e, "text", `jobs.Job_Location`, "Job location", index);
+    handleChange(
+      {
+        target: {
+          value: `${newLocation.city}, ${location.state}, ${location.country}`,
+        },
+      },
+      "text",
+      `jobs[${index}].Job_Location`, // Ensure the index is used to correctly target the job
+      "Job location",
+      index
+    );
   };
 
   const handleStateChange = (selectedOption) => {
     const newLocation = {
       ...location,
-      state: selectedOption ? selectedOption.value : "",
+      state: selectedOption ? selectedOption.value : location.state, // Preserve the current state if selection is cleared
     };
     setLocation(newLocation);
     handleChange(
       {
         target: {
-          value: `${newLocation.city}, ${newLocation.state}, ${newLocation.country}`,
+          value: `${location.city}, ${newLocation.state}, ${location.country}`,
         },
       },
       "text",
-      `jobs.Job_Location`,
+      `jobs[${index}].Job_Location`,
       "Job location",
       index
     );
@@ -130,10 +157,8 @@ const JobItem = React.memo(({ job, index, handleChange }) => {
         type="text"
         className="form-input p-2 border border-gray-300 rounded-md"
         placeholder="Job Name"
-        value={job.Job_Name}
-        onChange={(e) =>
-          handleChange(e, "text", `jobs.Job_Name`, "Job name", null)
-        }
+        value={jobName}
+        onChange={handleJobNameChange}
       />
       <input
         type="text"
@@ -475,7 +500,7 @@ export default function EditMode({
   const saveChanges = async () => {
     setSaveStatus("saving");
     try {
-      // Prepare deletion promises for marked references
+      // Handle deletion of references
       const deletionPromises = markedForDeletion.map(async (index) => {
         const refFields = userData.references[index];
         if (refFields) {
@@ -483,34 +508,40 @@ export default function EditMode({
         }
         console.error("Invalid reference fields:", refFields);
       });
+
+      // Handle specific changes for "education" and "jobs" before general updates
       const educationChanges = Object.entries(pendingChanges).filter(
         ([field]) => field.startsWith("education")
       );
-      // Handle Education changes
-      for (const [field, change] of educationChanges) {
-        if (field.includes("education")) {
-          const { index, ...updateData } = change;
-          await updateEducationField(userId, field, index, updateData);
-        }
-      }
-      // Handle Job changes
       const jobChanges = Object.entries(pendingChanges).filter(([field]) =>
         field.startsWith("jobs")
       );
-      for (const [field, change] of jobChanges) {
-        console.log(field, change);
-        if (field.includes("jobs")) {
-          const { index, ...updateData } = change;
-          await updateJobField(userId, field, index, updateData);
-        }
+
+      // Process education changes
+      for (const [field, change] of educationChanges) {
+        const { index, ...updateData } = change;
+        await updateEducationField(userId, field, index, updateData);
       }
-      // Prepare update operations for pending changes
-      const updateOperations = Object.entries(pendingChanges).map(
+
+      // Process job changes
+      for (const [field, change] of jobChanges) {
+        const { index, ...updateData } = change;
+        await updateJobField(userId, field, index, updateData);
+      }
+
+      // Filter out "jobs" and "education" changes from general updates
+      const generalChanges = Object.entries(pendingChanges).filter(
+        ([field]) => !field.startsWith("jobs") && !field.startsWith("education")
+      );
+
+      // Prepare general update operations
+      const updateOperations = generalChanges.map(
         async ([field, { value, type }]) => {
-          if (type === "text" && field != "jobs" && field != "education") {
+          if (type === "text") {
             return { [field]: value };
           }
 
+          // Process file uploads for video and image types
           const filename = `${field}_${userData.displayName}.mp4`;
           const deletePrevious = `Users/Seekers/${userId}/${field}/`;
           await deleteFilesInFolder(deletePrevious);
@@ -526,8 +557,9 @@ export default function EditMode({
         }
       );
 
-      await Promise.all(deletionPromises);
+      await Promise.all([...deletionPromises, ...updateOperations]);
 
+      // Apply all updates
       const updates = await Promise.all(updateOperations);
       for (const update of updates) {
         await updateUserField(update, userId);

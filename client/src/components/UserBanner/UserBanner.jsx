@@ -16,8 +16,7 @@ export default function UserBanner({
   isLoading,
 }) {
   const handleFileChange = (file, field, section) => {
-    const fileUrl = URL.createObjectURL(file);
-    handlePendingChange(field, fileUrl, "image", section, null);
+    handlePendingChange(field, file, "image", section, null);
   };
 
   const placeholderBanner = "/placeholderBanner.jpg";
@@ -53,16 +52,9 @@ export default function UserBanner({
           )}
         </div>
         <div className="absolute bottom-0 left-1/2 transform -translate-x-1/2 -translate-y-2 flex flex-col items-center">
-          <div
-            className="rounded-full overflow-hidden border-4 border-primary bg-white w-1/5 h-1/5 lg:h-1/4 lg:w-1/4 flex justify-center items-center"
-            style={{ width: iconSize, height: iconSize }}
-          >
+          <div className="rounded-full overflow-hidden border-4 border-primary bg-white flex justify-center items-center w-20 h-20 sm:w-24 sm:h-24 md:w-28 md:h-28 lg:w-32 lg:h-32 xl:w-36 xl:h-36">
             {isLoading ? (
-              <div className="-my-1 mx-40">
-                <SkeletonTheme baseColor="#e0e0e0" highlightColor="#f5f5f5">
-                  <Skeleton height={100} width={100} />
-                </SkeletonTheme>
-              </div>
+              <Skeleton circle={true} width="100%" height="100%" />
             ) : (
               <img
                 src={
@@ -70,7 +62,7 @@ export default function UserBanner({
                     ? renderUrlImage("image", picture, "pictureURL")
                     : picture || placeholderPFP
                 }
-                className="object-cover object-center"
+                className="w-full h-full object-cover"
                 alt="User"
               />
             )}
