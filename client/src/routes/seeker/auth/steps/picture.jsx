@@ -5,8 +5,10 @@ import { storage } from "../../../../firebase";
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { v4 } from "uuid";
 import PropTypes from "prop-types";
-import Lottie from 'lottie-react';
-import animationData from '../../../../images/animatedAI.json';
+import Lottie from "lottie-react";
+import animationData from "../../../../images/animatedAI.json";
+import Audio_Btn from "../../../../components/Buttons/audio__btn/audio_btn";
+
 function SeekerProfilepic({ handlePrevStep, handleNextStep, name }) {
   const [images, setImages] = useState([]);
   const [isDragging, setIsDragging] = useState(false);
@@ -14,7 +16,9 @@ function SeekerProfilepic({ handlePrevStep, handleNextStep, name }) {
   // const name=location.state?.fullName;
   const [imageUpload, setImageUpload] = useState(null);
   const usersCollection = collection(db, "Seekers");
-  const docRef = doc(usersCollection, name);
+  const docRef = name ? doc(db, "Seekers", name) : null;
+  const doneAudio =
+    "https://firebasestorage.googleapis.com/v0/b/career-compass-77175.appspot.com/o/static%2Faudio%2F2024-03-15%2003-26-31.mp3?alt=media&token=e203dc02-265f-478a-9a73-e30bf81618e6";
   async function handleSubmit(e) {
     e.preventDefault();
     try {
@@ -73,6 +77,14 @@ function SeekerProfilepic({ handlePrevStep, handleNextStep, name }) {
     }
   }
 
+  if (!name) {
+    return (
+      <div className="text-center mt-8">
+        <p>User name not available. Please ensure you are logged in.</p>
+      </div>
+    );
+  }
+
   function uploadImage() {
     if (imageUpload === null) return;
     const imageRef = ref(
@@ -98,26 +110,34 @@ function SeekerProfilepic({ handlePrevStep, handleNextStep, name }) {
   }
   return (
     <>
-            <div className="bg-primary text-white flex items-center pl-10">
+      <div className="bg-primary text-white flex items-center pl-10">
         <h1 className="text-xl md:text-2xl lg:text-4xl font-bold pt-4 p-2 flex-grow">
           Picture
         </h1>
       </div>
       <div className="maybolin-talk flex flex-col md:flex-row items-center justify-center m-4 mx-auto max-w-4xl">
         <div className="flex-1 flex-shrink-0 max-w-60 w-1/2 mr-0 ml-5 sm:p-0 sm:m-0">
-          <Lottie animationData={animationData} className="w-48 md:w-60 lg:w-full max-w-sm sm:p-0 sm:m-0" />
+          <Lottie
+            animationData={animationData}
+            className="w-48 md:w-60 lg:w-full max-w-sm sm:p-0 sm:m-0"
+          />
         </div>
         <div className="flex-1 bg-blue-100 px-6 py-4 mt-4 shadow-lg relative text-left mx-5 rounded-tr-lg rounded-bl-lg rounded-br-lg ">
           <p className="text-lg md:text-xl lg:text-2xl">
-            Almost done! <span className="text-secondary">Add </span> a picture with your face below.
+            Almost done! <span className="text-secondary">Add </span> a picture
+            with your face below.
           </p>
+          <div className="absolute top-0 -left-2 w-10 h-0 border-l-[10px] border-l-transparent border-b-[10px] border-b-primary"></div>
+          <div className="flex justify-end mt-2">
+            <Audio_Btn audioSrc={doneAudio} />
+          </div>
           <div className="absolute top-0 -left-2 w-10 h-0 border-l-[10px] border-l-transparent border-b-[10px] border-b-primary"></div>
         </div>
       </div>
       <div className="max-w-md mx-auto bg-white p-6 rounded-lg">
         <form onSubmit={handleSubmit}>
           <div className="relative mx-auto w-36 h-36">
-            <div 
+            <div
               className={`absolute inset-0 border-2 border-dashed rounded-full flex items-center justify-center ${
                 isDragging ? "border-primary" : "border-gray-300"
               } hover:border-primary bg-secondary transition duration-300 ease-in-out`}
@@ -128,7 +148,7 @@ function SeekerProfilepic({ handlePrevStep, handleNextStep, name }) {
             >
               {isDragging ? (
                 <span className="text-primary">Drop image here</span>
-              ) : images.length === 0 ? ( // Only show instruction if no image is selected
+              ) : images.length === 0 ? (
                 <span className="text-white text-center">
                   Click or drag & drop to upload
                 </span>

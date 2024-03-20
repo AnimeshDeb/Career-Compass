@@ -98,7 +98,7 @@ export function AuthProvider({ children }) {
 
     return unsubscribe;
   }, []);
-  //We list all the functions in addition to the reference to the current user, so that they are accessible properly
+  // We list all the functions in addition to the reference to the current user, so that they are accessible properly
   // in the other pages/ files.
   const value = {
     currentUser,

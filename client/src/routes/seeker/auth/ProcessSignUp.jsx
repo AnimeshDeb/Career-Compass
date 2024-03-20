@@ -7,7 +7,6 @@ import SeekerEducation from "./steps/education";
 import SeekerJobs from "./steps/jobs";
 import SeekerProfilepic from "./steps/picture";
 import { useNavigate } from "react-router-dom";
-import "../../../styling/UploadImages.css";
 import NavbarWhite from "../../../components/navbar/version2/navbar";
 import anime from "animejs";
 
@@ -28,15 +27,15 @@ function ParentComponent() {
   ];
 
   useEffect(() => {
-  const targetWidth = ((step / steps.length) * 100).toFixed(0) + "%";
+    const targetWidth = ((step / steps.length) * 100).toFixed(0) + "%";
 
-  anime({
-    targets: ".progress-bar-fill",
-    width: targetWidth,
-    easing: "easeInOutQuad",
-    duration: 1000, 
-  });
-}, [step]); 
+    anime({
+      targets: ".progress-bar-fill",
+      width: targetWidth,
+      easing: "easeInOutQuad",
+      duration: 1000,
+    });
+  }, [step]);
 
   useEffect(() => {
     positionWelcomeContainer();
@@ -67,7 +66,8 @@ function ParentComponent() {
     if (step < 5) {
       setStep(step + 1);
     } else {
-      navigate("/user", { state: { name: uid } });
+      navigate("/testsuccess");
+      // navigate("/user", { state: { name: uid } });
     }
   };
   const handlePrevStep = () => {
@@ -107,7 +107,7 @@ function ParentComponent() {
       {step === 1 && (
         <SeekerSkills
           handleNextStep={handleNextStep}
-          name={uid}
+          uid={uid}
           handlePrevStep={handlePrevStep}
         />
       )}

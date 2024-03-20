@@ -14,10 +14,13 @@ import SeekerSignup from "./src/routes/seeker/auth/SeekerSignup.jsx";
 import SeekerUser from "./src/routes/seeker/auth/steps/SeekerUser.jsx";
 import SeekerUpdateProfile from "./src/routes/seeker/auth/steps/SeekerUpdateProfile.jsx";
 import ParentComponent from "./src/routes/seeker/auth/ProcessSignUp.jsx";
+import MentorSignupProcess from "./src/routes/mentor/auth/ProcessSignUp.jsx";
 import MentorSignup from "./src/routes/mentor/auth/MentorSignup.jsx";
 import { MentorAuthProvider } from "./src/Contexts/MentorAuthContext.jsx";
-
+import SuccessfulTesting from "./src/routes/SuccessfulTesting.jsx";
 import JobList from "./src/routes/JobList/JobList.jsx";
+import PrivateRoute from "./src/Contexts/PrivateRoute.jsx";
+
 export const router = createBrowserRouter([
   {
     path: "/parent",
@@ -33,7 +36,7 @@ export const router = createBrowserRouter([
     element: (
       <AuthProvider>
         <SeekerAuthProvider>
-        <Onboard />
+          <Onboard />
         </SeekerAuthProvider>
       </AuthProvider>
     ),
@@ -71,6 +74,14 @@ export const router = createBrowserRouter([
     ),
   },
   {
+    path: "/mentorprocess",
+    element: (
+      <MentorAuthProvider>
+        <MentorSignupProcess />
+      </MentorAuthProvider>
+    ),
+  },
+  {
     path: "/mentor/:mentorId",
     element: <UserpageMentor />,
   },
@@ -96,9 +107,15 @@ export const router = createBrowserRouter([
     ),
   },
   {
+    path: "Seeker/Joblist",
+    element: <JobList />,
+  },
+  
+  {
     path: "/Joblist",
     element: <JobList />,
   },
+
   {
     path: "/SeekerForgotPassword",
     element: (
@@ -107,9 +124,64 @@ export const router = createBrowserRouter([
       </SeekerAuthProvider>
     ),
   },
-  { path: "/searchUsers", element: <SearchUser /> },
-  { path: "/user", element: <UserpageSeeker /> },
-  { path: "/mentor", element: <UserpageMentor /> },
-  { path: "/company", element: <UserpageCompany /> },
-  { path: "/myjobs", element: <JobsApplied /> },
+  {
+    path: "/searchUsers",
+    element: (
+      <AuthProvider>
+        <SeekerAuthProvider>
+          <SearchUser />
+        </SeekerAuthProvider>
+      </AuthProvider>
+    ),
+  },
+  {
+    path: "/user",
+    element: (
+      <AuthProvider>
+        <SeekerAuthProvider>
+          <UserpageSeeker />
+        </SeekerAuthProvider>
+      </AuthProvider>
+    ),
+  },
+  {
+    path: "/mentor",
+    element: (
+      <AuthProvider>
+        <SeekerAuthProvider>
+          <UserpageMentor />{" "}
+        </SeekerAuthProvider>
+      </AuthProvider>
+    ),
+  },
+  {
+    path: "/company",
+    element: (
+      <AuthProvider>
+        <SeekerAuthProvider>
+          <UserpageCompany />{" "}
+        </SeekerAuthProvider>
+      </AuthProvider>
+    ),
+  },
+  {
+    path: "/myjobs",
+    element: (
+      <AuthProvider>
+        <SeekerAuthProvider>
+          <JobsApplied />{" "}
+        </SeekerAuthProvider>
+      </AuthProvider>
+    ),
+  },
+  {
+    path: "/testsuccess",
+    element: (
+      <AuthProvider>
+        <SeekerAuthProvider>
+          <SuccessfulTesting />
+        </SeekerAuthProvider>
+      </AuthProvider>
+    ),
+  },
 ]);

@@ -2,13 +2,14 @@ import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useRef } from "react";
 import { useAuth } from "../../../Contexts/MentorAuthContext";
-import Navbar from "../../../components/navbar/version1/navbar";
+import NavbarWhite from "../../../components/navbar/version2/navbar";
 import Lottie from "lottie-react";
-import animationData from "../assets/Animation - 1707811919582.json";
+import animationAI from "../../../images/animatedAI.json";
 import DropFile from "../../../components/DropFile/DropFile";
 import { storage, db } from "../../../firebase";
 import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 import { doc, setDoc } from "firebase/firestore";
+import Audio_Btn from "../../../components/Buttons/audio__btn/audio_btn";
 const acceptedProfilePictureTypes = {
   "image/jpeg": [],
   "image/png": [],
@@ -21,124 +22,15 @@ const acceptedProfileGalleryTypes = {
   "image/gif": [],
 };
 
+const maybolinAudio =
+  "https://firebasestorage.googleapis.com/v0/b/career-compass-77175.appspot.com/o/static%2Faudio%2F2024-03-15%2005-27-11.mp3?alt=media&token=a05792ea-a246-42a0-9f6b-335e52bc9e28";
+
 const acceptedIntroVideoTypes = {
   "video/mp4": [],
   "video/webm": [],
   "video/ogg": [],
 };
-
-function MentorSignup() {
-  const emailRef = useRef();
-  const passwordRef = useRef();
-  const passwordConfirmRef = useRef();
-  const fullNameRef = useRef();
-  const { signup } = useAuth();
-  const [error, setError] = useState("");
-  const navigate = useNavigate();
-  const [loading, setLoading] = useState(false);
-
-  async function handleSubmit(e) {
-    e.preventDefault();
-    if (passwordRef.current.value !== passwordConfirmRef.current.value) {
-      return setError("Passwords do not match");
-    }
-    try {
-      setError("");
-      setLoading(true);
-      const userCredential = await signup(
-        emailRef.current.value,
-        passwordRef.current.value,
-        fullNameRef.current.value
-      );
-      navigate("/mentorprocess", {
-        state: {
-          uid: userCredential.user.uid,
-          username: fullNameRef.current.value,
-        },
-      });
-    } catch (error) {
-      setError(error.message);
-    }
-    setLoading(false);
-  }
-
-  return (
-    <>
-      <Navbar />
-      <div className="max-w-md mx-auto mt-10 bg-white p-8 border border-gray-200 rounded-lg shadow-md">
-        <h2 className="text-4xl text-primary font-bold text-center mb-4">
-          Mentor Sign Up
-        </h2>
-        {error && (
-          <div className="bg-red-500 text-white p-3 rounded mb-4">{error}</div>
-        )}
-        <form onSubmit={handleSubmit} className="space-y-4">
-          <div>
-            <label className="block text-sm font-bold mb-2" htmlFor="fullname">
-              Full Name
-            </label>
-            <input
-              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-              type="text"
-              ref={fullNameRef}
-              required
-            />
-          </div>
-          <div>
-            <label className="block text-sm font-bold mb-2" htmlFor="email">
-              Email
-            </label>
-            <input
-              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-              type="email"
-              ref={emailRef}
-              required
-            />
-          </div>
-          <div>
-            <label className="block text-sm font-bold mb-2" htmlFor="password">
-              Password
-            </label>
-            <input
-              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-              type="password"
-              ref={passwordRef}
-              required
-            />
-          </div>
-          <div>
-            <label
-              className="block text-sm font-bold mb-2"
-              htmlFor="password-confirm"
-            >
-              Password Confirmation
-            </label>
-            <input
-              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-              type="password"
-              ref={passwordConfirmRef}
-              required
-            />
-          </div>
-          <button
-            disabled={loading}
-            className="w-full bg-primary hover:bg-primary-dark text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
-            type="submit"
-          >
-            Sign Up
-          </button>
-        </form>
-        <div className="text-center mt-4">
-          Already have an account?{" "}
-          <Link to="/" className="text-primary hover:text-blue-800">
-            Log In
-          </Link>
-        </div>
-      </div>
-    </>
-  );
-}
-function MentorSignup1() {
+export default function MentorSignupProcess() {
   const emailRef = useRef();
   const passwordRef = useRef();
   const passwordConfirmRef = useRef();
@@ -155,7 +47,7 @@ function MentorSignup1() {
   const [error, setError] = useState("");
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
-
+  const audio = "";
   async function handleSubmit(e) {
     e.preventDefault();
     if (passwordRef.current.value !== passwordConfirmRef.current.value) {
@@ -310,70 +202,43 @@ function MentorSignup1() {
 
   return (
     <>
-      <Navbar userType="None" />
+      <NavbarWhite userType="None" />
+      <div className="bg-secondary mb-0 text-white flex items-center pl-10">
+        <h1 className="mb-0 text-xl md:text-2xl lg:text-4xl font-bold pt-4 p-2 flex-grow">
+          Sign Up Form
+        </h1>
+      </div>
+      <div className="maybolin-talk flex flex-col md:flex-row items-center justify-center m-4 mx-auto max-w-4xl">
+        <div className="flex-1 flex-shrink-0 max-w-60 w-1/2 mr-0 ml-5 sm:p-0 sm:m-0">
+          <Lottie
+            animationData={animationAI}
+            className="w-48 md:w-60 lg:w-full max-w-sm sm:p-0 sm:m-0"
+          />
+        </div>
+        <div className="flex-1 bg-blue-100 px-6 py-4 mt-4 shadow-lg relative text-left mx-5 rounded-tr-lg rounded-bl-lg rounded-br-lg ">
+          <p className="text-lg md:text-xl lg:text-2xl">
+            A pleasure to meet you!{" "}
+            <span className="text-primary font-semibold">
+              My name is Maybolin.
+            </span>{" "}
+            You can fill the form below to{" "}
+            <span className="text-secondary font-semibold">
+              finish your profile
+            </span>{" "}
+            and start mentoring.
+          </p>
+          <div className="absolute top-0 -left-2 w-10 h-0 border-l-[10px] border-l-transparent border-b-[10px] border-b-secondary"></div>
+          <div className="flex justify-end mt-0">
+            <Audio_Btn audioSrc={maybolinAudio} />
+          </div>
+        </div>
+      </div>
       <div className="max-w-lg mx-auto mt-10 bg-white p-8">
-        <h2 className="text-4xl text-secondary font-bold text-center mb-4">
-          Sign Up
-        </h2>
         {error && (
           <div className="bg-red-500 text-white p-3 rounded mb-4">{error}</div>
         )}
-        <div className="flex justify-center mb-8">
-          <Lottie
-            loop={false}
-            animationData={animationData}
-            className="animation"
-            style={{ width: "250px", height: "250px" }}
-          />
-        </div>
+
         <form onSubmit={handleSubmit} className="space-y-4">
-          <div>
-            <label className="block text-sm font-bold mb-2" htmlFor="fullname">
-              Full Name
-            </label>
-            <input
-              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-              type="text"
-              ref={fullNameRef}
-              required
-            />
-          </div>
-          <div>
-            <label className="block text-sm font-bold mb-2" htmlFor="email">
-              Email
-            </label>
-            <input
-              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-              type="email"
-              ref={emailRef}
-              required
-            />
-          </div>
-          <div>
-            <label className="block text-sm font-bold mb-2" htmlFor="password">
-              Password
-            </label>
-            <input
-              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-              type="password"
-              ref={passwordRef}
-              required
-            />
-          </div>
-          <div>
-            <label
-              className="block text-sm font-bold mb-2"
-              htmlFor="password-confirm"
-            >
-              Password Confirmation
-            </label>
-            <input
-              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-              type="password"
-              ref={passwordConfirmRef}
-              required
-            />
-          </div>
           <div>
             <label
               className="block text-sm font-bold mb-2"
@@ -468,23 +333,22 @@ function MentorSignup1() {
               acceptedFileTypes={acceptedIntroVideoTypes}
             />
           </div>
-          <button
+          {/* <button
             disabled={loading}
             className="w-full bg-primary hover:bg-primary-dark text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
             type="submit"
           >
-            Sign Up
-          </button>
-        </form>
-        <div className="text-center mt-4">
-          Already have an account?{" "}
-          <Link to="/" className="text-primary hover:text-blue-800">
-            Log In
+            Done
+          </button> */}
+          <Link
+            to={"/testsuccess"}
+            disabled={loading}
+            className="w-full mt-10 bg-primary hover:bg-primary-dark text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+          >
+            Done
           </Link>
-        </div>
+        </form>
       </div>
     </>
   );
 }
-
-export default MentorSignup;

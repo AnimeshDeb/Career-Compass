@@ -9,7 +9,9 @@ function SeekerLogin() {
   const { login } = useAuth();
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
-
+  const [userType, setUserType] = useState('seeker');
+  const mentorAuth = useContext(MentorAuthContext);
+  const seekerAuth = useContext(SeekerAuthContext);
   async function handleSubmit(e) {
     e.preventDefault();
     try {
