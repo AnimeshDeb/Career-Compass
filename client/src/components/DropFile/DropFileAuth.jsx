@@ -15,6 +15,8 @@ const DropFile = ({
   onFileChange,
   maxFiles,
   acceptedFileTypes,
+  userType,
+  userId,
   showFile = true,
 }) => {
   const [fileList, setFileList] = useState([]);
@@ -27,7 +29,10 @@ const DropFile = ({
 
       if (acceptedFiles[0]) {
         const file = acceptedFiles[0];
-        const storageRef = ref(storage, `uploads/${file.name}`);
+        const storageRef = ref(
+          storage,
+          `Users/${userType}/${userId}/${file.name}`
+        );
         const uploadTask = uploadBytesResumable(storageRef, file);
 
         uploadTask.on(

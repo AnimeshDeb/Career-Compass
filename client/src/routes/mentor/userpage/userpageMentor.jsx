@@ -1,4 +1,3 @@
-import "./userpageMentor.css";
 import Navbar from "../../../components/navbar/version1/navbar.jsx";
 import { useEffect, useState } from "react";
 import { getMentorById } from "../../../functions/mentorFunctions.js";
@@ -82,47 +81,48 @@ export default function UserpageMentor() {
     fetchData();
   }, []);
   return (
-    <div className="main">
-      <div className="men-navbar">
+    <div className="bg-primary-dark">
+      <div className="w-full bg-white max-w-[100%] mx-auto lg:max-w-[65%] shadow-md">
         <Navbar
-          className="men-navbar"
+          className="nav"
           userType={"mentor"}
           iconSize={iconSize}
           userId={mentorId}
         />
-      </div>
-      {userData && (
-        <UserBanner
-          editMode={editMode}
-          onEdit={toggleEditMode}
-          banner={userData.banner}
-          iconSize={iconSize}
-          picture={userData.pictureURL}
-          name={userData.displayName}
-          handlePendingChange={handlePendingChange}
-          pendingChanges={pendingChanges}
-          isLoading={isLoading}
-        />
-      )}
-      {editMode ? (
-        // Edit Mode
-        <>
-          <EditMode
-            pendingChanges={pendingChanges}
-            setPendingChanges={setPendingChanges}
-            userId={"a0MqGXB2hlJ5uJNheiKX"}
+
+        {userData && (
+          <UserBanner
+            editMode={editMode}
+            onEdit={toggleEditMode}
+            banner={userData.banner}
             iconSize={iconSize}
-            userData={userData}
+            picture={userData.pictureURL}
+            name={userData.displayName}
+            handlePendingChange={handlePendingChange}
+            pendingChanges={pendingChanges}
+            isLoading={isLoading}
           />
-        </>
-      ) : (
-        // Normal page
-        <>
-          <UserMode iconSize={iconSize} userData={userData} />
-        </>
-      )}
-      <div className="men-footer">
-        <Footer />
+        )}
+        {editMode ? (
+          // Edit Mode
+          <>
+            <EditMode
+              pendingChanges={pendingChanges}
+              setPendingChanges={setPendingChanges}
+              userId={"a0MqGXB2hlJ5uJNheiKX"}
+              iconSize={iconSize}
+              userData={userData}
+            />
+          </>
+        ) : (
+          // Normal page
+          <>
+            <UserMode iconSize={iconSize} userData={userData} />
+          </>
+        )}
+        <div className="bg-secondary">
+          <Footer mentorType={"Mentor"} />
+        </div>
       </div>
     </div>
   );

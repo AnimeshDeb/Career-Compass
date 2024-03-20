@@ -67,7 +67,7 @@ export default function UserBanner({
               />
             )}
           </div>
-          <h3 className="mt-0.5 -mb-0.5 bg-primary text-white py-0.5 px-1 rounded-full text-base md:text-lg lg:text-xl xl:text-2xl">
+          <h3 className="mt-0.5 -mb-1.5 bg-primary text-white py-1 px-3 rounded-full text-base md:text-lg lg:text-xl xl:text-2xl">
             {name || "User"}
           </h3>
         </div>

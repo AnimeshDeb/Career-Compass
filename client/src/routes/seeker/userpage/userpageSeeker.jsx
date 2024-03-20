@@ -117,7 +117,7 @@ export default function UserpageSeeker() {
           </>
         )}
 
-        <Footer className="seek-footer" />
+        <Footer />
       </div>
     </div>
   );

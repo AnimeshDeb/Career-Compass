@@ -6,8 +6,9 @@ import LogoutButton from "../../Buttons/navbar_btns/Logout/logout";
 import GroupButton from "../../Buttons/navbar_btns/Groups/Group";
 import { Link } from "react-router-dom";
 export default function Navbar({ userType, userId, iconSize }) {
+  const color = userType === "Mentor" ? "bg-primary" : "bg-secondary";
   return (
-    <nav className="flex justify-between bg-primary items-center py-4 px-6">
+    <nav className={`flex justify-between ${color} items-center py-4 px-6`}>
       <Link href="/">
         <img
           src={medImage}
