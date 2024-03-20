@@ -14,7 +14,6 @@ import SeekerSignup from "./src/routes/seeker/auth/SeekerSignup.jsx";
 import SeekerUser from "./src/routes/seeker/auth/steps/SeekerUser.jsx";
 import SeekerUpdateProfile from "./src/routes/seeker/auth/steps/SeekerUpdateProfile.jsx";
 import ParentComponent from "./src/routes/seeker/auth/ProcessSignUp.jsx";
-
 import MentorSignup from "./src/routes/mentor/auth/MentorSignup.jsx";
 import { MentorAuthProvider } from "./src/Contexts/MentorAuthContext.jsx";
 
@@ -28,6 +27,7 @@ export const router = createBrowserRouter([
       </SeekerAuthProvider>
     ),
   },
+  
   {
     path: "/",
     element: (
