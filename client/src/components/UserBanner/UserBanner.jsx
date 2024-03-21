@@ -51,7 +51,7 @@ export default function UserBanner({
             />
           )}
         </div>
-        <div className="absolute bottom-0 left-1/2 transform -translate-x-1/2 -translate-y-2 flex flex-col items-center">
+        <div className="absolute bottom-0 left-1/2 transform -translate-x-1/2 md:translate-y-16 -translate-y-2 z-10 flex flex-col items-center">
           <div className="rounded-full overflow-hidden border-4 border-primary bg-white flex justify-center items-center w-16 h-16 sm:w-24 sm:h-24 md:w-28 md:h-28 lg:w-30 lg:h-30 xl:w-36 xl:h-36">
             {isLoading ? (
               <Skeleton circle={true} width="100%" height="100%" />
@@ -67,16 +67,16 @@ export default function UserBanner({
               />
             )}
           </div>
-          <h3 className="mt-0.5 -mb-1.5 bg-primary text-white py-1 px-3 rounded-full text-base md:text-lg lg:text-xl xl:text-2xl">
+          <h3 className="break-words -mt-3 -mb-1.5 bg-primary text-white md:py-1 md:px-3 px-1.5 py-0 rounded-lg md:rounded-br-lg md:rounded-bl-lg text-base md:text-lg lg:text-xl xl:text-2xl max-w-2xs">
             {name || "User"}
           </h3>
         </div>
       </div>
       {editMode && (<>
         <h2
-                className={`${textSize} bg-primary text-white px-8 py-2 w-full text-center`}
-              >Profile Picture</h2>
-        <div className="flex justify-center items-center pt-3  space-x-10">
+                className={`${textSize} bg-primary text-white px-8 py-6 w-full text-center`}
+              ></h2>
+        <div className="flex justify-center items-center pt-3  mt-8 space-x-10">
           {/* <DropFile
             onFileChange={(file) => handleFileChange(file, "banner", "Banner")}
             maxFiles={1}

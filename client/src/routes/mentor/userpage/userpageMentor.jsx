@@ -77,7 +77,7 @@ export default function UserpageMentor() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const userId = "a0MqGXB2hlJ5uJNheiKX";
+        const userId = "J8tVexeC8shTEFTDBQfL5evs4oy2";
         const fetchedUserData = await getMentorById(userId);
         setUserData(fetchedUserData);
       } catch (error) {
@@ -116,7 +116,7 @@ export default function UserpageMentor() {
             <EditMode
               pendingChanges={pendingChanges}
               setPendingChanges={setPendingChanges}
-              userId={"a0MqGXB2hlJ5uJNheiKX"}
+              userId={"J8tVexeC8shTEFTDBQfL5evs4oy2"}
               iconSize={iconSize}
               userData={userData}
               triggerUserDataRefresh={triggerUserDataRefresh}

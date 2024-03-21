@@ -62,7 +62,11 @@ export default function UserMode({ userData, iconSize, isLoading }) {
         ) : (
           <div className="men-intro-content p-5  w-full flex flex-col items-center">
             {userData?.intro_text ? (
-              <p>{userData.intro_text}</p>
+              <div
+              dangerouslySetInnerHTML={{ __html: userData.intro_text }}
+              className={`${textSize} text-center pt-8 overflow-auto`}
+              style={{ width: "100%", height: "100%" }}
+            />
             ) : (
               <div className="text-center w-full m-10">
                 <p className="text-lg text-primary">

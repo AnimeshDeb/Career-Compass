@@ -18,12 +18,17 @@ const DropFile = ({ onFileChange, maxFiles = 1, acceptedFileTypes }) => {
       }));
       setFiles(updatedFiles);
 
-      // Directly invoke onFileChange with the File object or its preview URL
-      if (updatedFiles.length > 0) {
+      // Adjust the invocation of onFileChange based on the number of files
+      if (updatedFiles.length === 1) {
+        // If only one file is uploaded, return a single URL
         onFileChange(updatedFiles[0].preview);
-        setUploadSuccess(true);
-        setTimeout(() => setUploadSuccess(false), 3000);
+      } else if (updatedFiles.length > 1) {
+        // If multiple files are uploaded, return an array of URLs
+        const fileURLs = updatedFiles.map(file => file.preview);
+        onFileChange(fileURLs);
       }
+      setUploadSuccess(true);
+      setTimeout(() => setUploadSuccess(false), 3000);
     },
     [maxFiles, onFileChange]
   );
@@ -31,6 +36,7 @@ const DropFile = ({ onFileChange, maxFiles = 1, acceptedFileTypes }) => {
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
     onDrop,
     accept: acceptedFileTypes,
+    multiple: maxFiles > 1, // This ensures that the dropzone allows multiple files if maxFiles is greater than 1
   });
 
   return (

@@ -1,7 +1,6 @@
 import medImage from "../../../images/logos/large_v2.png";
 import PropTypes from "prop-types";
 import SearchButton from "../../Buttons/navbar_btns/search/search";
-import JobsButton from "../../Buttons/navbar_btns/jobsApplied/jobsApplied";
 import LogoutButton from "../../Buttons/navbar_btns/Logout/logout";
 import GroupButton from "../../Buttons/navbar_btns/Groups/Group";
 import { Link } from "react-router-dom";
@@ -23,9 +22,6 @@ export default function Navbar({ userType, userId, iconSize }) {
             className="one-btn"
             iconSize={iconSize}
           />
-        )}
-        {userType === "seeker" && (
-          <JobsButton userId={userId} iconSize={iconSize} />
         )}
         {(userType === "mentor" || userType === "seeker") && (
           <>

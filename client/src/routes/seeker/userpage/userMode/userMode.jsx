@@ -26,7 +26,7 @@ export default function UserMode({ userData, iconSize, isLoading }) {
   const renderTextVideo = (content) => {
     if (content.startsWith("http")) {
       return (
-        <div className="flex justify-center items-center p-5 mt-0">
+        <div className="flex justify-center items-center p-5 mt-5">
           <div className="w-full max-w-lg aspect-video">
             <ReactPlayer
               url={content}
@@ -60,7 +60,7 @@ export default function UserMode({ userData, iconSize, isLoading }) {
                 Introduction
               </h2>
               {isLoading ? (
-                <div className="p-2 justify-between">
+                <div className="p-2 mt-5 justify-between">
                   <SkeletonTheme baseColor="#e0e0e0" highlightColor="#f5f5f5">
                     <Skeleton height={35} width="50%" />
                     <div className="w-full">
@@ -82,7 +82,7 @@ export default function UserMode({ userData, iconSize, isLoading }) {
                 renderTextVideo(userData.introduction)
               ) : (
                 // Data doesn't exist, and it's not loading, suggest adding content
-                <div className="text-center p-5">
+                <div className="text-center mt-5 p-5">
                   <p className="text-lg text-primary">
                     Your introduction is missing.
                   </p>
@@ -100,7 +100,7 @@ export default function UserMode({ userData, iconSize, isLoading }) {
                 Skills
               </h2>
               {isLoading ? (
-                <div className="p-2 justify-between">
+                <div className="p-2 mt-5  justify-between">
                   <SkeletonTheme baseColor="#e0e0e0" highlightColor="#f5f5f5">
                     <Skeleton height={35} width="50%" />
                     <div className="w-full">
@@ -120,7 +120,7 @@ export default function UserMode({ userData, iconSize, isLoading }) {
               ) : userData.skills ? (
                 renderTextVideo(userData.skills)
               ) : (
-                <div className="text-center p-5">
+                <div className="text-center mt-5  p-5">
                   <p className="text-lg text-primary">
                     You haven't added any skills yet.
                   </p>

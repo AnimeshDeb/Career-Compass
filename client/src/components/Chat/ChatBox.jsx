@@ -175,35 +175,40 @@ const ChatBox = () => {
 
 
     return (
-        <div>
-            <button className="chatbot-toggler" onClick={toggleChat}>
-                <FontAwesomeIcon icon={isChatOpen ? faClose : faCommentDots} />
-            </button>
-            <div className={`chatbot ${isChatOpen ? '' : 'chatbot-hidden'}`}>
-                <header className="chat-header">
-                    <h2>Chat</h2>
-                    <FontAwesomeIcon icon={faClose} className="close-btn" onClick={toggleChat} />
-                </header>
-                <ul className="chatbox">
-                    {messages.map((msg, index) => (
-                        <li key={index} className={`chat ${msg.type}`}>
-                            <p>{msg.text} {msg.type === 'incoming' && <FontAwesomeIcon icon={faVolumeUp} className="volume-icon" />}</p>
-                        </li>
-                    ))}
-                </ul>
-                <div className="chat-input">
-                    <FontAwesomeIcon icon={faMicrophone} className="microphone-btn" onClick={handleMicrophoneClick} />
-                    <textarea
-                        placeholder="Enter a message..."
-                        spellCheck="false"
-                        required
-                        value={inputMessage}
-                        onChange={handleInput}
-                    ></textarea>
-                    <FontAwesomeIcon icon={faPaperPlane} className="send-btn" onClick={sendMessage} />
-                </div>
-            </div>
+<div>
+    <button 
+        className="z-1000 fixed bottom-8 right-9 outline-none border-none h-12 w-12 flex cursor-pointer items-center justify-center rounded-full bg-primary-light text-white transition-transform duration-200"
+        onClick={toggleChat}>
+        <FontAwesomeIcon icon={isChatOpen ? faClose : faCommentDots} />
+    </button>
+    <div className={`fixed right-9 bottom-[5.625rem] w-[26.25rem] bg-white rounded-2xl overflow-hidden transform transition-all duration-100 ${isChatOpen ? 'scale-100 opacity-100 pointer-events-auto' : 'scale-50 opacity-0 pointer-events-none'} shadow-xl`}>
+        <header className="p-4 relative text-center text-white bg-primary shadow">
+            <h2 className="text-lg">Chat</h2>
+            <FontAwesomeIcon icon={faClose} className="absolute right-4 top-1/2 transform -translate-y-1/2 cursor-pointer" onClick={toggleChat} />
+        </header>
+        <ul className="overflow-y-auto h-[31.875rem] p-8 pb-20">
+            {messages.map((msg, index) => (
+                <li key={index} className={`flex list-none ${msg.type === 'outgoing' ? 'justify-end' : ''} my-5`}>
+                    <p className={`whitespace-pre-wrap px-4 py-3 rounded-lg max-w-[75%] text-sm ${msg.type === 'incoming' ? 'text-black bg-gray-200 rounded-l-none' : 'text-white bg-blue-500 rounded-r-none'}`}>
+                        {msg.text} {msg.type === 'incoming' && <FontAwesomeIcon icon={faVolumeUp} className="ml-2 text-green-500 cursor-pointer text-xl" />} {/* Adjusted icon size to text-xl */}
+                    </p>
+                </li>
+            ))}
+        </ul>
+        <div className="flex gap-1 absolute bottom-0 w-full bg-white p-1 px-5 border-t border-gray-200">
+            <FontAwesomeIcon icon={faMicrophone} className="self-end text-primary cursor-pointer flex items-center text-3xl" onClick={handleMicrophoneClick} /> {/* Adjusted icon size to text-xl */}
+            <textarea
+                className="h-14 w-full border-none outline-none resize-none max-h-[11.25rem] p-4 text-sm rounded-full bg-gray-100"
+                placeholder="Enter a message..."
+                spellCheck="false"
+                required
+                value={inputMessage}
+                onChange={handleInput}
+            ></textarea>
+            <FontAwesomeIcon icon={faPaperPlane} className="self-end text-primary cursor-pointer flex items-center text-2xl" onClick={sendMessage} /> {/* Adjusted icon size to text-2xl */}
         </div>
+    </div>
+</div>
     );
 };
 

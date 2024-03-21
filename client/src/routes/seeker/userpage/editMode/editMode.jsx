@@ -227,7 +227,7 @@ const VideoOrTextItem = React.memo(
       <div className="flex flex-col items-center gap-4 w-full">
         <div
           className="w-full max-w-lg px-5 pt-5 pb-0 mb-0 aspect-video "
-          style={{ minHeight: "28vh", maxHeight: "28vh" }}
+          style={{ minHeight: "28vh"}}
         >
           {content.type === "video" ? (
             <ReactPlayer
@@ -473,6 +473,7 @@ export default function EditMode({
   );
   const handleChange = useCallback(
     (event, type, field, section, index) => {
+      console.log("Pending CHanges:", pendingChanges)
       let newValue = event.target.value;
 
       if (pendingChanges[field] && pendingChanges[field].type !== type) {
@@ -499,6 +500,7 @@ export default function EditMode({
           index: index,
         },
       }));
+      console.log("Pending CHanges:", pendingChanges)
     },
     [setPendingChanges]
   );
