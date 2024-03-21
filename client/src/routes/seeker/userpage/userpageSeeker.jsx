@@ -6,6 +6,7 @@ import Footer from "../../../components/footer/footer.jsx";
 import UserBanner from "../../../components/UserBanner/UserBanner.jsx";
 import UserMode from "./userMode/userMode.jsx";
 import EditMode from "./editMode/editMode.jsx";
+import ChatBox from "../../../components/Chat/ChatBox.jsx";
 export default function UserpageSeeker() {
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
   const [iconSize, setIconSize] = useState("2x");
@@ -119,6 +120,7 @@ export default function UserpageSeeker() {
 
         <Footer userType="Seeker" />
       </div>
+      <ChatBox />
     </div>
   );
 }
