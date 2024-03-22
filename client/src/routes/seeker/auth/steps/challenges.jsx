@@ -92,7 +92,11 @@ function SeekerChallenges({ handleNextStep, handlePrevStep, name }) {
         <div className="flex-1 bg-blue-100 px-6 py-4 mt-4 shadow-lg relative text-left mx-5 rounded-tr-lg rounded-bl-lg rounded-br-lg ">
           <p className="text-lg md:text-xl lg:text-2xl">
             Any <span className="text-secondary font-semibold">challenges</span>{" "}
-            you want to share?
+            you want to share? Did you need reminders to do something or help with anything?
+            <span className="text-secondary font-semibold"> Write </span> about
+            yourself in the box below or <span className="text-primary font-semibold">
+              record a video{" "}.
+            </span>{" "}
           </p>
           <div className="absolute top-0 -left-2 w-10 h-0 border-l-[10px] border-l-transparent border-b-[10px] border-b-primary"></div>
           <div className="flex justify-end mt-0">

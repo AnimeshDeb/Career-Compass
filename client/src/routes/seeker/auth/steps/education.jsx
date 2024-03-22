@@ -82,9 +82,8 @@ function SeekerEducation({ handleNextStep, handlePrevStep, name }) {
         </div>
         <div className="flex-1 bg-blue-100 px-6 py-4 mt-4 shadow-lg relative text-left mx-5 rounded-tr-lg rounded-bl-lg rounded-br-lg ">
           <p className="text-lg md:text-xl lg:text-2xl">
-            Where did you go to{" "}
-            <span className="text-secondary font-semibold">school</span>? Tell
-            us your highest education.
+            What was the last  {" "}
+            <span className="text-secondary font-semibold">school</span> you went to? 
           </p>
           <div className="absolute top-0 -left-2 w-10 h-0 border-l-[10px] border-l-transparent border-b-[10px] border-b-primary"></div>
           <div className="flex justify-end mt-2">
@@ -101,7 +100,7 @@ function SeekerEducation({ handleNextStep, handlePrevStep, name }) {
               placeholder="School name..."
               value={seekerSchoolNameTxt}
               onChange={handleChangeSchool}
-              required
+              
             />
 
             <div className="py-2 px-4">
@@ -127,7 +126,7 @@ function SeekerEducation({ handleNextStep, handlePrevStep, name }) {
               className="w-full p-2 border rounded-md"
               value={seekerGraduating}
               onChange={handleChangeGraduating}
-              required
+              
             >
               <option value="">Select your graduation year</option>
               {years.map((year) => (

@@ -137,7 +137,7 @@ function SeekerJobs({ handleNextStep, handlePrevStep, name }) {
               placeholder="Job name"
               value={jobName}
               onChange={(e) => setJobName(e.target.value)}
-              required
+              
             />
 
             <input
@@ -146,7 +146,7 @@ function SeekerJobs({ handleNextStep, handlePrevStep, name }) {
               placeholder="City"
               value={jobLocation.city}
               onChange={handleCityChange}
-              required
+              
             />
             <Select
               options={stateOptions}

@@ -1,40 +1,40 @@
-import { useState } from "react";
-import { collection, doc, setDoc } from "firebase/firestore";
-import { db } from "../../../../firebase";
-import { storage } from "../../../../firebase";
-import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
-import { v4 } from "uuid";
-import PropTypes from "prop-types";
-import Audio_Btn from "../../../../components/Buttons/audio__btn/audio_btn";
-import Lottie from "lottie-react";
-import animationAI from "../../../../images/animatedAI.json";
-import animationLoading from "../../../../images/Loading.json";
-import DropFile from "../../../../components/DropFile/DropFileAuth";
-import DOMPurify from "dompurify";
-import EditorTxt from "../../../../components/texteditor/Editor";
+import { useState } from 'react';
+import { collection, doc, setDoc } from 'firebase/firestore';
+import { db } from '../../../../firebase';
+import { storage } from '../../../../firebase';
+import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
+import { v4 } from 'uuid';
+import PropTypes from 'prop-types';
+import Audio_Btn from '../../../../components/Buttons/audio__btn/audio_btn';
+import Lottie from 'lottie-react';
+import animationAI from '../../../../images/animatedAI.json';
+import animationLoading from '../../../../images/Loading.json';
+import DropFile from '../../../../components/DropFile/DropFileAuth';
+import DOMPurify from 'dompurify';
+import EditorTxt from '../../../../components/texteditor/Editor';
 
 const acceptedIntroVideoTypes = {
-  "video/mp4": [],
-  "video/webm": [],
-  "video/ogg": [],
+  'video/mp4': [],
+  'video/webm': [],
+  'video/ogg': [],
 };
 
 function SeekerIntro({ handleNextStep, uid }) {
-  const [seekerTxtIntro, setSeekerTxtIntro] = useState("");
+  const [seekerTxtIntro, setSeekerTxtIntro] = useState('');
   const [isUploading, setIsUploading] = useState(false);
   const [uploadComplete, setUploadComplete] = useState(false);
   const [activeArea, setActiveArea] = useState(null);
-  const usersCollection = collection(db, "Seekers");
+  const usersCollection = collection(db, 'Seekers');
   const docRef = doc(usersCollection, uid);
 
   const introAudio =
-    "https://firebasestorage.googleapis.com/v0/b/career-compass-77175.appspot.com/o/static%2Faudio%2F2024-03-15%2002-43-20.mp3?alt=media&token=5ae4dced-3bd7-4933-a09a-2ade24daf577";
+    'https://firebasestorage.googleapis.com/v0/b/career-compass-77175.appspot.com/o/static%2Faudio%2F2024-03-15%2002-43-20.mp3?alt=media&token=5ae4dced-3bd7-4933-a09a-2ade24daf577';
 
   async function uploadVideo(file) {
     setIsUploading(true);
-    setActiveArea("video");
+    setActiveArea('video');
     if (!file) {
-      console.error("No file selected for upload.");
+      console.error('No file selected for upload.');
       setIsUploading(false);
       return;
     }
@@ -43,13 +43,13 @@ function SeekerIntro({ handleNextStep, uid }) {
     try {
       const snapshot = await uploadBytes(fileRef, file);
       const downloadURL = await getDownloadURL(snapshot.ref);
-      console.log("Video uploaded successfully: ", downloadURL);
+      console.log('Video uploaded successfully: ', downloadURL);
       await setDoc(docRef, { introduction: downloadURL }, { merge: true });
-      console.log("Firestore updated with video URL.");
+      console.log('Firestore updated with video URL.');
       setIsUploading(false);
       setUploadComplete(true);
     } catch (error) {
-      console.error("Error handling video upload: ", error);
+      console.error('Error handling video upload: ', error);
       setIsUploading(false);
     }
   }
@@ -57,7 +57,7 @@ function SeekerIntro({ handleNextStep, uid }) {
   const handleEditorChange = (e) => {
     const cleanHtml = DOMPurify.sanitize(e.htmlValue);
     setSeekerTxtIntro(cleanHtml);
-    if (activeArea !== "text") setActiveArea("text");
+    if (activeArea !== 'text') setActiveArea('text');
   };
 
   const handleSubmit = async (e) => {
@@ -69,9 +69,9 @@ function SeekerIntro({ handleNextStep, uid }) {
           { introduction: seekerTxtIntro.trim() },
           { merge: true }
         );
-        console.log("Text introduction saved successfully.");
+        console.log('Text introduction saved successfully.');
       } catch (error) {
-        console.error("Error saving text introduction: ", error);
+        console.error('Error saving text introduction: ', error);
       }
     }
     handleNextStep();
@@ -93,19 +93,18 @@ function SeekerIntro({ handleNextStep, uid }) {
         </div>
         <div className="flex-1 bg-blue-100 px-6 py-4 mt-4 shadow-lg relative text-left mx-5 rounded-tr-lg rounded-bl-lg rounded-br-lg ">
           <p className="text-lg md:text-xl lg:text-2xl">
-            We're excited to meet you! Please introduce yourself in the way you
-            like best:
+            Tell me about yourself:
             <br />
             <span className="text-primary font-semibold">
-              Record a video{" "}
-            </span>{" "}
+              Record a video{' '}
+            </span>{' '}
             or
             <span className="text-secondary font-semibold"> write </span> about
-            yourself.
+            yourself in the box below.
             <br />
-            You can also{" "}
+            {/* You can also{" "}
             <span className="text-secondary font-semibold"> talk</span>, and
-            we'll help turn it into writing.
+            we'll help turn it into writing. */}
           </p>
           <div className="absolute top-0 -left-2 w-10 h-0 border-l-[10px] border-l-transparent border-b-[10px] border-b-primary"></div>
           <div className="flex z-0 justify-end mt-0">
@@ -119,9 +118,9 @@ function SeekerIntro({ handleNextStep, uid }) {
           <div className="flex flex-col md:flex-row items-center justify-between space-y-4 md:space-y-0 md:space-x-4 h-auto md:min-h-120 lg:min-h-150">
             <div
               className={`w-full md:w-1/2 flex flex-col justify-between py-10 px-4 rounded-md ${
-                activeArea === "text" ? "bg-primary" : "hover:bg-primary"
+                activeArea === 'text' ? 'bg-primary' : 'hover:bg-primary'
               } h-auto md:min-h-120 lg:min-h-150`}
-              onClick={() => setActiveArea("text")}
+              onClick={() => setActiveArea('text')}
             >
               <EditorTxt
                 seekerTxtIntro={seekerTxtIntro}
@@ -137,9 +136,9 @@ function SeekerIntro({ handleNextStep, uid }) {
 
             <div
               className={`w-full md:w-1/2 py-10 px-4 rounded-md ${
-                activeArea === "video" ? "bg-secondary" : "hover:bg-secondary"
+                activeArea === 'video' ? 'bg-secondary' : 'hover:bg-secondary'
               } h-auto md:min-h-120 lg:min-h-150`}
-              onClick={() => setActiveArea("video")}
+              onClick={() => setActiveArea('video')}
             >
               <DropFile
                 onFileChange={(file) => {
@@ -157,10 +156,10 @@ function SeekerIntro({ handleNextStep, uid }) {
               onClick={handleSubmit}
               className={`px-6 py-2 text-lg rounded-md focus:outline-none focus:ring-2 focus:ring-green-500 flex justify-center items-center ${
                 isUploading
-                  ? "text-white bg-primary"
+                  ? 'text-white bg-primary'
                   : uploadComplete || seekerTxtIntro.trim()
-                  ? "text-white bg-secondary hover:bg-green-800"
-                  : "text-white bg-gray-400"
+                  ? 'text-white bg-secondary hover:bg-green-800'
+                  : 'text-white bg-gray-400'
               }`}
               type="button"
             >
@@ -171,7 +170,7 @@ function SeekerIntro({ handleNextStep, uid }) {
                   loop={true}
                 />
               ) : (
-                <>{uploadComplete || seekerTxtIntro.trim() ? "Next" : "Skip"}</>
+                <>{uploadComplete || seekerTxtIntro.trim() ? 'Next' : 'Skip'}</>
               )}
             </button>
           </div>

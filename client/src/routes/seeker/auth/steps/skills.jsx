@@ -92,18 +92,19 @@ function SeekerSkills({ handleNextStep, handlePrevStep, uid }) {
         </div>
         <div className="flex-1 bg-blue-100 px-6 py-4 mt-4 shadow-lg relative text-left mx-5 rounded-tr-lg rounded-bl-lg rounded-br-lg ">
           <p className="text-lg md:text-xl lg:text-2xl">
-            Please share the skills you bring:
+            Please share the different abilities or skills you have. Did you 
+            learn something new at a job or by yourself?
             <br />
             <span className="text-primary font-semibold">
               Record a video{" "}
             </span>{" "}
             or
-            <span className="text-secondary font-semibold"> write </span> about
-            your skills.
+            <span className="text-secondary font-semibold"> write </span> in the 
+            box below.
             <br />
-            You can also{" "}
+            {/* You can also{" "}
             <span className="text-secondary font-semibold"> talk</span>, and
-            we'll help turn it into writing.
+            we'll help turn it into writing. */}
           </p>
           <div className="absolute top-0 -left-2 w-10 h-0 border-l-[10px] border-l-transparent border-b-[10px] border-b-primary"></div>
           <div className="flex justify-end mt-0">
