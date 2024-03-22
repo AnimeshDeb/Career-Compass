@@ -22,7 +22,7 @@ export function SeekerAuthProvider({ children }) {
   const [currentUser, setCurrentUser] = useState();
   const [loading, setLoading] = useState(true);
 
-  async function signup(email, password, fullName) {
+  async function signup(email, password, fullName, userType) {
     try {
       //in below three lines, we are instantiating variables to refer to user data, such as their uid that is generated in firebase, email, and password.
       const userCredential = await createUserWithEmailAndPassword(
@@ -32,7 +32,7 @@ export function SeekerAuthProvider({ children }) {
       );
       const { user } = userCredential;
       console.log(user.uid);
-      const userDocRef = doc(db, "Seekers", user.uid);
+      const userDocRef = doc(db, userType, user.uid);
 
       await setDoc(userDocRef, {
         email: user.email,
