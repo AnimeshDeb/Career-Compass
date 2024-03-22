@@ -9,7 +9,7 @@ import Audio_Btn from "../../../../components/Buttons/audio__btn/audio_btn";
 import Lottie from "lottie-react";
 import animationAI from "../../../../images/animatedAI.json";
 import animationLoading from "../../../../images/Loading.json";
-import DropFile from "../../../../components/DropFile/DropFile";
+import DropFile from "../../../../components/DropFile/DropFileAuth";
 import DOMPurify from "dompurify";
 import EditorTxt from "../../../../components/texteditor/Editor";
 
@@ -134,6 +134,7 @@ function SeekerChallenges({ handleNextStep, handlePrevStep, name }) {
                 }}
                 maxFiles={1}
                 acceptedFileTypes={acceptedChallengesVideoTypes}
+                showFile={true}
               />
             </div>
           </div>

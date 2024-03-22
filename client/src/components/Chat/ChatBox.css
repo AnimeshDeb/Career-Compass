@@ -1,0 +1,185 @@
+/* ChatComponent.css */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap');
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Poppins", sans-serif;
+}
+
+.chatbot-toggler {
+  position: fixed;
+  bottom: 30px;
+  right: 35px;
+  outline: none;
+  border: none;
+  height: 50px;
+  width: 50px;
+  display: flex;
+  cursor: pointer;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: #4a8ce8;
+  color: #fff;
+  transition: transform 0.2s ease;
+}
+
+.chatbot {
+  position: fixed;
+  right: 35px;
+  bottom: 90px;
+  width: 420px;
+  background: #fff;
+  border-radius: 15px;
+  overflow: hidden;
+  transform: scale(1);
+  transform-origin: bottom right;
+  box-shadow: 0 0 128px 0 rgba(0,0,0,0.1),
+              0 32px 64px -48px rgba(0,0,0,0.5);
+  transition: all 0.1s ease;
+  opacity: 1; /* Assuming chat is visible when this class is applied */
+  pointer-events: auto; /* Allows interaction */
+}
+
+.chatbot-hidden {
+  opacity: 0;
+  pointer-events: none;
+  transform: scale(0.5);
+}
+
+.chatbot header {
+  padding: 16px 0;
+  position: relative;
+  text-align: center;
+  color: #fff;
+  background: #4a8ce8;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+
+.chatbot header .close-btn {
+  position: absolute;
+  right: 15px;
+  top: 50%;
+  cursor: pointer;
+  transform: translateY(-50%);
+}
+
+header h2 {
+  font-size: 1.4rem;
+}
+
+.chatbot .chatbox {
+  overflow-y: auto;
+  height: 510px;
+  padding: 30px 20px 80px;
+}
+
+.chatbox .chat {
+  display: flex;
+  list-style: none;
+}
+
+.chatbox .outgoing {
+  margin: 20px 0;
+  justify-content: flex-end;
+}
+
+.chatbox .incoming .faCommentDots, /* Adjusted for FontAwesomeIcon */
+.chatbox .chat p {
+  white-space: pre-wrap;
+  padding: 12px 16px;
+  border-radius: 10px 10px 0 10px;
+  max-width: 75%;
+  color: #fff;
+  font-size: 0.95rem;
+  background: #4a8ce8;
+}
+
+.chatbox .incoming p {
+  color: #000;
+  background: #f2f2f2;
+  border-radius: 10px 10px 10px 0;
+}
+
+.chatbot .chat-input {
+  display: flex;
+  gap: 5px;
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  background: #fff;
+  padding: 3px 20px;
+  border-top: 1px solid #ddd;
+}
+
+.chat-input textarea {
+  height: 55px;
+  width: 100%;
+  border: none;
+  outline: none;
+  resize: none;
+  max-height: 180px;
+  padding: 15px 15px 15px 0;
+  font-size: 0.95rem;
+  border-radius: 20px;
+  padding: 15px;
+  background-color: #f0f0f0;
+}
+
+.chat-input .faSend { /* Adjusted for FontAwesomeIcon */
+  align-self: flex-end;
+  color: rgb(37, 82, 166);
+  cursor: pointer;
+  height: 55px;
+  display: flex;
+  align-items: center;
+  font-size: 1.35rem;
+}
+
+@media (max-width: 490px) {
+  .chatbot-toggler {
+    right: 20px;
+    bottom: 20px;
+  }
+  .chatbot {
+    right: 0;
+    bottom: 0;
+    height: 100%;
+    border-radius: 0;
+    width: 100%;
+  }
+  .chatbot .chatbox {
+    height: 90%;
+    padding: 25px 15px 100px;
+  }
+  .chatbot .chat-input {
+    padding: 5px 15px;
+  }
+}
+
+.chat.incoming p {
+  background: #e6f2ff;
+  border-radius: 10px 10px 10px 0;
+}
+
+.chat.outgoing p {
+  background: #4a8ce8;
+}
+
+.chat.mentor p {
+    background-color: #289cdb !important; /* Green background for mentor messages */
+}
+
+.chat.mentee p {
+    background-color: #3280ed !important; /* Lighter green for mentee messages */
+}
+
+/* Add other styles to match the green theme */
+
+.volume-icon {
+    margin-left: 8px;
+    color: #4CAF50; /* Adjust the color as needed */
+    cursor: pointer;
+}

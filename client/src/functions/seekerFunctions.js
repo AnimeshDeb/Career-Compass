@@ -1,4 +1,4 @@
-import { getDoc, query, where, doc,deleteDoc, collection, getDocs, updateDoc } from 'firebase/firestore';
+import { deleteDoc, getDoc,doc, collection, query, where, getDocs, updateDoc, setDoc } from 'firebase/firestore';
 import { db, storage } from '../firebase';
 import { getDownloadURL, ref as storageRef, uploadBytes, listAll, deleteObject  } from 'firebase/storage';
 
@@ -18,11 +18,11 @@ const deleteFilesInFolder = async (folderPath) => {
   }
 };
 const deleteReference = async (userId, refFields) => {
+  
   const userDocRef = doc(db, "Seekers", userId);
-  const referencesSubcollectionRef = collection(userDocRef, "references");
+  const referencesSubcollectionRef = collection(userDocRef, "References");
   const queryRef = query(referencesSubcollectionRef, where("email", "==", refFields.email)); // Use the appropriate field to match
   const snapshot = await getDocs(queryRef);
-
   if (!snapshot.empty) {
     const docRef = snapshot.docs[0].ref;
     await deleteDoc(docRef);
@@ -33,11 +33,10 @@ const deleteReference = async (userId, refFields) => {
 }
 const uploadFileToStorage = async (file, path) => {
   try {
-    console.log(file,path)
     const fileRef = storageRef(storage, path);
-    await uploadBytes(fileRef, file);
-    const downloadURL = await getDownloadURL(fileRef);
-    return downloadURL;
+    await uploadBytes(fileRef, file); // Upload the file
+    const downloadURL = await getDownloadURL(fileRef); // Get the file's download URL
+    return downloadURL; // Return the download URL
   } catch (error) {
     console.error('Error uploading file to storage:', error.message);
     throw error;
@@ -46,11 +45,10 @@ const uploadFileToStorage = async (file, path) => {
 
 const updateUserField = async(object,userId)=>{
   try{
-    console.log(object)
     const userDocRef = doc(db, 'Seekers', userId);
     await updateDoc(userDocRef, object)
   } catch(error){
-    console.log("Error updating field:", error.message);
+    console.log(error)
     throw error;
   }
 };
@@ -101,5 +99,36 @@ const getSeekerById = async (userId) => {
     throw error;
   }
 };
+const updateJobField = async (userId, fullFieldName, jobIndex, newValue) => {
+  const field = fullFieldName.split(".").pop();
+  const userDocRef = doc(db, 'Seekers', userId);
+  const jobsCollectionRef = collection(userDocRef, 'Jobs');
+  const jobDocRef = doc(jobsCollectionRef, jobIndex);
 
-export { getSeekerById, deleteReference, updateUserField, deleteFilesInFolder, getSeekerJobsById, uploadFileToStorage};
+  try {
+    const updateObject = { [field]: newValue.value };
+    await updateDoc(jobDocRef, updateObject);
+  } catch (error) {
+    console.error("Error updating job field:", error);
+    throw error;
+  }
+};
+
+const updateEducationField = async (userId, fullFieldName, educationIndex, newValue) => {
+  const field = fullFieldName.split(".").pop();
+  
+const userDocRef = doc(db, 'Seekers', userId);
+  const educationCollectionRef = collection(userDocRef, 'Education');
+  const educationDocRef = doc(educationCollectionRef, educationIndex);
+
+  try {
+    const updateObject = { [field]: newValue.value };
+    await updateDoc(educationDocRef, updateObject);
+    console.log("Education field updated successfully.");
+  } catch (error) {
+    console.error("Error updating education field:", error);
+    throw error;
+  }
+};
+
+export { getSeekerById, deleteReference, updateUserField, deleteFilesInFolder, getSeekerJobsById, uploadFileToStorage, updateJobField, updateEducationField };

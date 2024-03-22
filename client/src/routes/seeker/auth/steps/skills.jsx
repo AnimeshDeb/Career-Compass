@@ -9,7 +9,7 @@ import Audio_Btn from "../../../../components/Buttons/audio__btn/audio_btn";
 import Lottie from "lottie-react";
 import animationData from "../../../../images/animatedAI.json";
 import animationLoading from "../../../../images/Loading.json";
-import DropFile from "../../../../components/DropFile/DropFile";
+import DropFile from "../../../../components/DropFile/DropFileAuth";
 import DOMPurify from "dompurify";
 import EditorTxt from "../../../../components/texteditor/Editor";
 
@@ -145,6 +145,7 @@ function SeekerSkills({ handleNextStep, handlePrevStep, uid }) {
                 }}
                 maxFiles={1}
                 acceptedFileTypes={acceptedSkillsVideoTypes}
+                showFile={true}
               />
             </div>
           </div>

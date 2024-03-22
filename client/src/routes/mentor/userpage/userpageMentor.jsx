@@ -1,4 +1,3 @@
-import "./userpageMentor.css";
 import Navbar from "../../../components/navbar/version1/navbar.jsx";
 import { useEffect, useState } from "react";
 import { getMentorById } from "../../../functions/mentorFunctions.js";
@@ -7,7 +6,7 @@ import "react-multi-carousel/lib/styles.css";
 import UserBanner from "../../../components/UserBanner/UserBanner.jsx";
 import UserMode from "./userMode/userMode.jsx";
 import EditMode from "./editMode/editMode.jsx";
-import { useLocation } from 'react-router-dom';
+import { useLocation } from "react-router-dom";
 
 export default function UserpageMentor() {
   const location = useLocation();
@@ -16,19 +15,32 @@ export default function UserpageMentor() {
   const [editMode, setEditMode] = useState(false);
   const [userData, setUserData] = useState(null);
   const [pendingChanges, setPendingChanges] = useState({});
-  const mentorId = location.state?.name;
+  const [isLoading, setIsLoading] = useState(true);
+  const [refreshUserData, setRefreshUserData] = useState(false);
+
+  const triggerUserDataRefresh = () => {
+    setRefreshUserData((prev) => !prev);
+  };
+  // const mentorId = location.state?.name;
+  const mentorId = "J8tVexeC8shTEFTDBQfL5evs4oy2";
   useEffect(() => {
     const fetchData = async () => {
       try {
+        setIsLoading(true);
+        // const userId = name;
         const fetchedUserData = await getMentorById(mentorId);
         setUserData(fetchedUserData);
       } catch (error) {
         console.error("Error fetching user by ID:", error.message);
+      } finally {
+        setTimeout(() => {
+          setIsLoading(false);
+        }, 750);
       }
     };
 
     fetchData();
-  }, [mentorId]);
+  }, [mentorId, refreshUserData]);
 
   const handlePendingChange = (field, value, type) => {
     setPendingChanges((prev) => ({
@@ -65,7 +77,7 @@ export default function UserpageMentor() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const userId = "a0MqGXB2hlJ5uJNheiKX";
+        const userId = "J8tVexeC8shTEFTDBQfL5evs4oy2";
         const fetchedUserData = await getMentorById(userId);
         setUserData(fetchedUserData);
       } catch (error) {
@@ -76,45 +88,49 @@ export default function UserpageMentor() {
     fetchData();
   }, []);
   return (
-    <div className="main">
-      <div className="men-navbar">
+    <div className="bg-primary-dark">
+      <div className="w-full bg-white max-w-[100%] mx-auto xl:max-w-[75%] shadow-md">
         <Navbar
-          className="men-navbar"
+          className="nav"
           userType={"mentor"}
           iconSize={iconSize}
+          userId={mentorId}
         />
-      </div>
-      {userData && (
-        <UserBanner
-          editMode={editMode}
-          onEdit={toggleEditMode}
-          banner={userData.banner}
-          iconSize={iconSize}
-          picture={userData.pictureURL}
-          name={userData.displayName}
-          handlePendingChange={handlePendingChange}
-          pendingChanges={pendingChanges}
-        />
-      )}
-      {editMode ? (
-        // Edit Mode
-        <>
-          <EditMode
-            pendingChanges={pendingChanges}
-            setPendingChanges={setPendingChanges}
-            userId={"a0MqGXB2hlJ5uJNheiKX"}
+
+        {userData && (
+          <UserBanner
+            editMode={editMode}
+            onEdit={toggleEditMode}
+            banner={userData.banner}
             iconSize={iconSize}
-            userData={userData}
+            picture={userData.pictureURL}
+            name={userData.displayName}
+            handlePendingChange={handlePendingChange}
+            pendingChanges={pendingChanges}
+            isLoading={isLoading}
           />
-        </>
-      ) : (
-        // Normal page
-        <>
-          <UserMode iconSize={iconSize} userData={userData} />
-        </>
-      )}
-      <div className="men-footer">
-        <Footer />
+        )}
+        {editMode ? (
+          // Edit Mode
+          <>
+            <EditMode
+              pendingChanges={pendingChanges}
+              setPendingChanges={setPendingChanges}
+              userId={"J8tVexeC8shTEFTDBQfL5evs4oy2"}
+              iconSize={iconSize}
+              userData={userData}
+              triggerUserDataRefresh={triggerUserDataRefresh}
+            />
+          </>
+        ) : (
+          // Normal page
+          <>
+            <UserMode iconSize={iconSize} userData={userData} />
+          </>
+        )}
+        <div className="bg-secondary">
+          <Footer mentorType={"Mentor"} />
+        </div>
       </div>
     </div>
   );

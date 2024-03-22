@@ -11,7 +11,14 @@ import {
 import { storage } from "../../firebase";
 import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 
-const DropFile = ({ onFileChange, maxFiles, acceptedFileTypes }) => {
+const DropFile = ({
+  onFileChange,
+  maxFiles,
+  acceptedFileTypes,
+  userType,
+  userId,
+  showFile = true,
+}) => {
   const [fileList, setFileList] = useState([]);
 
   const onDrop = useCallback(
@@ -22,7 +29,10 @@ const DropFile = ({ onFileChange, maxFiles, acceptedFileTypes }) => {
 
       if (acceptedFiles[0]) {
         const file = acceptedFiles[0];
-        const storageRef = ref(storage, `uploads/${file.name}`);
+        const storageRef = ref(
+          storage,
+          `Users/${userType}/${userId}/${file.name}`
+        );
         const uploadTask = uploadBytesResumable(storageRef, file);
 
         uploadTask.on(
@@ -32,9 +42,7 @@ const DropFile = ({ onFileChange, maxFiles, acceptedFileTypes }) => {
             console.error(error);
           },
           () => {
-            getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
-              console.log(downloadURL);
-            });
+            getDownloadURL(uploadTask.snapshot.ref);
           }
         );
       }
@@ -73,7 +81,7 @@ const DropFile = ({ onFileChange, maxFiles, acceptedFileTypes }) => {
         />
         <p>Drag & Drop your files here</p>
       </div>
-      {fileList.length > 0 && (
+      {fileList.length > 0 && showFile && (
         <div className="flex-1 flex flex-col overflow-hidden">
           {fileList.map((file, index) => (
             <div
@@ -107,6 +115,7 @@ DropFile.propTypes = {
   onFileChange: PropTypes.func.isRequired,
   maxFiles: PropTypes.number,
   acceptedFileTypes: PropTypes.object,
+  showFile: PropTypes.bool,
 };
 
 export default DropFile;
