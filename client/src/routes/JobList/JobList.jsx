@@ -72,7 +72,6 @@ const JobListing = ({ job, onJobClick, isFirst }) => {
       className="cursor-pointer border border-gray-300 p-4 my-2 bg-primary rounded-lg text-white shadow hover:shadow-md relative"
       onClick={() => onJobClick(job)}
     >
-      
       <div className="flex justify-between items-center">
         <div className="flex">
           <h1 className="font-semibold pr-5 text-2xl">{job.id}</h1>
@@ -104,7 +103,7 @@ const JobListing = ({ job, onJobClick, isFirst }) => {
             </button>
           ) : lowerCaseUserType === "seeker" ? (
             <button
-             className="bg-secondary hover:bg-secondary-dark text-white px-10 py-2 rounded-full cursor-pointer"
+              className="bg-secondary hover:bg-secondary-dark text-white px-10 py-2 rounded-full cursor-pointer"
               onClick={(event) => event.stopPropagation()}
             >
               Apply
@@ -123,6 +122,27 @@ const JobList = () => {
   const [locationFilter, setLocationFilter] = useState("");
   const [isPartTime, setIsPartTime] = useState(false);
   const detailsRef = useRef(null);
+  const [windowWidth, setWindowWidth] = useState(window.innerWidth);
+  const [iconSize, setIconSize] = useState("2x");
+  useEffect(() => {
+    if (windowWidth < 400) {
+      setIconSize("xs");
+    } else if (windowWidth < 769) {
+      setIconSize("lg");
+    } else {
+      setIconSize("2x");
+    }
+  }, [windowWidth]);
+  useEffect(() => {
+    function handleResize() {
+      setWindowWidth(window.innerWidth);
+    }
+
+    window.addEventListener("resize", handleResize);
+    handleResize();
+
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -180,7 +200,7 @@ const JobList = () => {
   return (
     <>
       <div className="flex flex-col min-h-screen">
-        <Navbar userType="seeker" />
+        <Navbar userType="seeker" iconSize={iconSize} />
         <div className="px-3">
           <h1 className="text-7xl pt-2 font-bold text-primary">Jobs</h1>
           <div className="flex items-center mb-4">
@@ -222,38 +242,29 @@ const JobList = () => {
         <div className="flex-grow flex">
           <div
             className={`${selectedJob ? "w-1/2" : "w-full"} px-2 overflow-auto`}
-      >
-
-
-<div
-      className="cursor-pointer border border-gray-300 p-4 my-2 bg-secondary rounded-lg text-white shadow hover:shadow-md relative"
-    >
-      
-      <div className="flex justify-between items-center ">
-        <div className="flex">
-          <h1 className="font-semibold pr-5 text-2xl">Cleaner</h1>
-          <div className="flex items-start">
-              <>
-                <span className="text-lg pt-1">&#8226;</span>
-                <h2 className="pl-2 text-lg">To clean a home</h2>
-              </>
-          </div>
-        </div>
-          <h2>Recommended by Mentor</h2>
-          <div className="flex flex-col items-end space-y-2">
-          <div
-            className="bg-primary hover:bg-secondary-dark text-white px-10 py-2 rounded-full cursor-pointer text-center"
           >
-            Details
-          </div>
-            <button
-             className="bg-primary hover:bg-secondary-dark text-white px-10 py-2 rounded-full cursor-pointer"
-            >
-              Apply
-            </button>
-        </div>
-      </div>
-    </div>
+            <div className="cursor-pointer border border-gray-300 p-4 my-2 bg-secondary rounded-lg text-white shadow hover:shadow-md relative">
+              <div className="flex justify-between items-center ">
+                <div className="flex">
+                  <h1 className="font-semibold pr-5 text-2xl">Cleaner</h1>
+                  <div className="flex items-start">
+                    <>
+                      <span className="text-lg pt-1">&#8226;</span>
+                      <h2 className="pl-2 text-lg">To clean a home</h2>
+                    </>
+                  </div>
+                </div>
+                <h2>Recommended by Mentor</h2>
+                <div className="flex flex-col items-end space-y-2">
+                  <div className="bg-primary hover:bg-secondary-dark text-white px-10 py-2 rounded-full cursor-pointer text-center">
+                    Details
+                  </div>
+                  <button className="bg-primary hover:bg-secondary-dark text-white px-10 py-2 rounded-full cursor-pointer">
+                    Apply
+                  </button>
+                </div>
+              </div>
+            </div>
             {filteredJobs.length > 0 ? (
               filteredJobs.map((job) => (
                 <JobListing
