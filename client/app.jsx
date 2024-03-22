@@ -33,9 +33,9 @@ export const router = createBrowserRouter([
     path: "/searchUser",
     element: (
       <SeekerAuthProvider>
-        <SearchBar/>
+        <SearchBar />
       </SeekerAuthProvider>
-    )
+    ),
   },
   {
     path: "/",
@@ -121,7 +121,14 @@ export const router = createBrowserRouter([
 
   {
     path: "/Joblist",
-    element: <JobList />,
+    element: (
+      <AuthProvider>
+        <SeekerAuthProvider>
+          {" "}
+          <JobList />{" "}
+        </SeekerAuthProvider>
+      </AuthProvider>
+    ),
   },
 
   {
