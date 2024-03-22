@@ -1,17 +1,17 @@
-import React, { useState, useEffect } from 'react';
-import { collection, getDocs, query, where } from 'firebase/firestore';
-import { db } from '../../firebase';
-import { useNavigate } from 'react-router-dom';
+import React, { useState, useEffect } from "react";
+import { collection, getDocs, query, where } from "firebase/firestore";
+import { db } from "../../firebase";
+import { useNavigate } from "react-router-dom";
 
 const SearchBar = () => {
   const [isExpanded, setIsExpanded] = useState(false);
-  const [searchName, setSearchName] = useState('');
+  const [searchName, setSearchName] = useState("");
   const [users, setUsers] = useState([]);
   const [filteredUsers, setFilteredUsers] = useState([]);
   const [isSearched, setIsSearched] = useState(false);
   const navigate = useNavigate();
 
-  const usersCollection = collection(db, 'Seekers');
+  const usersCollection = collection(db, "Seekers");
 
   const toggleExpand = () => {
     setIsExpanded(!isExpanded);
@@ -29,7 +29,7 @@ const SearchBar = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     const querySnapshot = await getDocs(
-      query(usersCollection, where('displayName', '==', searchName))
+      query(usersCollection, where("displayName", "==", searchName))
     );
     const dataHolder = [];
     querySnapshot.forEach((doc) => {
@@ -40,18 +40,17 @@ const SearchBar = () => {
   };
 
   const handleNext = (userUid) => {
-    navigate('/user', { state: { name: userUid } });
+    navigate("/user", { state: { name: userUid } });
   };
 
   return (
-  
     <div className="flex flex-col justify-center items-center h-screen">
       <div className="flex flex-col items-center">
         <h1
-          className="text-3xl font-bold mb-8 text-blue-600 transition-colors duration-500 ease-in-out"
+          className="text-3xl font-bold mb-8 text-primary transition-colors duration-500 ease-in-out"
           style={{
-            color: isExpanded ? '#34D399' : '#3B82F6',
-            marginLeft: '30px',
+            color: isExpanded ? "#34D399" : "#3B82F6",
+            marginLeft: "30px",
           }}
         >
           Search for our Users
@@ -59,10 +58,10 @@ const SearchBar = () => {
 
         <div
           className={`relative flex items-center justify-center border rounded-full px-8 py-6 transition-all duration-300 ${
-            isExpanded ? 'w-96 border-green-500' : 'w-80'
+            isExpanded ? "w-96 border-green-500" : "w-80"
           }`}
           onClick={toggleExpand}
-          style={{ height: isExpanded ? '150px' : '200px' }}
+          style={{ height: isExpanded ? "150px" : "200px" }}
         >
           <form
             onSubmit={handleSubmit}
@@ -77,7 +76,7 @@ const SearchBar = () => {
             />
             <button
               type="submit"
-              className="bg-blue-500 rounded-lg text-white px-4 py-2"
+              className="bg-primary rounded-lg text-white px-4 py-2"
             >
               Search
             </button>
@@ -99,8 +98,8 @@ const SearchBar = () => {
           )}
         </div>
       </div>
-      <div className={`mt-4 ${isSearched ? 'block' : 'hidden'}`}>
-        <div className="rounded-lg bg-blue-200 p-4">
+      <div className={`mt-4 ${isSearched ? "block" : "hidden"}`}>
+        <div className="rounded-lg bg-primary p-4">
           <h2 className="text-xl font-bold mb-2">Search Results:</h2>
           <ul>
             {users.map((user, index) => (

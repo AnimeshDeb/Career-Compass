@@ -37,7 +37,7 @@ export default function UserMode({ userData, iconSize, isLoading }) {
     <>
       <section className="flex flex-col justify-center items-center pb-0">
         <h2
-          className={`${textSize} bg-secondary text-white px-8 py-2 w-full text-center`}
+          className={`${textSize} bg-primary text-white px-8 py-2 w-full text-left`}
         >
           Introduction
         </h2>
@@ -63,10 +63,10 @@ export default function UserMode({ userData, iconSize, isLoading }) {
           <div className="men-intro-content p-5  w-full flex flex-col items-center">
             {userData?.intro_text ? (
               <div
-              dangerouslySetInnerHTML={{ __html: userData.intro_text }}
-              className={`${textSize} text-center pt-8 overflow-auto`}
-              style={{ width: "100%", height: "100%" }}
-            />
+                dangerouslySetInnerHTML={{ __html: userData.intro_text }}
+                className={`${textSize} text-center pt-8 overflow-auto`}
+                style={{ width: "100%", height: "100%" }}
+              />
             ) : (
               <div className="text-center w-full m-10">
                 <p className="text-lg text-primary">
