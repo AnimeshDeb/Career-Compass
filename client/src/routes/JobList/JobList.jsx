@@ -59,16 +59,20 @@ const states = [
   "Wyoming",
 ];
 
-const JobListing = ({ job, onJobClick }) => {
+const JobListing = ({ job, onJobClick, isFirst }) => {
   const location = useLocation();
-  const userType = location.state?.userType;
+  const userType = "seeker";
   const lowerCaseUserType = userType?.toLowerCase();
+  const jobStyle = isFirst
+    ? "bg-green-500" // replace with your actual green color class
+    : "bg-primary"; // the default background color class
 
   return (
     <div
       className="cursor-pointer border border-gray-300 p-4 my-2 bg-primary rounded-lg text-white shadow hover:shadow-md relative"
       onClick={() => onJobClick(job)}
     >
+      
       <div className="flex justify-between items-center">
         <div className="flex">
           <h1 className="font-semibold pr-5 text-2xl">{job.id}</h1>
@@ -100,7 +104,7 @@ const JobListing = ({ job, onJobClick }) => {
             </button>
           ) : lowerCaseUserType === "seeker" ? (
             <button
-              className="bg-secondary hover:bg-secondary-dark text-white px-10 py-2 rounded-full cursor-pointer"
+             className="bg-secondary hover:bg-secondary-dark text-white px-10 py-2 rounded-full cursor-pointer"
               onClick={(event) => event.stopPropagation()}
             >
               Apply
@@ -218,7 +222,38 @@ const JobList = () => {
         <div className="flex-grow flex">
           <div
             className={`${selectedJob ? "w-1/2" : "w-full"} px-2 overflow-auto`}
+      >
+
+
+<div
+      className="cursor-pointer border border-gray-300 p-4 my-2 bg-secondary rounded-lg text-white shadow hover:shadow-md relative"
+    >
+      
+      <div className="flex justify-between items-center ">
+        <div className="flex">
+          <h1 className="font-semibold pr-5 text-2xl">Cleaner</h1>
+          <div className="flex items-start">
+              <>
+                <span className="text-lg pt-1">&#8226;</span>
+                <h2 className="pl-2 text-lg">To clean a home</h2>
+              </>
+          </div>
+        </div>
+          <h2>Recommended by Mentor</h2>
+          <div className="flex flex-col items-end space-y-2">
+          <div
+            className="bg-primary hover:bg-secondary-dark text-white px-10 py-2 rounded-full cursor-pointer text-center"
           >
+            Details
+          </div>
+            <button
+             className="bg-primary hover:bg-secondary-dark text-white px-10 py-2 rounded-full cursor-pointer"
+            >
+              Apply
+            </button>
+        </div>
+      </div>
+    </div>
             {filteredJobs.length > 0 ? (
               filteredJobs.map((job) => (
                 <JobListing
@@ -287,6 +322,26 @@ const JobList = () => {
       </div>
       <Footer />
     </>
+  );
+};
+
+const JobListingStyle = () => {
+  return (
+    <div className="w-full bg-green-600 text-white p-4 flex justify-between items-center">
+      <div className="flex items-center space-x-4">
+        <div className="bg-green-800 p-2">
+          <span className="font-bold text-lg">Long Technician II</span>
+        </div>
+        <div>
+          <p>Help employees with their IT problems</p>
+          <p className="font-bold">Requirements:</p>
+          <ul className="list-inside list-disc">
+            <li>Windows</li>
+            <li>Communication skills</li>
+          </ul>
+        </div>
+      </div>
+    </div>
   );
 };
 
