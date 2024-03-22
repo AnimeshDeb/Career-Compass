@@ -137,7 +137,7 @@ const JobList = () => {
         targets: detailsRef.current,
         translateX: ["100%", "0%"],
         opacity: [0, 1],
-        easing: "linear",
+        easing: "easeOutQuad",
         duration: 700,
       });
     }
