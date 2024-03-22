@@ -61,7 +61,8 @@ const states = [
 
 const JobListing = ({ job, onJobClick }) => {
   const location = useLocation();
-  const userType = location.state?.userType;
+  // const userType = location.state?.userType;
+  const userType = "mentor";
   const lowerCaseUserType = userType?.toLowerCase();
 
   return (
@@ -119,6 +120,7 @@ const JobList = () => {
   const [locationFilter, setLocationFilter] = useState("");
   const [isPartTime, setIsPartTime] = useState(false);
   const detailsRef = useRef(null);
+  const userType = "mentor";
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -219,6 +221,7 @@ const JobList = () => {
           <div
             className={`${selectedJob ? "w-1/2" : "w-full"} px-2 overflow-auto`}
           >
+            <div className="bg-secondary">Hello</div>
             {filteredJobs.length > 0 ? (
               filteredJobs.map((job) => (
                 <JobListing

@@ -20,6 +20,7 @@ import { MentorAuthProvider } from "./src/Contexts/MentorAuthContext.jsx";
 import SuccessfulTesting from "./src/routes/SuccessfulTesting.jsx";
 import JobList from "./src/routes/JobList/JobList.jsx";
 import SearchBar from "./src/routes/userSearch/SearchBar.jsx";
+import PrivateRoute from "./src/Contexts/PrivateRoute.jsx";
 export const router = createBrowserRouter([
   {
     path: "/parent",
@@ -107,7 +108,6 @@ export const router = createBrowserRouter([
     path: "/SeekerUpdateProfile",
     element: (
       <SeekerAuthProvider>
-        {" "}
         <SeekerPrivateRoute>
           <SeekerUpdateProfile />
         </SeekerPrivateRoute>
@@ -152,11 +152,9 @@ export const router = createBrowserRouter([
   {
     path: "/user",
     element: (
-      <AuthProvider>
-        <SeekerAuthProvider>
-          <UserpageSeeker />
-        </SeekerAuthProvider>
-      </AuthProvider>
+      <SeekerAuthProvider>
+        <UserpageSeeker />
+      </SeekerAuthProvider>
     ),
   },
   {
