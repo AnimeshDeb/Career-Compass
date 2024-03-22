@@ -284,10 +284,11 @@ const JobList = () => {
               className="w-1/2 overflow-auto shadow-lg rounded-lg transition-opacity duration-500"
             >
               <h3 className="text-4xl rounded-tl-lg font-semibold mt-2.5 text-white mb-4 px-3 py-2 pt-3 bg-primary w-full ">
-                {selectedJob.id}
+                Work In Progress{/* {selectedJob.id} */}
               </h3>
-              <div className="space-y-3 px-4">
-                <p className="text-md">
+              <div className="flex flex-col space-y-3 px-4">
+                Work In Progress
+                {/* <p className="text-md">
                   <span className="text-2xl font-medium text-primary">
                     {selectedJob.Description}
                   </span>
@@ -319,7 +320,7 @@ const JobList = () => {
                   <span className="text-xl font-medium text-primary">
                     {selectedJob.Availability}
                   </span>
-                </p>
+                </p> */}
                 <button
                   className="mt-5 py-2 px-4 bg-secondary text-white font-semibold rounded-md hover:bg-secondary-dark transition-colors"
                   onClick={() => setSelectedJob(null)}
