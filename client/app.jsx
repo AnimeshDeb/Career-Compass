@@ -85,9 +85,9 @@ export const router = createBrowserRouter([
   {
     path: "/MentorSignup",
     element: (
-      <MentorAuthProvider>
+      <SeekerAuthProvider>
         <MentorSignup />
-      </MentorAuthProvider>
+      </SeekerAuthProvider>
     ),
   },
   {

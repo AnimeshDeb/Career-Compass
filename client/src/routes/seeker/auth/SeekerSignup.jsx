@@ -24,7 +24,8 @@ function SeekerSignup() {
       const userCredential = await signup(
         emailRef.current.value,
         passwordRef.current.value,
-        fullNameRef.current.value
+        fullNameRef.current.value,
+        "Seekers"
       );
       navigate("/parent", {
         state: {

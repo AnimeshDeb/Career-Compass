@@ -6,8 +6,8 @@ import { Navigate } from "react-router-dom";
 // if the user isn't logged in, then they will be navigated to the login page,, even if they try to go
 // back to the web pages.
 function PrivateRoute({ children }) {
-  //   const { currentUser } = useAuth();
-  //   return currentUser ? children : <Navigate to="/" />;
+    const { currentUser } = useAuth();
+    return currentUser ? children : <Navigate to="/" />;
 }
 
 export default PrivateRoute;
