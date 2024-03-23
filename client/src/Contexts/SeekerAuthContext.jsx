@@ -31,7 +31,6 @@ export function SeekerAuthProvider({ children }) {
         password
       );
       const { user } = userCredential;
-      console.log(user.uid);
       const userDocRef = doc(db, userType, user.uid);
 
       await setDoc(userDocRef, {

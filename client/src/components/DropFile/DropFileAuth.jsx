@@ -25,10 +25,11 @@ const DropFile = ({
     (acceptedFiles) => {
       const updatedList = [...fileList, ...acceptedFiles].slice(0, maxFiles);
       setFileList(updatedList);
-      onFileChange(updatedList[0]);
+      // Call onFileChange with the entire updated list instead of just the first file
+      onFileChange(updatedList);
 
-      if (acceptedFiles[0]) {
-        const file = acceptedFiles[0];
+      // Upload each file and get its download URL
+      updatedList.forEach((file) => {
         const storageRef = ref(
           storage,
           `Users/${userType}/${userId}/${file.name}`
@@ -37,29 +38,35 @@ const DropFile = ({
 
         uploadTask.on(
           "state_changed",
-          (snapshot) => {},
+          (snapshot) => {
+            // Optionally, handle upload progress here
+          },
           (error) => {
             console.error(error);
           },
-          () => {
-            getDownloadURL(uploadTask.snapshot.ref);
+          async () => {
+            // After a successful upload, get the download URL
+            const url = await getDownloadURL(uploadTask.snapshot.ref);
+            console.log("Upload complete:", url);
+            // Optionally, do something with the URL, like updating a state or calling a parent component method
           }
         );
-      }
+      });
     },
-    [fileList, onFileChange, maxFiles]
+    [fileList, onFileChange, maxFiles, userId, userType]
   );
+
+  const fileRemove = (file) => {
+    const updatedList = fileList.filter((f) => f !== file);
+    setFileList(updatedList);
+    // Update onFileChange call to reflect the removal
+    onFileChange(updatedList);
+  };
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
     onDrop,
     accept: acceptedFileTypes,
   });
-
-  const fileRemove = (file) => {
-    const updatedList = fileList.filter((f) => f !== file);
-    setFileList(updatedList);
-    onFileChange(null);
-  };
 
   return (
     <div className="flex h-full space-x-4">
@@ -115,6 +122,8 @@ DropFile.propTypes = {
   onFileChange: PropTypes.func.isRequired,
   maxFiles: PropTypes.number,
   acceptedFileTypes: PropTypes.object,
+  userType: PropTypes.string.isRequired,
+  userId: PropTypes.string.isRequired,
   showFile: PropTypes.bool,
 };
 

@@ -209,12 +209,12 @@ const JobList = () => {
               placeholder="Search for jobs"
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="mr-2 w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm"
+              className="mr-2 w-full px-4 py-2 mt-2 border border-gray-300 rounded-md shadow-sm"
             />
             <select
               value={locationFilter}
               onChange={(e) => setLocationFilter(e.target.value)}
-              className="mr-2 px-4 py-2 border border-gray-300 rounded-md shadow-sm"
+              className="mr-2 px-4 py-2 border mt-2 border-gray-300 rounded-md shadow-sm"
             >
               <option value="">All Locations</option>
               {states.map((state) => (

@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useRef } from "react";
+import { useLocation } from "react-router-dom";
 import { useAuth } from "../../../Contexts/MentorAuthContext";
 import NavbarWhite from "../../../components/navbar/version2/navbar";
 import Lottie from "lottie-react";
@@ -31,177 +32,118 @@ const acceptedIntroVideoTypes = {
   "video/ogg": [],
 };
 export default function MentorSignupProcess() {
-  const emailRef = useRef();
-  const passwordRef = useRef();
-  const passwordConfirmRef = useRef();
-  const fullNameRef = useRef();
+  const location = useLocation();
+  const userId = location.state?.uid;
   const companyNameRef = useRef();
   const locationRef = useRef();
   const companyEmailRef = useRef();
-  const websiteRef = useRef();
+  const introRef = useRef();
   const additionalInfoRef = useRef();
   const [profilePicture, setProfilePicture] = useState([]);
   const [introVideo, setIntroVideo] = useState([]);
   const [profileGallery, setProfileGallery] = useState([]);
-  const [userId, setId] = useState();
-  const { signup } = useAuth();
   const [error, setError] = useState("");
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
-  const audio = "";
-  async function handleSubmit(e) {
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    if (passwordRef.current.value !== passwordConfirmRef.current.value) {
-      return setError("Passwords do not match");
-    }
+    setError("");
+    setLoading(true);
+    console.log("Running", profileGallery, introVideo);
+    // Function to upload a file and return its download URL
+    const uploadFileAndGetURL = async (file, path) => {
+      const fileRef = ref(storage, path);
+      // Start the file upload
+      const uploadTask = uploadBytesResumable(fileRef, file);
+
+      // Wait for the upload to complete
+      await new Promise((resolve, reject) => {
+        uploadTask.on(
+          "state_changed",
+          (snapshot) => {
+            // Optionally, handle progress updates
+            // const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+            // console.log('Upload is ' + progress + '% done');
+          },
+          (error) => reject(error),
+          () => resolve(uploadTask.snapshot)
+        );
+      });
+
+      // After upload completes, get the download URL
+      return await getDownloadURL(uploadTask.snapshot.ref);
+    };
     try {
-      setError("");
-      setLoading(true);
-      const userCredential = await signup(
-        emailRef.current.value,
-        passwordRef.current.value,
-        fullNameRef.current.value
-      );
-
-      setId(userCredential.user.uid);
-      // Upload files to Firebase Storage
-      const storageRef = ref(storage);
-
       // Upload profile picture
-      let profilePictureUrl = "";
-      if (profilePicture.length > 0) {
-        const profilePictureRef = ref(
-          storage,
-          `Users/Mentors/${userId}/profilePicture.jpg`
-        );
-        const uploadTask = uploadBytesResumable(
-          profilePictureRef,
-          profilePicture[0]
-        );
-
-        await new Promise((resolve, reject) => {
-          uploadTask.on(
-            "state_changed",
-            (snapshot) => {
-              // Handle upload progress
-            },
-            (error) => {
-              // Handle unsuccessful uploads
-              reject(error);
-            },
-            async () => {
-              // Handle successful uploads on complete
-              try {
-                profilePictureUrl = await getDownloadURL(
-                  uploadTask.snapshot.ref
-                );
-                resolve(profilePictureUrl);
-              } catch (error) {
-                reject(error);
-              }
-            }
-          );
-        });
-      }
+      let profilePictureUrl = profilePicture
+        ? await uploadFileAndGetURL(
+            profilePicture[0],
+            `Users/Mentors/${userId}/profilePicture.jpg`
+          )
+        : "";
 
       // Upload intro video
-      let introVideoUrl = "";
-      if (introVideo.length > 0) {
-        const introVideoRef = ref(
-          storage,
-          `Users/Mentors/${userId}/introVideo.mp4`
-        );
-        const uploadTaskVideo = uploadBytesResumable(
-          introVideoRef,
-          introVideo[0]
-        );
-
-        await new Promise((resolve, reject) => {
-          uploadTaskVideo.on(
-            "state_changed",
-            (snapshot) => {
-              // Handle upload progress
-            },
-            (error) => {
-              // Handle unsuccessful uploads
-              reject(error);
-            },
-            async () => {
-              // Handle successful uploads on complete
-              try {
-                introVideoUrl = await getDownloadURL(
-                  uploadTaskVideo.snapshot.ref
-                );
-                resolve(introVideoUrl);
-              } catch (error) {
-                reject(error);
-              }
-            }
-          );
-        });
-      }
+      let introVideoUrl = introVideo
+        ? await uploadFileAndGetURL(
+            introVideo[0],
+            `Users/Mentors/${userId}/introVideo.mp4`
+          )
+        : "";
 
       // Upload profile gallery
       let galleryUrls = [];
-      if (profileGallery.length > 0) {
-        galleryUrls = await Promise.all(
-          profileGallery.map(async (file, index) => {
-            const galleryRef = ref(
-              storage,
-              `Users/Mentors/${userId}/gallery/${file.name}-${index}`
-            );
-            const uploadTaskGallery = uploadBytesResumable(galleryRef, file);
+      if (profileGallery) {
+        const uploadPromises = profileGallery.map(async (file, index) => {
+          const galleryRef = ref(
+            storage,
+            `Users/Mentors/${userId}/gallery/${file.name}-${index}`
+          );
+          // Start the file upload
+          const uploadTaskSnapshot = await uploadBytesResumable(
+            galleryRef,
+            file
+          );
+          // After upload completes, get the download URL
+          const url = await getDownloadURL(uploadTaskSnapshot.ref);
 
-            return new Promise((resolve, reject) => {
-              uploadTaskGallery.on(
-                "state_changed",
-                (snapshot) => {
-                  // Handle upload progress
-                },
-                (error) => {
-                  // Handle unsuccessful uploads
-                  reject(error);
-                },
-                async () => {
-                  // Handle successful uploads on complete
-                  try {
-                    const url = await getDownloadURL(
-                      uploadTaskGallery.snapshot.ref
-                    );
-                    resolve(url);
-                  } catch (error) {
-                    reject(error);
-                  }
-                }
-              );
-            });
-          })
-        );
+          // Create a new document in the gallery subcollection for each image
+          const galleryDocRef = doc(db, `Mentors/${userId}/gallery`, file.name);
+          await setDoc(galleryDocRef, { imageURL: url });
+
+          // Optionally, return the document reference or URL for further use
+          return galleryDocRef;
+        });
+
+        try {
+          // Await all gallery image uploads and document creations
+          await Promise.all(uploadPromises);
+        } catch (error) {
+          console.error("Error uploading gallery images:", error);
+        }
       }
 
-      // Store additional form data in Firestore
       await setDoc(
         doc(db, "Mentors", userId),
         {
           companyName: companyNameRef.current.value,
           location: locationRef.current.value,
-          companyEmail: companyEmailRef.current.value,
-          website: websiteRef.current.value,
+          intro_text: introRef.current.value,
           additionalInfo: additionalInfoRef.current.value,
           pictureURL: profilePictureUrl,
-          introVideo: introVideoUrl,
-          gallery: galleryUrls,
+          intro_video: introVideoUrl,
         },
         { merge: true }
       );
 
       // Navigate to the mentor profile page
-      navigate("/mentor", { state: { name: userId } });
+      navigate("/mentor", { state: { userId: userId } });
     } catch (error) {
       setError(error.message);
+      console.error("Error during the sign-up process:", error);
     }
     setLoading(false);
-  }
+  };
 
   return (
     <>
@@ -282,13 +224,16 @@ export default function MentorSignupProcess() {
             />
           </div>
           <div>
-            <label className="block text-sm font-bold mb-2" htmlFor="website">
-              Website URL
+            <label
+              className="block text-sm font-bold mb-2"
+              htmlFor="intro_text"
+            >
+              Introduction
             </label>
             <input
               className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
               type="text"
-              ref={websiteRef}
+              ref={introRef}
               required
             />
           </div>
@@ -342,20 +287,13 @@ export default function MentorSignupProcess() {
               userId={userId}
             />
           </div>
-          {/* <button
+          <button
             disabled={loading}
             className="w-full bg-primary hover:bg-primary-dark text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
             type="submit"
           >
             Done
-          </button> */}
-          <Link
-            to={"/testsuccess"}
-            disabled={loading}
-            className="w-full mt-10 bg-primary hover:bg-primary-dark text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
-          >
-            Done
-          </Link>
+          </button>
         </form>
       </div>
     </>

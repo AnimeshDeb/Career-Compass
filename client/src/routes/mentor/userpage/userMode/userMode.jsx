@@ -144,8 +144,15 @@ export default function UserMode({ userData, iconSize, isLoading }) {
             className="w-full p-5"
           >
             {galleryItems.map((image, index) => (
-              <div key={index} className="gallery-item p-2">
-                <img src={image.imageURL} alt="Gallery item" />
+              <div
+                key={index}
+                className="gallery-item p-2 flex justify-center items-center h-[300px] w-full"
+              >
+                <img
+                  src={image.imageURL}
+                  alt="Gallery item"
+                  className="max-h-full max-w-full object-cover"
+                />
               </div>
             ))}
           </Carousel>
