@@ -23,14 +23,7 @@ import JobList from "./src/routes/JobList/JobList.jsx";
 import SearchBar from "./src/routes/userSearch/SearchBar.jsx";
 import PrivateRoute from "./src/Contexts/PrivateRoute.jsx";
 export const router = createBrowserRouter([
-  {
-    path: "/search",
-    element:(
-      <SeekerAuthProvider>
-        <SearchBar/>
-      </SeekerAuthProvider>
-    ),
-  },
+  
   {
     path: "/parent",
     element: (
