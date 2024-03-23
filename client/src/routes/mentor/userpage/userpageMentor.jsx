@@ -10,6 +10,7 @@ import { useLocation } from "react-router-dom";
 
 export default function UserpageMentor() {
   const location = useLocation();
+  const mentorId = location.state?.userId;
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
   const [iconSize, setIconSize] = useState("2x");
   const [editMode, setEditMode] = useState(false);
@@ -21,15 +22,13 @@ export default function UserpageMentor() {
   const triggerUserDataRefresh = () => {
     setRefreshUserData((prev) => !prev);
   };
-  // const mentorId = location.state?.name;
-  const mentorId = "J8tVexeC8shTEFTDBQfL5evs4oy2";
   useEffect(() => {
     const fetchData = async () => {
       try {
         setIsLoading(true);
-        // const userId = name;
         const fetchedUserData = await getMentorById(mentorId);
         setUserData(fetchedUserData);
+        console.log(fetchedUserData);
       } catch (error) {
         console.error("Error fetching user by ID:", error.message);
       } finally {
@@ -74,19 +73,6 @@ export default function UserpageMentor() {
     }
   }, [windowWidth]);
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const userId = "J8tVexeC8shTEFTDBQfL5evs4oy2";
-        const fetchedUserData = await getMentorById(userId);
-        setUserData(fetchedUserData);
-      } catch (error) {
-        console.error("Error fetching user by ID:", error.message);
-      }
-    };
-
-    fetchData();
-  }, []);
   return (
     <div className="bg-primary-dark">
       <div className="w-full bg-white max-w-[100%] mx-auto xl:max-w-[75%] shadow-md">
@@ -116,7 +102,7 @@ export default function UserpageMentor() {
             <EditMode
               pendingChanges={pendingChanges}
               setPendingChanges={setPendingChanges}
-              userId={"J8tVexeC8shTEFTDBQfL5evs4oy2"}
+              userId={mentorId}
               iconSize={iconSize}
               userData={userData}
               triggerUserDataRefresh={triggerUserDataRefresh}

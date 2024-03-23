@@ -73,7 +73,7 @@ const JobListing = ({ job, onJobClick, isFirst }) => {
       onClick={() => onJobClick(job)}
     >
       <div className="flex justify-between items-center">
-        <div className="flex">
+        <div className="lg:flex xl:flex">
           <h1 className="font-semibold pr-5 text-2xl">{job.id}</h1>
           <div className="flex items-start">
             {job.Description && (
@@ -203,18 +203,18 @@ const JobList = () => {
         <Navbar userType="seeker" iconSize={iconSize} />
         <div className="px-3">
           <h1 className="text-7xl pt-2 font-bold text-primary">Jobs</h1>
-          <div className="flex items-center mb-4">
+          <div className="md:flex items-center mb-4">
             <input
               type="text"
               placeholder="Search for jobs"
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="mr-2 w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm"
+              className="mr-2 w-full px-4 py-2 mt-2 border border-gray-300 rounded-md shadow-sm"
             />
             <select
               value={locationFilter}
               onChange={(e) => setLocationFilter(e.target.value)}
-              className="mr-2 px-4 py-2 border border-gray-300 rounded-md shadow-sm"
+              className="mr-2 px-4 py-2 border mt-2 border-gray-300 rounded-md shadow-sm"
             >
               <option value="">All Locations</option>
               {states.map((state) => (
@@ -223,6 +223,7 @@ const JobList = () => {
                 </option>
               ))}
             </select>
+
             <button
               className={`py-2 px-4 ${
                 isPartTime ? "bg-primary" : "bg-secondary"
@@ -239,13 +240,19 @@ const JobList = () => {
             </button>
           </div>
         </div>
-        <div className="flex-grow flex">
+        <div
+          className={`flex-grow relative ${
+            selectedJob ? "md:flex md:flex-row" : ""
+          }`}
+        >
           <div
-            className={`${selectedJob ? "w-1/2" : "w-full"} px-2 overflow-auto`}
+            className={`px-2 overflow-auto transition-all duration-500 ease-in-out ${
+              selectedJob ? "w-full md:w-1/2" : "w-full"
+            }`}
           >
             <div className="cursor-pointer border border-gray-300 p-4 my-2 bg-secondary rounded-lg text-white shadow hover:shadow-md relative">
               <div className="flex justify-between items-center ">
-                <div className="flex">
+                <div className="">
                   <h1 className="font-semibold pr-5 text-2xl">Cleaner</h1>
                   <div className="flex items-start">
                     <>
@@ -256,7 +263,7 @@ const JobList = () => {
                 </div>
                 <h2>Recommended by Mentor</h2>
                 <div className="flex flex-col items-end space-y-2">
-                  <div className="bg-primary hover:bg-secondary-dark text-white px-10 py-2 rounded-full cursor-pointer text-center">
+                  <div className="bg-secondary hover:bg-secondary-dark text-white px-10 py-2 rounded-full cursor-pointer text-center">
                     Details
                   </div>
                   <button className="bg-primary hover:bg-secondary-dark text-white px-10 py-2 rounded-full cursor-pointer">
@@ -281,14 +288,15 @@ const JobList = () => {
           {selectedJob && (
             <div
               ref={detailsRef}
-              className="w-1/2 overflow-auto shadow-lg rounded-lg transition-opacity duration-500"
+              className={`absolute top-0 left-0 w-full h-full overflow-auto shadow-lg rounded-lg bg-white md:relative md:w-1/2 transition-all duration-500 ease-in-out z-10 ${
+                selectedJob ? "block" : "hidden"
+              }`}
             >
               <h3 className="text-4xl rounded-tl-lg font-semibold mt-2.5 text-white mb-4 px-3 py-2 pt-3 bg-primary w-full ">
-                Work In Progress{/* {selectedJob.id} */}
+                {selectedJob.id}
               </h3>
               <div className="flex flex-col space-y-3 px-4">
-                Work In Progress
-                {/* <p className="text-md">
+                <p className="text-md">
                   <span className="text-2xl font-medium text-primary">
                     {selectedJob.Description}
                   </span>
@@ -320,7 +328,7 @@ const JobList = () => {
                   <span className="text-xl font-medium text-primary">
                     {selectedJob.Availability}
                   </span>
-                </p> */}
+                </p>
                 <button
                   className="mt-5 py-2 px-4 bg-secondary text-white font-semibold rounded-md hover:bg-secondary-dark transition-colors"
                   onClick={() => setSelectedJob(null)}
@@ -334,26 +342,6 @@ const JobList = () => {
       </div>
       <Footer />
     </>
-  );
-};
-
-const JobListingStyle = () => {
-  return (
-    <div className="w-full bg-green-600 text-white p-4 flex justify-between items-center">
-      <div className="flex items-center space-x-4">
-        <div className="bg-green-800 p-2">
-          <span className="font-bold text-lg">Long Technician II</span>
-        </div>
-        <div>
-          <p>Help employees with their IT problems</p>
-          <p className="font-bold">Requirements:</p>
-          <ul className="list-inside list-disc">
-            <li>Windows</li>
-            <li>Communication skills</li>
-          </ul>
-        </div>
-      </div>
-    </div>
   );
 };
 

@@ -1,32 +1,89 @@
-import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
-import { useRef } from "react";
-import { useAuth } from "../../../Contexts/SeekerAuthContext";
+import { useState, useEffect } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import { useRef } from 'react';
+import { useAuth } from '../../../Contexts/SeekerAuthContext';
+import { db, auth } from '../../../firebase';
+import {
+  collection,
+  doc,
+  setDoc,
+  query,
+  getDocs,
+  where,
+} from 'firebase/firestore';
+
 function SeekerLogin() {
   const emailRef = useRef();
   const passwordRef = useRef();
   const navigate = useNavigate();
   const { login } = useAuth();
-  const [error, setError] = useState("");
+  const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
-  const [userType, setUserType] = useState("seeker");
+  const [emailCheck, setEmailCheck] = useState('');
+  const [userNavigate, setUserNavigate] = useState('');
+
   async function handleSubmit(e) {
     e.preventDefault();
     try {
-      setError("");
+      setError('');
       setLoading(true);
-      const userCredentials = await login(
-        emailRef.current.value,
-        passwordRef.current.value
-      );
-      setLoading(false);
-      navigate("/user", { state: { name: userCredentials.user.uid } });
+
+      const email = emailRef.current.value;
+      const mentorSnapshot = collection(db, 'Mentors');
+      const emailquery = query(mentorSnapshot, where('email', '==', email));
+      const querySnapshot = await getDocs(emailquery);
+      if (!querySnapshot.empty) {
+        setUserNavigate('/mentor');
+        setLoading(false);
+      } else {
+        const seekerSnapshot = collection(db, 'Seekers');
+        const seekerEmailQuery = query(
+          seekerSnapshot,
+          where('email', '==', email)
+        );
+        const seekerQuerySnapshot = await getDocs(seekerEmailQuery);
+        if (!seekerQuerySnapshot.empty) {
+          setUserNavigate('/user');
+          setLoading(false);
+        } else {
+          setLoading(false);
+          setError('Email Not Found');
+        }
+      }
     } catch (error) {
-      console.error("Error signing in: ", error);
-      setError("Unable to Login");
+      console.error('Error signing in: ', error);
+      setError('Unable to Login');
       setLoading(false);
     }
   }
+
+  //purpose is to check if userNavigate is storing a value and if it does we call the login function and navigate to the appropriate page
+  useEffect(() => {
+    if (userNavigate) {
+      const loginFunction = async () => {
+        try {
+          const userCredentials = await login(
+            emailRef.current.value,
+            passwordRef.current.value
+          );
+          navigate(userNavigate, {
+            state: { name: userCredentials.user.uid }
+          });
+        } catch (error) {
+          console.error('Error signing in: ', error);
+          setError('Unable to Login');
+          setLoading(false);
+        }
+      };
+
+      loginFunction();
+    }
+  }, [userNavigate, navigate, login]);
+
+  const handleEmailCheck = (e) => {
+    e.preventDefault();
+    setEmailCheck(e.target.value);
+  };
 
   return (
     <>
@@ -42,6 +99,8 @@ function SeekerLogin() {
               className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
               type="email"
               ref={emailRef}
+              value={emailCheck}
+              onChange={handleEmailCheck}
               required
             />
           </div>
