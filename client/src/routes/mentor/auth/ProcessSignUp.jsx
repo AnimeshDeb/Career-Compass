@@ -64,6 +64,10 @@ export default function MentorSignupProcess() {
       );
 
       setId(userCredential.user.uid);
+      if(!userId)
+      {
+        throw new Error("User id is not defined");
+      }
       // Upload files to Firebase Storage
       const storageRef = ref(storage);
 
@@ -342,20 +346,20 @@ export default function MentorSignupProcess() {
               userId={userId}
             />
           </div>
-          {/* <button
+          <button
             disabled={loading}
             className="w-full bg-primary hover:bg-primary-dark text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
             type="submit"
           >
             Done
-          </button> */}
-          <Link
-            to={"/testsuccess"}
+          </button>
+          {/* <Link
+            to={"/mentor"}
             disabled={loading}
             className="w-full mt-10 bg-primary hover:bg-primary-dark text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
           >
             Done
-          </Link>
+          </Link> */}
         </form>
       </div>
     </>
