@@ -81,6 +81,7 @@ export default function UserpageMentor() {
           userType={"mentor"}
           iconSize={iconSize}
           userId={mentorId}
+          currentPage={"userpage"}
         />
 
         {userData && (

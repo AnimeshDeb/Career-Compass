@@ -4,7 +4,8 @@ import SearchButton from "../../Buttons/navbar_btns/search/search";
 import LogoutButton from "../../Buttons/navbar_btns/Logout/logout";
 import GroupButton from "../../Buttons/navbar_btns/Groups/Group";
 import { Link } from "react-router-dom";
-export default function Navbar({ userType, userId, iconSize }) {
+import UserpageButton from "../../Buttons/navbar_btns/UserpageButton";
+export default function Navbar({ userType, userId, iconSize, currentPage }) {
   return (
     <nav className={`flex justify-between bg-secondary items-center py-4 px-6`}>
       <Link href="/">
@@ -15,17 +16,26 @@ export default function Navbar({ userType, userId, iconSize }) {
         />
       </Link>
       <div className="flex space-x-4">
-        {(userType === "mentor" || userType === "seeker") && (
-          <SearchButton
-            userId={userId}
+        {currentPage != "userpage" && (
+          <UserpageButton
             userType={userType}
-            className="one-btn"
             iconSize={iconSize}
+            userId={userId}
           />
         )}
+        {currentPage != "joblist" &&
+          (userType === "mentor" || userType === "seeker") && (
+            <SearchButton
+              userId={userId}
+              userType={userType}
+              iconSize={iconSize}
+            />
+          )}
         {(userType === "mentor" || userType === "seeker") && (
           <>
-            <GroupButton userId={userId} iconSize={iconSize} />
+            {currentPage != "groups" && (
+              <GroupButton userId={userId} iconSize={iconSize} />
+            )}
             <LogoutButton userId={userId} iconSize={iconSize} />
           </>
         )}
@@ -38,4 +48,5 @@ Navbar.propTypes = {
   userType: PropTypes.string.isRequired,
   iconSize: PropTypes.string,
   userId: PropTypes.string,
+  currentPage: PropTypes.string,
 };

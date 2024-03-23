@@ -81,6 +81,7 @@ export default function UserpageSeeker() {
           userId={name}
           userType={"seeker"}
           iconSize={iconSize}
+          currentPage={"userpage"}
         />
         {userData && (
           <UserBanner
