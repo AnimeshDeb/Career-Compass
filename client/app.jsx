@@ -19,6 +19,7 @@ import MentorSignup from "./src/routes/mentor/auth/MentorSignup.jsx";
 import { MentorAuthProvider } from "./src/Contexts/MentorAuthContext.jsx";
 import SuccessfulTesting from "./src/routes/SuccessfulTesting.jsx";
 import JobList from "./src/routes/JobList/JobList.jsx";
+import GroupPage from "./src/routes/group/GroupPage.jsx";
 
 import SearchBar from "./src/routes/userSearch/SearchBar.jsx";
 import PrivateRoute from "./src/Contexts/PrivateRoute.jsx";
@@ -120,6 +121,7 @@ export const router = createBrowserRouter([
     path: "Seeker/Joblist",
     element: <JobList />,
   },
+  
 
   {
     path: "/Joblist",
@@ -151,6 +153,18 @@ export const router = createBrowserRouter([
       </AuthProvider>
     ),
   },
+
+  {
+    path: "/groups",
+    element: (
+      <AuthProvider>
+        <SeekerAuthProvider>
+          <GroupPage />
+        </SeekerAuthProvider>
+      </AuthProvider>
+    ),
+  },
+  
   {
     path: "/user",
     element: (

@@ -5,6 +5,7 @@ import LogoutButton from "../../Buttons/navbar_btns/Logout/logout";
 import GroupButton from "../../Buttons/navbar_btns/Groups/Group";
 import { Link } from "react-router-dom";
 import UserpageButton from "../../Buttons/navbar_btns/UserpageButton";
+
 export default function Navbar({ userType, userId, iconSize, currentPage }) {
  return (
   <nav className={`flex justify-between bg-secondary items-center py-4 px-6`}>
@@ -35,7 +36,7 @@ export default function Navbar({ userType, userId, iconSize, currentPage }) {
           {(userType === "mentor" || userType === "seeker") && (
             <>
               {currentPage !== "groups" && (
-                <GroupButton userId={userId} iconSize={iconSize} />
+                <GroupButton userId={userId} iconSize={iconSize} userType={userType} />
               )}
               <LogoutButton userId={userId} iconSize={iconSize} />
             </>
