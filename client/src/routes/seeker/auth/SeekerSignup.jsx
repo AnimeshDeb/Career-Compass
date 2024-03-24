@@ -1,39 +1,50 @@
-import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
-import { useRef } from "react";
-import { useAuth } from "../../../Contexts/SeekerAuthContext";
-import Navbar from "../../../components/navbar/version1/navbar";
+import { useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import { useRef } from 'react';
+import { useAuth } from '../../../Contexts/SeekerAuthContext';
+import Navbar from '../../../components/navbar/version1/navbar';
+import { collection, doc, setDoc } from 'firebase/firestore';
+import { db } from '../../../firebase';
 function SeekerSignup() {
   const emailRef = useRef();
   const passwordRef = useRef();
   const passwordConfirmRef = useRef();
   const fullNameRef = useRef();
   const { signup } = useAuth();
-  const [error, setError] = useState("");
+  const [error, setError] = useState('');
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
-
+  const usersCollection = collection(db, 'Seekers');
+  const {currentUser}=useAuth();
   async function handleSubmit(e) {
     e.preventDefault();
     if (passwordRef.current.value !== passwordConfirmRef.current.value) {
-      return setError("Passwords do not match");
+      return setError('Passwords do not match');
     }
     try {
-      setError("");
+      setError('');
       setLoading(true);
       const userCredential = await signup(
         emailRef.current.value,
         passwordRef.current.value,
         fullNameRef.current.value,
-        "Seekers"
+        'Seekers'
       );
-      navigate("/parent", {
-        state: {
-          uid: userCredential.user.uid,
-          username: fullNameRef.current.value,
-        },
-      });
+      const uid=userCredential.user.uid;
+      
+        const docRef = doc(usersCollection, uid);
+        await setDoc(docRef, { type: 'Seeker' }, { merge: true });
+
+        navigate('/parent', {
+          state: {
+            uid: userCredential.user.uid,
+            username: fullNameRef.current.value,
+          },
+        });
+      
     } catch (error) {
+      console.log(error);
+      
       setError(error.message);
     }
     setLoading(false);
@@ -106,7 +117,7 @@ function SeekerSignup() {
           </button>
         </form>
         <div className="text-center mt-4">
-          Already have an account?{" "}
+          Already have an account?{' '}
           <Link to="/" className="text-primary hover:text-blue-800">
             Log In
           </Link>

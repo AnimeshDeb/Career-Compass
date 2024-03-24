@@ -9,7 +9,7 @@ import animationData from "../assets/Animation - 1707811919582.json";
 import DropFile from "../../../components/DropFile/DropFileAuth";
 import { storage, db } from "../../../firebase";
 import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
-import { doc, setDoc } from "firebase/firestore";
+import { collection, doc, setDoc } from "firebase/firestore";
 const acceptedProfilePictureTypes = {
   "image/jpeg": [],
   "image/png": [],
@@ -37,6 +37,7 @@ function MentorSignup() {
   const [error, setError] = useState("");
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
+  const usersCollection=collection(db, "Mentors");
 
   async function handleSubmit(e) {
     e.preventDefault();
@@ -52,6 +53,8 @@ function MentorSignup() {
         fullNameRef.current.value,
         "Mentors"
       );
+      const docRef=doc(usersCollection, userCredential.user.uid );
+      await setDoc(docRef, {type: "Mentor"}, {merge: true});
       navigate("/mentorprocess", {
         state: {
           uid: userCredential.user.uid,

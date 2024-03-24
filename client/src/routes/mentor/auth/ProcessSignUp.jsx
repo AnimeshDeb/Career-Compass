@@ -131,7 +131,8 @@ export default function MentorSignupProcess() {
           intro_text: introRef.current.value,
           additionalInfo: additionalInfoRef.current.value,
           pictureURL: profilePictureUrl,
-          intro_video: introVideoUrl,
+          intro_video: introVideoUrl
+         
         },
         { merge: true }
       );

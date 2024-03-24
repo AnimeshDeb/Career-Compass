@@ -66,7 +66,8 @@ function SeekerIntro({ handleNextStep, uid }) {
       try {
         await setDoc(
           docRef,
-          { introduction: seekerTxtIntro.trim() },
+          { introduction: seekerTxtIntro.trim()},
+          
           { merge: true }
         );
         console.log('Text introduction saved successfully.');
