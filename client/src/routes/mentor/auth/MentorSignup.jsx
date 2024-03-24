@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useRef } from "react";
-import {useAuth} from "../../../Contexts/SeekerAuthContext"
+import { useAuth } from "../../../Contexts/SeekerAuthContext";
 // import { useAuth } from "../../../Contexts/MentorAuthContext";
 import Navbar from "../../../components/navbar/version1/navbar";
 import Lottie from "lottie-react";
@@ -37,7 +37,7 @@ function MentorSignup() {
   const [error, setError] = useState("");
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
-  const usersCollection=collection(db, "Mentors");
+  const usersCollection = collection(db, "Mentors");
 
   async function handleSubmit(e) {
     e.preventDefault();
@@ -53,8 +53,8 @@ function MentorSignup() {
         fullNameRef.current.value,
         "Mentors"
       );
-      const docRef=doc(usersCollection, userCredential.user.uid );
-      await setDoc(docRef, {type: "Mentor"}, {merge: true});
+      const docRef = doc(usersCollection, userCredential.user.uid);
+      await setDoc(docRef, { type: "Mentor" }, { merge: true });
       navigate("/mentorprocess", {
         state: {
           uid: userCredential.user.uid,
@@ -69,7 +69,7 @@ function MentorSignup() {
 
   return (
     <>
-      <Navbar />
+      <Navbar currentPage={"signup"} />
       <div className="max-w-md mx-auto mt-10 bg-white p-8 border border-gray-200 rounded-lg shadow-md">
         <h2 className="text-4xl text-primary font-bold text-center mb-4">
           Mentor Sign Up

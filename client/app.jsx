@@ -20,11 +20,11 @@ import { MentorAuthProvider } from "./src/Contexts/MentorAuthContext.jsx";
 import SuccessfulTesting from "./src/routes/SuccessfulTesting.jsx";
 import JobList from "./src/routes/JobList/JobList.jsx";
 import GroupPage from "./src/routes/group/GroupPage.jsx";
-
+import PublicUserPage from "./src/routes/PublicUserPage/PublicUserPage";
 import SearchBar from "./src/routes/userSearch/SearchBar.jsx";
 import PrivateRoute from "./src/Contexts/PrivateRoute.jsx";
+import Error404Page from "./src/404.jsx";
 export const router = createBrowserRouter([
-  
   {
     path: "/parent",
     element: (
@@ -121,7 +121,6 @@ export const router = createBrowserRouter([
     path: "Seeker/Joblist",
     element: <JobList />,
   },
-  
 
   {
     path: "/Joblist",
@@ -153,7 +152,10 @@ export const router = createBrowserRouter([
       </AuthProvider>
     ),
   },
-
+  {
+    path: "/public",
+    element: <PublicUserPage />,
+  },
   {
     path: "/groups",
     element: (
@@ -164,7 +166,7 @@ export const router = createBrowserRouter([
       </AuthProvider>
     ),
   },
-  
+
   {
     path: "/user",
     element: (
@@ -209,6 +211,16 @@ export const router = createBrowserRouter([
       <AuthProvider>
         <SeekerAuthProvider>
           <SuccessfulTesting />
+        </SeekerAuthProvider>
+      </AuthProvider>
+    ),
+  },
+  {
+    path: "/*",
+    element: (
+      <AuthProvider>
+        <SeekerAuthProvider>
+          <Error404Page />
         </SeekerAuthProvider>
       </AuthProvider>
     ),

@@ -1,20 +1,11 @@
 import PropTypes from "prop-types";
 import Skeleton, { SkeletonTheme } from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
-export default function UserBannerPublic({
-  banner,
-  picture,
-  name,
-  isLoading,
-}) {
-
-
+export default function UserBannerPublic({ banner, picture, name, isLoading }) {
   const placeholderBanner = "/placeholderBanner.jpg";
   const placeholderPFP = "/placeholderPFP.png";
   const renderUrlImage = (dataType, data, field) => {
-    return (
-      data || (field === "banner" ? placeholderBanner : placeholderPFP)
-    );
+    return data || (field === "banner" ? placeholderBanner : placeholderPFP);
   };
 
   return (
