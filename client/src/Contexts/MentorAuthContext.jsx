@@ -36,7 +36,6 @@ export function MentorAuthProvider({ children }) {
         password
       );
       const { user } = userCredential;
-      console.log(user.uid);
       const userDocRef = doc(db, "Mentors", user.uid);
       await setDoc(userDocRef, {
         email: user.email,
