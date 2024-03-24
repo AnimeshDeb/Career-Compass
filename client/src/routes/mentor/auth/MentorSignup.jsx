@@ -315,7 +315,7 @@ function MentorSignup1() {
 
   return (
     <>
-      <Navbar userType="None" />
+      <Navbar userType="None" currentPage={"signup"} />
       <div className="max-w-lg mx-auto mt-10 bg-white p-8">
         <h2 className="text-4xl text-secondary font-bold text-center mb-4">
           Sign Up

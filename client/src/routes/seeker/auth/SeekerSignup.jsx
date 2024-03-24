@@ -52,7 +52,7 @@ function SeekerSignup() {
 
   return (
     <>
-      <Navbar />
+      <Navbar currentPage={"signup"} />
       <div className="max-w-md mx-auto mt-10 bg-white p-8 border border-gray-200 rounded-lg shadow-md">
         <h2 className="text-4xl text-primary font-bold text-center mb-4">
           Seeker Sign Up

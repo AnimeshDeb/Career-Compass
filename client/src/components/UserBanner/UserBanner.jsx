@@ -101,7 +101,7 @@ export default function UserBanner({
 UserBanner.propTypes = {
   banner: PropTypes.string,
   picture: PropTypes.string,
-  name: PropTypes.string.isRequired,
+  name: PropTypes.string,
   iconSize: PropTypes.string,
   onEdit: PropTypes.func,
   editMode: PropTypes.bool,

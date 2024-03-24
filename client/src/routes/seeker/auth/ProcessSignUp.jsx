@@ -66,8 +66,7 @@ function ParentComponent() {
     if (step < 5) {
       setStep(step + 1);
     } else {
-      navigate("/testsuccess");
-      // navigate("/user", { state: { name: uid } });
+      navigate("/user", { state: { name: uid } });
     }
   };
   const handlePrevStep = () => {

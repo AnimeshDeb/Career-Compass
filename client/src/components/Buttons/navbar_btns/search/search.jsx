@@ -11,12 +11,13 @@ export default function SearchButton({
   const navigate = useNavigate();
 
   async function directPage() {
-    navigate("/joblist", { state: { uid: userId, userType: userType } });
+    console.log("User info:", userId, userType);
+    navigate("/joblist", { state: { userId: userId, userType: userType } });
   }
   return (
     <button
       onClick={directPage}
-      className="flex flex-col items-center z-2 justify-center p-1.5 xs:p-2.5 text-xs rounded-sm mt-1 xs:mt-2.5 ml-2.5 xs:ml-5 transition-colors duration-700 hover:bg-white hover:text-primary general-btn"
+      className="flex flex-col items-center z-2 justify-center p-1.5 xs:p-2.5 rounded-sm mt-1 xs:mt-2.5 ml-2.5 xs:ml-5 transition-colors duration-700 hover:bg-white hover:text-primary general-btn"
     >
       <FontAwesomeIcon icon={faMagnifyingGlass} size={iconSize} />
     </button>

@@ -61,7 +61,8 @@ const states = [
 
 const JobListing = ({ job, onJobClick, isFirst }) => {
   const location = useLocation();
-  const userType = "seeker";
+  const userType = location.state?.userType;
+  const userId = location.state?.userId;
   const lowerCaseUserType = userType?.toLowerCase();
   const jobStyle = isFirst
     ? "bg-green-500" // replace with your actual green color class
@@ -116,6 +117,9 @@ const JobListing = ({ job, onJobClick, isFirst }) => {
 };
 
 const JobList = () => {
+  const location = useLocation();
+  const userType = location.state?.userType;
+  const userId = location.state?.userId;
   const [searchTerm, setSearchTerm] = useState("");
   const [jobs, setJobs] = useState([]);
   const [selectedJob, setSelectedJob] = useState(null);
@@ -200,7 +204,12 @@ const JobList = () => {
   return (
     <>
       <div className="flex flex-col min-h-screen">
-        <Navbar userType="seeker" iconSize={iconSize} />
+        <Navbar
+          userType={userType}
+          iconSize={iconSize}
+          currentPage={"joblist"}
+          userId={userId}
+        />
         <div className="px-3">
           <h1 className="text-7xl pt-2 font-bold text-primary">Jobs</h1>
           <div className="md:flex items-center mb-4">
