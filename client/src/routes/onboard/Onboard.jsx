@@ -45,7 +45,7 @@ function Onboard() {
                   onClick={() => setTab('login')}
                   className={`px-4 text-xl py-2 ${
                     tab === 'login'
-                      ? 'bg-primary text-white rounded-lg hover:bg-primaryDark'
+                      ? 'bg-primary text-white rounded-lg'
                       : 'bg-transparent'
                   }`}
                 >
@@ -69,7 +69,7 @@ function Onboard() {
                     <h4 className="text-2xl">Choose what you are</h4>
                     <Link
                       to="/SeekerSignup"
-                      className="px-4 py-2 text-xl bg-primary rounded-md text-white text-center hover:bg-primaryDark hover:text-gray-200 hover:shadow-md transition-colors duration-300"
+                      className="px-4 py-2 text-xl bg-primary hover:bg-primary-light rounded-md text-white text-center hover:bg-primaryDark hover:text-gray-200 hover:shadow-md transition-colors duration-300"
                     >
                      
                       Seeker
@@ -77,7 +77,7 @@ function Onboard() {
                     </Link>
                     <Link
                       to="/MentorSignup"
-                      className="px-4 py-2 text-xl bg-secondary rounded-md text-white text-center hover:bg-secondaryDark hover:text-gray-200 hover:shadow-md transition-colors duration-300"
+                      className="px-4 py-2 text-xl bg-secondary hover:bg-secondary-light rounded-md text-white text-center hover:bg-secondaryDark hover:text-gray-200 hover:shadow-md transition-colors duration-300"
                     >
                    
                       Mentor
@@ -89,7 +89,7 @@ function Onboard() {
             </div>
             <button
               onClick={handleNextPage}
-              className="bg-secondary text-white text-xl py-2 w-full max-w-md rounded-b-lg mt-0 mx-auto hover:bg-secondaryDark hover:text-gray-200 hover:shadow-md transition-colors duration-300"
+              className="bg-secondary hover:bg-secondary-light text-white text-xl py-2 w-full max-w-md rounded-b-lg mt-0 mx-auto hover:bg-secondaryDark hover:text-gray-200 hover:shadow-md transition-colors duration-300"
             >
               Looking for someone? Search them!
             </button>
