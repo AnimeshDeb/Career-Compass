@@ -5,6 +5,8 @@ import { useLocation } from "react-router-dom";
 import PropTypes from "prop-types";
 import Footer from "../../components/footer/footer";
 import anime from "animejs";
+import { doc, getDoc, runTransaction, arrayUnion } from "firebase/firestore";
+import { db } from "../../firebase";
 // Array of all 50 U.S. states
 const states = [
   "Alabama",
@@ -59,57 +61,187 @@ const states = [
   "Wyoming",
 ];
 
-const JobListing = ({ job, onJobClick, isFirst }) => {
+const JobListing = ({ job, onJobClick, isRecommended }) => {
   const location = useLocation();
   const userType = location.state?.userType;
   const userId = location.state?.userId;
   const lowerCaseUserType = userType?.toLowerCase();
-  const jobStyle = isFirst
-    ? "bg-green-500" // replace with your actual green color class
-    : "bg-primary"; // the default background color class
+  const [showDropdown, setShowDropdown] = useState(false);
+  const [selectedGroup, setSelectedGroup] = useState(null);
+  const [selectedMentee, setSelectedMentee] = useState(null);
+  const [groups, setGroups] = useState([]);
+  const [mentees, setMentees] = useState([]);
+  const bgColorClass = isRecommended ? "bg-secondary" : "bg-primary";
+  const btnColor = isRecommended
+    ? "bg-primary hover:bg-primary-light"
+    : "bg-secondary hover:bg-secondary-light";
 
+  useEffect(() => {
+    if (selectedGroup) {
+      const currentGroup = groups.find((group) => group.id === selectedGroup);
+      if (currentGroup && currentGroup.mentees) {
+        const menteesArray = Object.entries(currentGroup.mentees).map(
+          ([id, mentee]) => ({
+            id,
+            ...mentee,
+          })
+        );
+        setMentees(menteesArray);
+      } else {
+        setMentees([]);
+      }
+    }
+  }, [selectedGroup, groups]);
+  useEffect(() => {
+    const fetchUserGroups = async () => {
+      if (!userId) return;
+
+      const userRef = doc(db, "Mentors", userId);
+      const userSnap = await getDoc(userRef);
+
+      if (userSnap.exists()) {
+        const userData = userSnap.data();
+        const groupIds = userData.groups || [];
+
+        // Fetch details for each group
+        const groupsDetailsPromise = groupIds.map(async (groupId) => {
+          const groupRef = doc(db, "Groups", groupId);
+          const groupSnap = await getDoc(groupRef);
+          if (groupSnap.exists()) {
+            return { id: groupId, ...groupSnap.data() };
+          } else {
+            console.log("No such group!");
+            return null;
+          }
+        });
+
+        const groupsDetails = await Promise.all(groupsDetailsPromise);
+        setGroups(groupsDetails.filter((group) => group));
+        console.log(groups);
+      } else {
+        console.log("No such user!");
+      }
+    };
+
+    fetchUserGroups();
+  }, [userId]);
+
+  const recommendJob = async (groupId, menteeId, jobId) => {
+    if (!groupId || !menteeId || !jobId) {
+      console.error("Missing groupId, menteeId, or jobId");
+      return;
+    }
+
+    try {
+      const menteeRef = doc(db, "Seekers", menteeId);
+      await runTransaction(db, async (transaction) => {
+        const menteeDoc = await transaction.get(menteeRef);
+        if (!menteeDoc.exists()) {
+          console.error("Document does not exist!");
+          return;
+        }
+        const currentRecommendations = menteeDoc.data().recommended || [];
+        if (!currentRecommendations.includes(jobId)) {
+          transaction.update(menteeRef, {
+            recommended: arrayUnion(jobId),
+          });
+        }
+      });
+
+      alert("Job recommended successfully!");
+      setShowDropdown(false);
+    } catch (error) {
+      console.error("Failed to recommend job:", error);
+    }
+  };
   return (
     <div
-      className="cursor-pointer border border-gray-300 p-4 my-2 bg-primary rounded-lg text-white shadow hover:shadow-md relative"
+      className={`cursor-pointer border border-gray-300 p-4 my-2 ${bgColorClass} rounded-lg text-white shadow hover:shadow-md relative`}
       onClick={() => onJobClick(job)}
     >
-      <div className="flex justify-between items-center">
-        <div className="lg:flex xl:flex">
+      <div className="flex justify-between items-center ">
+        <div className="">
           <h1 className="font-semibold pr-5 text-2xl">{job.id}</h1>
           <div className="flex items-start">
-            {job.Description && (
-              <>
-                <span className="text-lg pt-1">&#8226;</span>
-                <h2 className="pl-2 text-lg">{job.Description}</h2>
-              </>
-            )}
+            <>
+              <span className="text-lg pt-1">&#8226;</span>
+              <h2 className="pl-2 text-lg">{job.Description}</h2>
+            </>
           </div>
         </div>
+        {isRecommended && <h2>Recommended by Mentor</h2>}
         <div className="flex flex-col items-end space-y-2">
           <div
-            className="bg-secondary hover:bg-secondary-dark text-white px-10 py-2 rounded-full cursor-pointer text-center"
-            onClick={(event) => {
-              event.stopPropagation();
-              onJobClick(job);
-            }}
+            className={`${btnColor} text-white px-10 py-2 rounded-full cursor-pointer text-center`}
           >
             Details
           </div>
-          {lowerCaseUserType === "mentor" ? (
+          {lowerCaseUserType === "seeker" && (
             <button
-              className="bg-primary hover:bg-primary-dark text-white px-10 py-2 rounded-full cursor-pointer"
-              onClick={(event) => event.stopPropagation()}
-            >
-              Recommend
-            </button>
-          ) : lowerCaseUserType === "seeker" ? (
-            <button
-              className="bg-secondary hover:bg-secondary-dark text-white px-10 py-2 rounded-full cursor-pointer"
-              onClick={(event) => event.stopPropagation()}
+              className={`${btnColor} text-white px-10 py-2 rounded-full cursor-pointer`}
             >
               Apply
             </button>
-          ) : null}
+          )}
+          {lowerCaseUserType === "mentor" && (
+            <div>
+              <button
+                className={`${btnColor} text-white px-10 py-2 rounded-full cursor-pointer`}
+                onClick={(event) => {
+                  event.stopPropagation();
+                  setShowDropdown(!showDropdown);
+                }}
+              >
+                Recommend
+              </button>
+              {showDropdown && (
+                <div className="absolute z-10 left-1/4 mt-2 w-56 bg-white shadow-lg rounded-lg p-4">
+                  <p className="text-primary font-bold">Select Group</p>
+                  <select
+                    className="block w-full text-primary mt-1 border border-gray-300 rounded-md shadow-sm py-2 px-3 bg-white focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                    value={selectedGroup}
+                    onChange={(e) => {
+                      setSelectedGroup(e.target.value);
+                      setSelectedMentee("");
+                    }}
+                  >
+                    <option disabled value="">
+                      Select Group
+                    </option>
+                    {groups.map((group) => (
+                      <option key={group.id} value={group.id}>
+                        {group.name}
+                      </option>
+                    ))}
+                  </select>
+                  <p className="text-primary mt-2 font-bold">Select Mentee</p>
+                  <select
+                    className="block text-primary w-full mt-1 border border-gray-300 rounded-md shadow-sm py-2 px-3 bg-white focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                    value={selectedMentee}
+                    onChange={(e) => setSelectedMentee(e.target.value)}
+                  >
+                    Select Mentee
+                    <option className="text-primary " disabled value="">
+                      Select Mentee
+                    </option>
+                    {mentees.map((mentee) => (
+                      <option key={mentee.id} className="" value={mentee.id}>
+                        {mentee.name}
+                      </option>
+                    ))}
+                  </select>
+                  <button
+                    className="mt-3 inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-primary hover:bg-primary-light focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                    onClick={() =>
+                      recommendJob(selectedGroup, selectedMentee, job.id)
+                    }
+                  >
+                    Recommend
+                  </button>
+                </div>
+              )}
+            </div>
+          )}
         </div>
       </div>
     </div>
@@ -122,12 +254,39 @@ const JobList = () => {
   const userId = location.state?.userId;
   const [searchTerm, setSearchTerm] = useState("");
   const [jobs, setJobs] = useState([]);
+  const [recommendedJobs, setRecommendedJobs] = useState([]);
   const [selectedJob, setSelectedJob] = useState(null);
   const [locationFilter, setLocationFilter] = useState("");
   const [isPartTime, setIsPartTime] = useState(false);
   const detailsRef = useRef(null);
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
   const [iconSize, setIconSize] = useState("2x");
+
+  useEffect(() => {
+    const fetchRecommendedJobs = async () => {
+      const menteeRef = doc(db, "Seekers", userId);
+      const docSnap = await getDoc(menteeRef);
+      if (docSnap.exists() && docSnap.data().recommended) {
+        const recommendedIds = docSnap.data().recommended;
+
+        const recommendedJobDetails = await Promise.all(
+          recommendedIds.map(async (id) => {
+            const jobRef = doc(db, "Jobs", id);
+            const jobSnap = await getDoc(jobRef);
+            return jobSnap.exists()
+              ? { id: jobSnap.id, ...jobSnap.data() }
+              : null;
+          })
+        );
+
+        setRecommendedJobs(recommendedJobDetails.filter((job) => job !== null));
+      }
+    };
+
+    if (userId && userType === "seeker") {
+      fetchRecommendedJobs();
+    }
+  }, [userId, userType]);
   useEffect(() => {
     if (windowWidth < 400) {
       setIconSize("xs");
@@ -195,7 +354,12 @@ const JobList = () => {
       const matchesPartTime = isPartTime
         ? job.Availability === "Part Time"
         : true;
-      return matchesIdOrDescription && matchesLocation && matchesPartTime;
+      return (
+        !recommendedJobs.some((rJob) => rJob.id === job.id) &&
+        matchesIdOrDescription &&
+        matchesLocation &&
+        matchesPartTime
+      );
     });
   };
 
@@ -259,34 +423,28 @@ const JobList = () => {
               selectedJob ? "w-full md:w-1/2" : "w-full"
             }`}
           >
-            <div className="cursor-pointer border border-gray-300 p-4 my-2 bg-secondary rounded-lg text-white shadow hover:shadow-md relative">
-              <div className="flex justify-between items-center ">
-                <div className="">
-                  <h1 className="font-semibold pr-5 text-2xl">Cleaner</h1>
-                  <div className="flex items-start">
-                    <>
-                      <span className="text-lg pt-1">&#8226;</span>
-                      <h2 className="pl-2 text-lg">To clean a home</h2>
-                    </>
-                  </div>
-                </div>
-                <h2>Recommended by Mentor</h2>
-                <div className="flex flex-col items-end space-y-2">
-                  <div className="bg-secondary hover:bg-secondary-dark text-white px-10 py-2 rounded-full cursor-pointer text-center">
-                    Details
-                  </div>
-                  <button className="bg-primary hover:bg-secondary-dark text-white px-10 py-2 rounded-full cursor-pointer">
-                    Apply
-                  </button>
-                </div>
+            {recommendedJobs.length > 0 && (
+              <div>
+                <h2 className="px-3 text-xl font-semibold text-secondary">
+                  Recommended for You
+                </h2>
+                {recommendedJobs.map((job) => (
+                  <JobListing
+                    key={job.id}
+                    job={job}
+                    onJobClick={handleJobClick}
+                    isRecommended={true}
+                  />
+                ))}
               </div>
-            </div>
+            )}
             {filteredJobs.length > 0 ? (
               filteredJobs.map((job) => (
                 <JobListing
                   key={job.id}
                   job={job}
                   onJobClick={handleJobClick}
+                  isRecommended={false}
                 />
               ))
             ) : (

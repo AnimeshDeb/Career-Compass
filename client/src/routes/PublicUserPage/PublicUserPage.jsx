@@ -10,6 +10,7 @@ import { getSeekerById } from "../../functions/seekerFunctions.js";
 import { getMentorById } from "../../functions/mentorFunctions.js";
 
 export default function PublicUserPage() {
+  const textSize = "text-sm md:text-base lg:text-lg xl:text-xl";
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
   const [iconSize, setIconSize] = useState("2x");
   const [userData, setUserData] = useState(null);
