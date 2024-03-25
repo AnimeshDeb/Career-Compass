@@ -7,6 +7,11 @@ import "./Onboard.css";
 import SeekerLogin from "../seeker/auth/SeekerLogin";
 import anime from "animejs";
 import { useNavigate } from "react-router-dom";
+import one from "../../images/onboard/one.png";
+import two from "../../images/onboard/two.png";
+import three from "../../images/onboard/three.png";
+import four from "../../images/onboard/four.png";
+
 const responsive = {
   superLargeDesktop: {
     breakpoint: { max: 4000, min: 3000 },
@@ -47,37 +52,50 @@ function Onboard() {
     <div className="flex min-h-screen w-full justify-center items-center p-4 bg-gray-50">
       <div className="container mx-auto">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 items-start">
-          <div className="left-side flex flex-col xl:pr-0 items-center justify-center -mt-14 md:-mt-22 lg:-mt-24 xl:-mt-36 2xl:-mt-44">
+          <div className="left-side flex flex-col xl:pr-0 items-center justify-center -mt-14 md:-mt-22 lg:-mt-24 xl:-mt-36 2xl:-mt-36 mr-0 pl-0">
             <img
               src={largeLogo}
               alt="Career Compass"
-              className="max-w-full h-auto mb-4"
+              className="max-w-full h-auto mr-0 pl-0 mb-4"
             />
             <Carousel
-              responsive={responsive}
-              autoPlay={true}
-              autoPlaySpeed={3000}
-              className="w-full mb-5"
-            >
-              <div className="item">
-                <div className="bg-gray-300 w-full h-96 text-center flex items-center justify-center">
-                  Placeholder Image 1
-                </div>
-              </div>
-              <div className="item">
-                <div className="bg-gray-300 w-full h-96 text-center flex items-center justify-center">
-                  Placeholder Image 2
-                </div>
-              </div>
-              <div className="item">
-                <div className="bg-gray-300 w-full h-96 text-center flex items-center justify-center">
-                  Placeholder Image 3
-                </div>
-              </div>
-            </Carousel>
-            {/* <div className="bg-gray-300 w-full align-center py-5 h-16 text-center">
-              Placeholder Transaction
-            </div> */}
+  responsive={responsive}
+  autoPlay={true}
+  autoPlaySpeed={1750}
+  className="w-full mb-5 h-128 mr-0"
+>
+  <div className="bg-gray-300 w-full h-full text-center flex items-center justify-center">
+    <img
+      src={one}
+      alt="Gallery item"
+      className="max-h-full max-w-full object-contain"
+    />
+  </div>
+  <div className="bg-gray-300 w-full h-full text-center flex items-center justify-center">
+    <img
+      src={two}
+      alt="Gallery item"
+      className="max-h-full max-w-full object-contain"
+    />
+  </div>
+  <div className="bg-gray-300 w-full h-full text-center flex items-center justify-center">
+    <img
+      src={three}
+      alt="Gallery item"
+      className="max-h-full max-w-full object-contain"
+    />
+  </div>
+  <div className="bg-gray-300 w-full h-full text-center flex items-center justify-center">
+    <img
+      src={four}
+      alt="Gallery item"
+      className="max-h-full max-w-full object-contain"
+    />
+  </div>
+</Carousel>
+            <div className="h-0 text-secondary text-xl font-bold w-full align-center text-center">
+              Some of our features
+            </div>
           </div>
           <div className="right-side flex flex-col items-center md:items-start xl:pl-0">
             <div className="flex flex-col border border-gray-300 rounded-t-lg w-full max-w-md mx-auto min-h-[500px]">

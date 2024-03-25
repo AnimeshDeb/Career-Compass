@@ -151,7 +151,7 @@ const ChatBox = ({
                   transition={{ duration: 0.3, ease: "easeInOut" }}
                 >
                   <div
-                    className={`inline-block p-2 rounded-lg ${
+                    className={`inline-block p-2 mr-2 rounded-lg ${
                       message.user === userId
                         ? "bg-primary-light text-white"
                         : "bg-gray-200 text-gray-800"
