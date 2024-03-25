@@ -15,7 +15,7 @@ const GroupPage = () => {
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
   const [iconSize, setIconSize] = useState('2x');
   const [group, setGroup] = useState(null);
-
+  const [selectedSeeker, setSelectedSeeker] = useState(null);
   const [isAddMenteeDialogOpen, setIsAddMenteeDialogOpen] = useState(false);
 
   const openAddMenteeDialog = () => {
@@ -64,6 +64,10 @@ const GroupPage = () => {
     }
   }, [userId]);
 
+  const handleChatIconClick = (seeker) => {
+    setSelectedSeeker(seeker);
+  };
+
   const handleAddMentee = async (selectedSeekers) => {
     try {
       const groupRef = doc(db, 'Groups', userId);
@@ -74,7 +78,6 @@ const GroupPage = () => {
         };
         return acc;
       }, {});
-
       await setDoc(
         groupRef,
         { mentees: { ...group.mentees, ...mentees } },
@@ -107,20 +110,27 @@ const GroupPage = () => {
           </button>
           <AnimatePresence>
             {isAddMenteeDialogOpen && (
-            <AddMenteeDialog
+              <AddMenteeDialog
                 isOpen={isAddMenteeDialogOpen}
                 onClose={() => setIsAddMenteeDialogOpen(false)}
                 onAddMentee={handleAddMentee}
-            />
+              />
             )}
           </AnimatePresence>
           {group ? (
             <div>
               {Object.keys(group.mentees).length > 0 ? (
                 Object.entries(group.mentees).map(([menteeId, menteeData]) => (
-                  <div key={menteeId} className="mb-4">
-                    <p className="text-lg font-semibold">{menteeData.name}</p>
-                    {/* Add other mentee details here */}
+                  <div key={menteeId} className="mb-6 flex items-center">
+                    <p className="text-2xl font-semibold mr-6">{menteeData.name}</p>
+                    <button
+                      onClick={() => handleChatIconClick(menteeData)}
+                      className="text-blue-500 hover:text-blue-700 focus:outline-none"
+                    >
+                      <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z" />
+                      </svg>
+                    </button>
                   </div>
                 ))
               ) : (
@@ -132,7 +142,7 @@ const GroupPage = () => {
           )}
         </div>
       </div>
-      <ChatBox />
+      <ChatBox userId={userId} selectedSeeker={selectedSeeker} />
       <Footer />
     </>
   );

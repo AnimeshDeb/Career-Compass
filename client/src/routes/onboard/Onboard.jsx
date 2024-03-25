@@ -75,9 +75,9 @@ function Onboard() {
                 </div>
               </div>
             </Carousel>
-            <div className="bg-gray-300 w-full align-center py-5 h-16 text-center">
+            {/* <div className="bg-gray-300 w-full align-center py-5 h-16 text-center">
               Placeholder Transaction
-            </div>
+            </div> */}
           </div>
           <div className="right-side flex flex-col items-center md:items-start xl:pl-0">
             <div className="flex flex-col border border-gray-300 rounded-t-lg w-full max-w-md mx-auto min-h-[500px]">

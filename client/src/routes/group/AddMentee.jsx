@@ -18,19 +18,23 @@ const AddMenteeDialog = ({ isOpen, onClose, onAddMentee }) => {
           where('displayName', '>=', searchedSeeker.toLowerCase()),
           where('displayName', '<=', searchedSeeker.toLowerCase() + '\uf8ff')
         );
+        
         const snapshot = await getDocs(q);
-        const seekers = snapshot.docs.map(doc => ({
-          id: doc.id,
-          ...doc.data(),
-        }));
-        setSearchResults(seekers.slice(0, 4));
+        const seekers = snapshot.docs
+          .map(doc => ({
+            id: doc.id,
+            ...doc.data(),
+          }))
+          .filter(seeker => !selectedSeekers.some(selected => selected.id === seeker.id));
+        setSearchResults(seekers.slice(0, ));
+        console.log(searchedSeeker,seekers)
       } else {
         setSearchResults([]);
       }
     };
-
+  
     searchSeekers();
-  }, [searchedSeeker]);
+  }, [searchedSeeker, selectedSeekers]);
 
   // Adds the clicked seeker to the selected list
   const handleSeekerClick = seeker => {
@@ -51,12 +55,12 @@ const AddMenteeDialog = ({ isOpen, onClose, onAddMentee }) => {
 
   return (
     <AnimatePresence>
-        <motion.div
+      <motion.div
         initial={{ opacity: 0, scale: 0.5 }}
         animate={{ opacity: 1, scale: 1 }}
         exit={{ opacity: 0, scale: 0.5 }}
         className={`fixed inset-0 flex items-center justify-center ${isOpen ? '' : 'hidden'}`}
-        >
+      >
         <div className="fixed inset-0 bg-black opacity-50" onClick={onClose}></div>
         <div className="bg-white rounded-lg p-6 z-10 w-1/2">
             <h2 className="text-2xl font-semibold mb-4">Add Mentee</h2>

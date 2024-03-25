@@ -1,51 +1,119 @@
-import { useState } from 'react';
-import { motion } from 'framer-motion';
+import React, { useState, useEffect } from 'react';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faClose, faCommentDots, faPaperPlane, faMicrophone, faVolumeUp } from '@fortawesome/free-solid-svg-icons';
+import axios from 'axios';
+import { motion, AnimatePresence } from 'framer-motion';
 
 const ChatBox = () => {
-  const [isOpen, setIsOpen] = useState(false);
+    const [isChatOpen, setIsChatOpen] = useState(false);
+    const [messages, setMessages] = useState([]);
+    const [inputMessage, setInputMessage] = useState('');
 
-  const toggleChat = () => {
-    setIsOpen(!isOpen);
-  };
+    useEffect(() => {
+        if (messages.length > 0) {
+            const lastMessage = messages[messages.length - 1];
+            if (lastMessage.type === 'outgoing') {
+                fetchResponse(lastMessage.text);
+            }
+        }
+    }, [messages]);
 
-  return (
-    <div className="fixed bottom-4 right-4">
-      {!isOpen && (
-        <motion.button
-          onClick={toggleChat}
-          whileHover={{ scale: 1.1 }}
-          whileTap={{ scale: 0.9 }}
-          className="bg-blue-500 text-white px-4 py-2 rounded-full shadow-lg"
-        >
-          <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z" />
-          </svg>
-        </motion.button>
-      )}
-      {isOpen && (
-        <motion.div
-          initial={{ y: '100%', scale: 0.8 }}
-          animate={{ y: 0, scale: 1 }}
-          transition={{ duration: 0.3 }}
-          className="bg-white rounded-lg shadow-lg p-4 w-80"
-        >
-          <div className="flex justify-between items-center mb-4">
-            <h2 className="text-xl font-semibold">Messages</h2>
-            <button
-              onClick={toggleChat}
-              className="text-gray-500 hover:text-gray-700 focus:outline-none"
+    const toggleChat = () => setIsChatOpen(!isChatOpen);
+
+    const handleInput = (e) => setInputMessage(e.target.value);
+
+    const sendMessage = () => {
+        if (!inputMessage.trim()) return;
+        setMessages(msgs => [...msgs, { type: 'outgoing', text: inputMessage }]);
+        setInputMessage('');
+    };
+
+    const fetchResponse = async (message) => {
+        try {
+            const response = await axios.post('https://api.openai.com/v1/engines/davinci-codex/completions', {
+                prompt: message,
+                max_tokens: 100,
+                n: 1,
+                stop: null,
+                temperature: 0.7,
+            }, {
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${process.env.REACT_APP_OPENAI_API_KEY}`,
+                },
+            });
+
+            const generatedText = response.data.choices[0].text.trim();
+            setMessages(msgs => [...msgs, { type: 'incoming', text: generatedText }]);
+        } catch (error) {
+            console.error('Error fetching response from OpenAI:', error);
+        }
+    };
+
+    const handleMicrophoneClick = () => {
+        setTimeout(() => {
+            setInputMessage("How do I navigate to the jobs page");
+        }, 4000);
+    };
+
+    const chatbotVariants = {
+        open: { opacity: 1, y: 0, scale: 1, transition: { duration: 0.3, ease: 'easeInOut' } },
+        closed: { opacity: 0, y: 20, scale: 0.95, transition: { duration: 0.3, ease: 'easeInOut' } },
+    };
+
+    return (
+        <div>
+            <motion.button
+                className="chatbot-toggler"
+                onClick={toggleChat}
+                initial={{ scale: 0 }}
+                animate={{ rotate: isChatOpen ? 180 : 0, scale: 1 }}
+                transition={{ duration: 0.3, ease: 'easeInOut' }}
             >
-              <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-              </svg>
-            </button>
-          </div>
-          {/* Add chat functionality here */}
-          <p>Chat messages will appear here.</p>
-        </motion.div>
-      )}
-    </div>
-  );
+                <FontAwesomeIcon icon={isChatOpen ? faClose : faCommentDots} />
+            </motion.button>
+            <AnimatePresence>
+                {isChatOpen && (
+                    <motion.div
+                        className={`chatbot ${isChatOpen ? '' : 'chatbot-hidden'}`}
+                        variants={chatbotVariants}
+                        initial="closed"
+                        animate="open"
+                        exit="closed"
+                    >
+                        <header className="chat-header">
+                            <h2>Chat</h2>
+                            <FontAwesomeIcon icon={faClose} className="close-btn" onClick={toggleChat} />
+                        </header>
+                        <ul className="chatbox">
+                            {messages.map((msg, index) => (
+                                <motion.li
+                                    key={index}
+                                    className={`chat ${msg.type}`}
+                                    initial={{ opacity: 0, y: 20 }}
+                                    animate={{ opacity: 1, y: 0 }}
+                                    transition={{ duration: 0.3, ease: 'easeInOut' }}
+                                >
+                                    <p>{msg.text} {msg.type === 'incoming' && <FontAwesomeIcon icon={faVolumeUp} className="volume-icon" />}</p>
+                                </motion.li>
+                            ))}
+                        </ul>
+                        <div className="chat-input">
+                            <FontAwesomeIcon icon={faMicrophone} className="microphone-btn" onClick={handleMicrophoneClick} />
+                            <textarea
+                                placeholder="Enter a message..."
+                                spellCheck="false"
+                                required
+                                value={inputMessage}
+                                onChange={handleInput}
+                            ></textarea>
+                            <FontAwesomeIcon icon={faPaperPlane} className="send-btn" onClick={sendMessage} />
+                        </div>
+                    </motion.div>
+                )}
+            </AnimatePresence>
+        </div>
+    );
 };
 
 export default ChatBox;

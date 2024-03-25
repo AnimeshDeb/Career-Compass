@@ -37,6 +37,7 @@ export function SeekerAuthProvider({ children }) {
         email: user.email,
         password: password,
         displayName: fullName,
+        displayNameLowerCase: fullName.toLowerCase(),
         UID: user.uid, // Consider if you really need to store UID explicitly since it's already the document ID
       });
 

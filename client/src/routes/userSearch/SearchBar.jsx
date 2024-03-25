@@ -54,11 +54,7 @@ const SearchBar = () => {
   };
 
   const handleNext = (userUid, userType) => {
-    if (userType === 'Mentor') {
-      navigate('/mentor', { state: { name: userUid } });
-    } else if (userType === 'Seeker') {
-      navigate('/user', { state: { name: userUid } });
-    }
+    navigate('/public', { state: { userId: userUid , userType: userType} });
   };
 
   return (

@@ -1,8 +1,8 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useRef } from "react";
-import { useAuth } from "../../../Contexts/SeekerAuthContext";
-// import { useAuth } from "../../../Contexts/MentorAuthContext";
+//import { useAuth } from "../../../Contexts/SeekerAuthContext";
+import { useAuth } from "../../../Contexts/MentorAuthContext";
 import Navbar from "../../../components/navbar/version1/navbar";
 import Lottie from "lottie-react";
 import animationData from "../assets/Animation - 1707811919582.json";

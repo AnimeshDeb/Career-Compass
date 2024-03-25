@@ -10,7 +10,7 @@ import { useLocation } from "react-router-dom";
 
 export default function UserpageMentor() {
   const location = useLocation();
-  const mentorId = location.state?.userId;
+  const mentorId = location.state?.name;
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
   const [iconSize, setIconSize] = useState("2x");
   const [editMode, setEditMode] = useState(false);
