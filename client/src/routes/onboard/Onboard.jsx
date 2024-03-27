@@ -93,7 +93,7 @@ function Onboard() {
     />
   </div>
 </Carousel>
-            <div className="h-0 text-secondary text-xl font-bold w-full align-center text-center">
+            <div className="h-10 text-secondary text-xl font-bold w-full align-center text-center">
               Some of our features
             </div>
           </div>
