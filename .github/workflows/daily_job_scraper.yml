@@ -2,9 +2,9 @@ name: Daily Job Scraper
 
 on:
   schedule:
-    # Runs every day at 06:00 UTC
     - cron: "0 6 * * *"
-    workflow_dispatch:
+  workflow_dispatch:
+
 jobs:
   scrape_and_update:
     runs-on: ubuntu-latest
@@ -16,7 +16,7 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v2
         with:
-          python-version: "3.8" # Specify the Python version
+          python-version: "3.8"
 
       - name: Install dependencies
         run: |
