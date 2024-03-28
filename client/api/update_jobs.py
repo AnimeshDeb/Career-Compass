@@ -6,13 +6,13 @@ from datetime import datetime
 import json
 from dotenv import load_dotenv
 import os
-load_dotenv("../env")
+load_dotenv("./env")
 print("Starting job scraping...")
 
 def fetch_job_postings():
     print("Fetching job postings...")
-    base_url = "https://example.com/jobs"
-    response = requests.get(base_url)
+    base_url = "https://www.google.com/about/careers/applications/jobs/results?page={}"
+    response = requests.get(base_url.format())
     if response.status_code == 200:
         print("Successfully fetched job postings.")
     else:
@@ -70,3 +70,5 @@ class handler(BaseHTTPRequestHandler):
             self.end_headers()
             self.wfile.write(str(e).encode())
 
+if __name__ == "__main__":
+    fetch_job_postings()
