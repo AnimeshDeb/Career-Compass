@@ -7,48 +7,74 @@ import json
 from dotenv import load_dotenv
 import os
 load_dotenv("./env")
-print("Starting job scraping...")
+FIRESTORE_URL = "https://firestore.googleapis.com/v1/projects/career-compass-77175/databases/(default)/documents/Jobs"
+API_KEY = os.environ.get("VITE_REACT_APP_FIREBASE_API_KEY")
 
-def fetch_job_postings():
-    print("Fetching job postings...")
-    base_url = "https://www.google.com/about/careers/applications/jobs/results?page={}"
-    response = requests.get(base_url.format())
-    if response.status_code == 200:
-        print("Successfully fetched job postings.")
-    else:
-        print(f"Failed to fetch job postings. Status code: {response.status_code}")
-    soup = BeautifulSoup(response.content, 'html.parser')
-    job_cards = soup.find_all('div', class_='Ln1EL')  # Example class, adjust as needed
-    FIRESTORE_URL = "https://firestore.googleapis.com/v1/projects/career-compass-77175/databases/(default)/documents/Jobs"
-    API_KEY = os.environ.get("VITE_REACT_APP_FIREBASE_API_KEY")
+def get_page_content(url):
+    try:
+        response = requests.get(url)
+        response.raise_for_status() 
+        return response.content
+    except requests.HTTPError as http_err:
+        print(f'HTTP error occurred: {http_err}')
+    except Exception as err:
+        print(f'An error occurred: {err}')
+      
+        
+def extract_links(html_content):
+    soup = BeautifulSoup(html_content, 'html.parser')
+    # Find the container with the 'search-results-table' class
+    table = soup.find('div', class_='search-results-table')
+    
+    links = [a.get('href') for a in table.find_all('a', href=True) if a.get('href')]
+    print("LINKS:",links)
+    return links
 
-    def store_job_posting(job):
+
+def store_job_posting(job):
+        print("Storing Jobs...")
         data = {
             "fields": {
                 "title": {"stringValue": job["title"]},
                 "company": {"stringValue": job["company"]},
                 "location": {"stringValue": job["location"]},
-                "link": {"stringValue": job["link"]}
+                "minimum_qualifications": {
+                    "arrayValue": {
+                        "values": [{"stringValue": qual} for qual in job["minimum_qualifications"]]
+                    }
+                }
             }
         }
         response = requests.post(f"{FIRESTORE_URL}?key={API_KEY}", json=data)
         return response.json()
-    jobs = []
+    
+    
+def fetch_job_postings():
+    
+    print("Fetching job postings...")
+    base_url = "https://jobs.cvshealth.com/job-search-results/?pg={}"
+    content = get_page_content(base_url.format(2))
+    print("Extracting links...")
+    links = extract_links(content)
     jobs_stored = 0
-    for job in job_cards:
+
+    base_job_url = "https://jobs.cvshealth.com"
+    job_cards = []
+    print("Obtaining Job Cards...")
+    for link in links:
         if jobs_stored >= 10:
-            break;
-        title_tag = job.find('h3', class_='QJPWVe')  # Example class, adjust as needed
-        title = title_tag.text if title_tag else "No Title"
-        company_tag = job.find('span', class_='RP7SMd')  # Example class, adjust as needed
-        company = company_tag.text if company_tag else "No Company"
-        location_tag = job.find('span', class_='pwO9Dc vo5qdf')  # Example class, adjust as needed
-        location = location_tag.text if location_tag else "No Location"
-        link = "https://www.google.com/about/careers/applications/jobs/results"  # Example link
-        job_data = {"title": title, "company": company, "location": location, "link": link}
-        store_job_posting(job_data)
+            break
+        full_url = base_job_url + link  # Concatenate the base URL with the relative link
+        job_page_content = get_page_content(full_url)
+        print(job_page_content)
+        soup = BeautifulSoup(job_page_content, 'html.parser')
+        title = soup.find('h1').text  # Modify with correct selectors
+        job_data = {"title": title}
+        store_job_posting(job_data)  # Define job_data with all necessary details
         jobs_stored += 1
         
+    
+
 
 class handler(BaseHTTPRequestHandler):
     
@@ -71,4 +97,6 @@ class handler(BaseHTTPRequestHandler):
             self.wfile.write(str(e).encode())
 
 if __name__ == "__main__":
+    print("Starting job scraping...")
     fetch_job_postings()
+    print("Job Scraping Concluded.")
