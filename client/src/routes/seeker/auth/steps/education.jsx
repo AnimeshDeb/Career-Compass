@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { db } from "../../../../firebase";
-import { collection, addDoc, doc } from "firebase/firestore";
+import { collection, addDoc,setDoc, doc } from "firebase/firestore";
 import PropTypes from "prop-types";
 import Audio_Btn from "../../../../components/Buttons/audio__btn/audio_btn";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -31,7 +31,8 @@ function SeekerEducation({ handleNextStep, handlePrevStep, name }) {
     PhD: faBrain,
   };
 
-  const handleEducationTypeButtonClick = (type) => {
+  const handleEducationTypeButtonClick = (type, e) => {
+    e.preventDefault();
     setSeekerEducationTypeTxt(type);
   };
 
@@ -54,12 +55,16 @@ function SeekerEducation({ handleNextStep, handlePrevStep, name }) {
       const usersCollection = collection(db, "Seekers");
       const docRef = doc(usersCollection, name);
       const educationSubcollectionRef = collection(docRef, "Education");
-      await addDoc(educationSubcollectionRef, {
+  
+      const educationData={ 
         University: seekerSchoolNameTxt,
         DegreeType: seekerEducationTypeTxt,
         ClassOf: seekerGraduating,
         Major: seekerMajor,
-      });
+      };
+      // await setDoc(doc(educationSubcollectionRef), educationData)
+      const educationDocRef=doc(educationSubcollectionRef, name);
+      await setDoc(educationDocRef, educationData, {merge:true});
       handleNextStep();
     } catch (error) {
       console.log("The error is: " + error);
@@ -113,7 +118,7 @@ function SeekerEducation({ handleNextStep, handlePrevStep, name }) {
                         ? "bg-primary text-white"
                         : "bg-white text-primary border-gray-400"
                     } flex items-center justify-center`}
-                    onClick={() => handleEducationTypeButtonClick(type)}
+                    onClick={(e) => handleEducationTypeButtonClick(type, e)}
                   >
                     <FontAwesomeIcon icon={icon} className="mr-2" />
                     {type}
