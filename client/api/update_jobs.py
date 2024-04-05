@@ -137,8 +137,19 @@ def job_exists(url):
         }
     }
     response = requests.post(f"{DATABASE_URL}:runQuery?key={API_KEY}", json=query)
-    result = response.json()
-    return bool(result and result[0] and 'document' in result[0])
+
+    if response.status_code != 200:
+        print(f"Error querying database: {response.status_code}")
+        print(f"Response content: {response.content}")
+        return False
+
+    try:
+        result = response.json()
+        return bool(result and result[0] and 'document' in result[0])
+    except (IndexError, KeyError, TypeError):
+        print(f"Error with database response format: {response.json()}")
+        return False
+
 
 def store_job_posting(job, url):
     if not job_exists(url):
