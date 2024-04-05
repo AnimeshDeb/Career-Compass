@@ -15,9 +15,8 @@ import json
 from dotenv import load_dotenv
 import os
 load_dotenv("./env")
-FIRESTORE_URL = "https://firestore.googleapis.com/v1/projects/career-compass-77175/databases/(default)/documents/Jobs"
+DATABASE_URL = os.environ.get("VITE_REACT_APP_DATABASE_URL")
 API_KEY = os.environ.get("VITE_REACT_APP_FIREBASE_API_KEY")
-
 def get_main_page_content(url):
     service = Service(ChromeDriverManager().install())
     options = webdriver.ChromeOptions()
@@ -29,14 +28,13 @@ def get_main_page_content(url):
     options.add_argument('--ignore-certificate-errors')
     with webdriver.Chrome(service=service, options=options) as browser:
         browser.get(url)
-        # Wait for the content to load
         try:
             WebDriverWait(browser, 20).until(
                 EC.presence_of_element_located((By.ID, "widget-jobsearch-results-list"))
             )
         except TimeoutException as e:
             print("The element was not loaded within the given time.")
-            print(browser.page_source)  # This can give you the current state of the page HTML
+            print(browser.page_source)
             raise e
         return browser.page_source
 
@@ -48,10 +46,8 @@ def get_job_page_content(url):
     options.add_argument('--disable-dev-shm-usage')
     options.add_argument('--ignore-certificate-errors')
 
-    # Suppress INFO messages from the console
-    options.add_experimental_option('excludeSwitches', ['enable-logging'])  # This suppresses all logging
-    options.set_capability('goog:loggingPrefs', {'browser': 'SEVERE'})  # This sets the logging level for browser logs
-
+    options.add_experimental_option('excludeSwitches', ['enable-logging'])
+    options.set_capability('goog:loggingPrefs', {'browser': 'SEVERE'})
     with webdriver.Chrome(service=service, options=options) as browser:
         browser.get(url)
         try:
@@ -65,16 +61,14 @@ def get_job_page_content(url):
 
 def extract_links(html_content):
     soup = BeautifulSoup(html_content, 'html.parser')
-    # Find all divs with the 'entry-content-wrapper clearfix' class
     entry_content_wrappers = soup.find_all('div', class_='entry-content-wrapper clearfix')
     
-    hrefs = []
+    hrefs = set()
     for wrapper in entry_content_wrappers:
-        # Find all 'a' tags within each wrapper
         links = wrapper.find_all('a', href=True)
-        # Extract the 'href' attributes from each link and add to the list
-        hrefs.extend([link['href'] for link in links])
-    return hrefs
+        for link in links:
+            hrefs.add(link['href'])
+    return list(hrefs)
 
 def extract_job_info(html_content):
     soup = BeautifulSoup(html_content, 'html.parser')
@@ -101,12 +95,10 @@ def extract_job_info(html_content):
     req_qual_heading = soup.find(string="Required Qualifications")
     if req_qual_heading:
         parent = req_qual_heading.find_parent()
-        print(parent)
         qualifications_list = parent.find_next_sibling(['ul', 'ol'])
         print(qualifications_list)
         if qualifications_list:
             list_items = qualifications_list.find_all('li')
-            print(list_items)
             job_info["required_qualifications"] = [li.get_text(strip=True) for li in list_items if li.text.strip()]
 
     pref_qual_heading = soup.find(string="Preferred Qualifications")
@@ -115,13 +107,13 @@ def extract_job_info(html_content):
         pref_qualifications_list = parent.find_next_sibling(['ul', 'ol'])
         if pref_qualifications_list:
             list_items = pref_qualifications_list.find_all('li')
-            print(list_items)
             job_info["preferred_qualifications"] = [li.get_text(strip=True) for li in list_items if li.text.strip()]
 
     edu_heading = soup.find(string="Education")
     if edu_heading:
-        edu_text = edu_heading.find_next_siblings('p')
-        job_info["education"] = " ".join(p.get_text(strip=True) for p in edu_text if p)
+        parent = edu_heading.parent
+        edu_text = parent.find_next_sibling('p')
+        job_info["education"] = edu_text.get_text(strip=True) if edu_text else ""
 
     pay_range_heading = soup.find(string="Pay Range")
     if pay_range_heading:
@@ -129,51 +121,84 @@ def extract_job_info(html_content):
         pay_range_text = pay_range_text.find_next('p')
         pay_range_text = pay_range_text.find_next('p')
         job_info["pay_range"] = pay_range_text.get_text(strip=True) if pay_range_text else ""
-    
     return job_info
 
+def job_exists(url):
+    query = {
+        "structuredQuery": {
+            "where": {
+                "fieldFilter": {
+                    "field": {"fieldPath": "url"},
+                    "op": "EQUAL",
+                    "value": {"stringValue": url}
+                }
+            },
+            "from": [{"collectionId": "Jobs"}],
+            "limit": 1
+        }
+    }
+    response = requests.post(f"{DATABASE_URL}:runQuery?key={API_KEY}", json=query)
+    result = response.json()
+    return bool(result and result[0] and 'document' in result[0])
+
 def store_job_posting(job, url):
-        print("Storing Jobs...")
-        print(job)
-    #     data = {
-    #     "fields": {
-    #         "title": {"stringValue": job["title"]},
-    #         "company": {"stringValue": job["company"]},
-    #         "location": {"stringValue": job["location"]},
-    #         "position_summary": {"stringValue": job["position_summary"]},
-    #         "required_qualifications": {
-    #             "arrayValue": {
-    #                 "values": [{"stringValue": qual} for qual in job["required_qualifications"]]
-    #             }
-    #         },
-    #         "preferred_qualifications": {
-    #             "arrayValue": {
-    #                 "values": [{"stringValue": qual} for qual in job["preferred_qualifications"]]
-    #             }
-    #         },
-    #         "education": {"stringValue": job["education"]},
-    #         "pay_range": {"stringValue": job["pay_range"]},
-    #         "url": {"stringValue": url},
-    #     }
-    # }
-        # response = requests.post(f"{FIRESTORE_URL}?key={API_KEY}", json=data)
-        # return response.json()
+    if not job_exists(url):
+            print("Storing Jobs...")
+            data = {
+                "fields": {
+                        "title": {"stringValue": job["title"]},
+                        "company": {"stringValue": job["company"]},
+                        "location": {"stringValue": job["location"]},
+                        "position_summary": {"stringValue": job["position_summary"]},
+                        "required_qualifications": {
+                            "arrayValue": {
+                                "values": [{"stringValue": qual} for qual in job["required_qualifications"]]
+                            }
+                        },
+                        "preferred_qualifications": {
+                            "arrayValue": {
+                                "values": [{"stringValue": qual} for qual in job["preferred_qualifications"]]
+                            }
+                        },
+                        "education": {"stringValue": job["education"]},
+                        "pay_range": {"stringValue": job["pay_range"]},
+                        "url": {"stringValue": url},
+                    }
+            }
+            
+            response = requests.post(f"{DATABASE_URL}?key={API_KEY}", json=data)
+            return response.json()
        
 def fetch_job_postings():
     print("Fetching job postings...")
+    page_number = 1
     base_url = "https://jobs.cvshealth.com/job-search-results/?parent_category=Stores&location=NYC%2C%20NY%2C%20USA&latitude=40.7127753&longitude=-74.0059728&radius=25&pg={}"
-    content = get_main_page_content(base_url.format(2))
-    
-    print("Extracting links...")
-    links = extract_links(content)
-
-    print("Extracting job info...")
     base_job_url = "https://jobs.cvshealth.com"
-    for link in links:
-        full_url = base_job_url + link
-        job_page_content = get_job_page_content(full_url)
-        job_data = extract_job_info(job_page_content)
-        store_job_posting(job_data, full_url)
+    
+    while page_number < 5:
+        page_url = base_url.format(page_number)
+        print(f"Accessing page: {page_url}")
+        content = get_main_page_content(page_url)
+        
+        if not content or "no jobs found" in content.lower():
+            print("No more job postings found, ending search.")
+            break
+        
+        links = extract_links(content)
+        if not links:
+            print("No more job postings found, ending search.")
+            break
+
+        print("Extracting job info...")
+        for link in links:
+            full_url = base_job_url + link
+            job_page_content = get_job_page_content(full_url)
+            job_data = extract_job_info(job_page_content)
+            store_job_posting(job_data, full_url)
+        
+        page_number += 1
+
+    print("Job scraping concluded.")
 
 class handler(BaseHTTPRequestHandler):
     
@@ -195,7 +220,12 @@ class handler(BaseHTTPRequestHandler):
             self.end_headers()
             self.wfile.write(str(e).encode())
 
+def localTest(info):
+    with open('./soup_content.txt', 'a', encoding='utf-8') as file:
+        file.write(json.dumps(info, ensure_ascii=False, indent=2))
+        file.write("\n\n")
+
 if __name__ == "__main__":
-    print("Starting job scraping...")
-    fetch_job_postings()
-    print("Job Scraping Concluded.")
+#     print("Starting job scraping...")
+#     fetch_job_postings()
+#     print("Job Scraping Concluded.")
