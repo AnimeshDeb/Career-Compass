@@ -7,6 +7,7 @@ import "./Onboard.css";
 import SeekerLogin from "../seeker/auth/SeekerLogin";
 import anime from "animejs";
 import { useNavigate } from "react-router-dom";
+import group from "../../images/flat_illustrations/group.png";
 import one from "../../images/onboard/one.png";
 import two from "../../images/onboard/two.png";
 import three from "../../images/onboard/three.png";
@@ -59,40 +60,47 @@ function Onboard() {
               className="max-w-full h-auto mr-0 pl-0 mb-4"
             />
             <Carousel
-  responsive={responsive}
-  autoPlay={true}
-  autoPlaySpeed={1750}
-  className="w-full mb-5 h-128 mr-0"
->
-  <div className="bg-gray-300 w-full h-full text-center flex items-center justify-center">
-    <img
-      src={one}
-      alt="Gallery item"
-      className="max-h-full max-w-full object-contain"
-    />
-  </div>
-  <div className="bg-gray-300 w-full h-full text-center flex items-center justify-center">
-    <img
-      src={two}
-      alt="Gallery item"
-      className="max-h-full max-w-full object-contain"
-    />
-  </div>
-  <div className="bg-gray-300 w-full h-full text-center flex items-center justify-center">
-    <img
-      src={three}
-      alt="Gallery item"
-      className="max-h-full max-w-full object-contain"
-    />
-  </div>
-  <div className="bg-gray-300 w-full h-full text-center flex items-center justify-center">
-    <img
-      src={four}
-      alt="Gallery item"
-      className="max-h-full max-w-full object-contain"
-    />
-  </div>
-</Carousel>
+              responsive={responsive}
+              autoPlay={true}
+              autoPlaySpeed={1000000}
+              className="w-full mb-5 h-128 mr-0"
+            >
+              <div className="xl:w-3/4 w-full mx-auto h-full text-center flex items-center justify-center">
+                <img
+                  src={group}
+                  alt="Gallery item"
+                  className="max-h-full max-w-full object-contain"
+                />
+              </div>
+              <div className="bg-gray-300 w-full h-full text-center flex items-center justify-center">
+                <img
+                  src={one}
+                  alt="Gallery item"
+                  className="max-h-full max-w-full object-contain"
+                />
+              </div>
+              <div className="bg-gray-300 w-full h-full text-center flex items-center justify-center">
+                <img
+                  src={two}
+                  alt="Gallery item"
+                  className="max-h-full max-w-full object-contain"
+                />
+              </div>
+              <div className="bg-gray-300 w-full h-full text-center flex items-center justify-center">
+                <img
+                  src={three}
+                  alt="Gallery item"
+                  className="max-h-full max-w-full object-contain"
+                />
+              </div>
+              <div className="bg-gray-300 w-full h-full text-center flex items-center justify-center">
+                <img
+                  src={four}
+                  alt="Gallery item"
+                  className="max-h-full max-w-full object-contain"
+                />
+              </div>
+            </Carousel>
             <div className="h-0 text-secondary text-xl font-bold w-full align-center text-center">
               Some of our features
             </div>
@@ -103,9 +111,9 @@ function Onboard() {
                 <button
                   onClick={() => setTab("login")}
                   className={`px-4 text-xl py-2 ${
-                    tab === 'login'
-                      ? 'bg-primary text-white rounded-lg'
-                      : 'bg-transparent'
+                    tab === "login"
+                      ? "bg-primary text-white rounded-lg"
+                      : "bg-transparent"
                   }`}
                 >
                   Login
