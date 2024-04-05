@@ -226,6 +226,6 @@ def localTest(info):
         file.write("\n\n")
 
 if __name__ == "__main__":
-#     print("Starting job scraping...")
-#     fetch_job_postings()
-#     print("Job Scraping Concluded.")
+    print("Starting job scraping...")
+    fetch_job_postings()
+    print("Job Scraping Concluded.")
