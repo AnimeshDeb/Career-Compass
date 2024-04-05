@@ -7,7 +7,7 @@ import Footer from "../../components/footer/footer";
 import anime from "animejs";
 import { doc, getDoc, runTransaction, arrayUnion } from "firebase/firestore";
 import { db } from "../../firebase";
-// Array of all 50 U.S. states
+
 const states = [
   "Alabama",
   "Alaska",
@@ -61,12 +61,18 @@ const states = [
   "Wyoming",
 ];
 
-const JobListing = ({ job, onJobClick, isRecommended }) => {
+const JobListing = ({
+  job,
+  onJobClick,
+  isRecommended,
+  selectedJob,
+  showDropdown,
+  toggleDropdown,
+}) => {
   const location = useLocation();
   const userType = location.state?.userType;
   const userId = location.state?.userId;
   const lowerCaseUserType = userType?.toLowerCase();
-  const [showDropdown, setShowDropdown] = useState(false);
   const [selectedGroup, setSelectedGroup] = useState(null);
   const [selectedMentee, setSelectedMentee] = useState(null);
   const [groups, setGroups] = useState([]);
@@ -103,7 +109,6 @@ const JobListing = ({ job, onJobClick, isRecommended }) => {
         const userData = userSnap.data();
         const groupIds = userData.groups || [];
 
-        // Fetch details for each group
         const groupsDetailsPromise = groupIds.map(async (groupId) => {
           const groupRef = doc(db, "Groups", groupId);
           const groupSnap = await getDoc(groupRef);
@@ -165,7 +170,10 @@ const JobListing = ({ job, onJobClick, isRecommended }) => {
           <div className="flex items-start">
             <>
               <span className="text-lg pt-1">&#8226;</span>
-              <h2 className="pl-2 text-lg">{job.position_summary?.split(".")[0] + "." || "No summary available."}</h2>
+              <h2 className="pl-2 text-lg">
+                {job.position_summary?.split(".")[0] + "." ||
+                  "No summary available."}
+              </h2>
             </>
           </div>
         </div>
@@ -189,13 +197,16 @@ const JobListing = ({ job, onJobClick, isRecommended }) => {
                 className={`${btnColor} text-white px-10 py-2 rounded-full cursor-pointer`}
                 onClick={(event) => {
                   event.stopPropagation();
-                  setShowDropdown(!showDropdown);
+                  toggleDropdown(job.id);
                 }}
               >
                 Recommend
               </button>
+
               {showDropdown && (
-                <div className="absolute z-20 right-1/4 mt-2 w-3/4 bg-white shadow-lg rounded-lg p-4">
+                <div
+                  className={`absolute z-20 right-1/4 mt-2 w-3/4 bg-white shadow-lg rounded-lg p-4 `}
+                >
                   <p className="text-primary font-bold">Select Group</p>
                   <select
                     className="block w-full text-primary mt-1 border border-gray-700 rounded-md shadow-sm py-2 px-3 bg-white focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
@@ -261,15 +272,19 @@ const JobList = () => {
   const detailsRef = useRef(null);
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
   const [iconSize, setIconSize] = useState("2x");
-  
-  // NEW CODE
+  const [openDropdownId, setOpenDropdownId] = useState(null);
   const [currentIndex, setCurrentIndex] = useState(0);
-  const pageSize = 10; // Set the number of jobs you want to show on one page
-  const handleShowMoreJobs = () => {setCurrentIndex((prevIndex) => prevIndex + pageSize);};
-  //const currentJobsToShow = filteredJobs.slice(currentIndex, currentIndex + pageSize);
-//NEW CODE END 
-
-
+  const pageSize = 10;
+  const handleShowMoreJobs = () => {
+    setCurrentIndex((prevIndex) => prevIndex + pageSize);
+  };
+  const toggleDropdown = (jobId) => {
+    if (openDropdownId === jobId) {
+      setOpenDropdownId(null);
+    } else {
+      setOpenDropdownId(jobId);
+    }
+  };
   useEffect(() => {
     const fetchRecommendedJobs = async () => {
       const menteeRef = doc(db, "Seekers", userId);
@@ -404,15 +419,15 @@ const JobList = () => {
                 </option>
               ))}
             </select>
-            
+
             {currentIndex + pageSize < filteredJobs.length && (
-  <button
-    onClick={handleShowMoreJobs}
-    className="my-4 mx-auto py-2 px-4 bg-primary text-white font-semibold rounded-md hover:bg-primary-dark transition-colors"
-  >
-    Show More
-  </button>
-)}
+              <button
+                onClick={handleShowMoreJobs}
+                className="my-4 mx-auto py-2 px-4 bg-primary text-white font-semibold rounded-md hover:bg-primary-dark transition-colors"
+              >
+                Show More
+              </button>
+            )}
 
             <button
               className={`py-2 px-4 ${
@@ -449,8 +464,11 @@ const JobList = () => {
                   <JobListing
                     key={job.title}
                     job={job}
+                    selectedJob={selectedJob}
                     onJobClick={handleJobClick}
                     isRecommended={true}
+                    showDropdown={openDropdownId === job.id}
+                    toggleDropdown={toggleDropdown}
                   />
                 ))}
               </div>
@@ -460,8 +478,11 @@ const JobList = () => {
                 <JobListing
                   key={job.id}
                   job={job}
+                  selectedJob={selectedJob}
                   onJobClick={handleJobClick}
                   isRecommended={false}
+                  showDropdown={openDropdownId === job.id}
+                  toggleDropdown={toggleDropdown}
                 />
               ))
             ) : (
@@ -487,7 +508,7 @@ const JobList = () => {
                 </p>
                 <p className="text-md">
                   <strong className="text-secondary text-xl">
-                  Company Name:
+                    Company Name:
                   </strong>{" "}
                   <span className="text-lg font-medium text-primary">
                     {selectedJob.company}
@@ -507,21 +528,21 @@ const JobList = () => {
                 </p>
                 <p className="text-md">
                   <strong className="text-secondary text-xl">
-                    Link to Application:
-                  </strong>{" "}
-                  <span className="text-xl font-medium text-primary">
-                    {selectedJob.url}
-                  </span>
-                </p>
-                <p className="text-md">
-                  <strong className="text-secondary text-xl">
-                  Position Summary:
+                    Position Summary:
                   </strong>{" "}
                   <span className="text-xl font-medium text-primary">
                     {selectedJob.position_summary}
                   </span>
                 </p>
-                
+                <button
+                  className="mt-5 py-2 px-4 bg-secondary text-white font-semibold rounded-md hover:bg-secondary-dark transition-colors"
+                  onClick={() => {
+                    window.location.href = selectedJob.url;
+                  }}
+                >
+                  Apply
+                </button>
+
                 <button
                   className="mt-5 py-2 px-4 bg-secondary text-white font-semibold rounded-md hover:bg-secondary-dark transition-colors"
                   onClick={() => setSelectedJob(null)}
@@ -545,7 +566,6 @@ JobListing.propTypes = {
     Description: PropTypes.string,
     Location: PropTypes.string,
     Availability: PropTypes.string,
-    // etc...
   }).isRequired,
   onJobClick: PropTypes.func.isRequired,
 };
