@@ -26,5 +26,5 @@ jobs:
       - name: Run the scraper
         run: python "client/api/update_jobs.py"
         env:
-          VITE_REACT_APP_FIREBASE_API_KEY: ${{ secrets.VITE_REACT_APP_FIREBASE_API_KEY }}
-          VITE_REACT_APP_DATABASE_URL: ${{ secrets.VITE_REACT_APP_DATABASE_URL }}
+          API_KEY: ${{ secrets.VITE_REACT_APP_FIREBASE_API_KEY }}
+          DATABASE_URL: ${{ secrets.VITE_REACT_APP_DATABASE_URL }}

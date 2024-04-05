@@ -14,10 +14,6 @@ from datetime import datetime
 import json
 from dotenv import load_dotenv
 import os
-load_dotenv()
-DATABASE_URL = os.environ.get("VITE_REACT_APP_DATABASE_URL")
-API_KEY = os.environ.get("VITE_REACT_APP_FIREBASE_API_KEY")
-
 def get_main_page_content(url):
     service = Service(ChromeDriverManager().install())
     options = webdriver.ChromeOptions()
