@@ -161,11 +161,11 @@ const JobListing = ({ job, onJobClick, isRecommended }) => {
     >
       <div className="flex justify-between items-center ">
         <div className="">
-          <h1 className="font-semibold pr-5 text-2xl">{job.id}</h1>
+          <h1 className="font-semibold pr-5 text-2xl">{job.title}</h1>
           <div className="flex items-start">
             <>
               <span className="text-lg pt-1">&#8226;</span>
-              <h2 className="pl-2 text-lg">{job.Description}</h2>
+              <h2 className="pl-2 text-lg">{job.position_summary?.split(".")[0] + "." || "No summary available."}</h2>
             </>
           </div>
         </div>
@@ -195,10 +195,10 @@ const JobListing = ({ job, onJobClick, isRecommended }) => {
                 Recommend
               </button>
               {showDropdown && (
-                <div className="absolute z-10 left-1/4 mt-2 w-56 bg-white shadow-lg rounded-lg p-4">
+                <div className="absolute z-20 right-1/4 mt-2 w-3/4 bg-white shadow-lg rounded-lg p-4">
                   <p className="text-primary font-bold">Select Group</p>
                   <select
-                    className="block w-full text-primary mt-1 border border-gray-300 rounded-md shadow-sm py-2 px-3 bg-white focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                    className="block w-full text-primary mt-1 border border-gray-700 rounded-md shadow-sm py-2 px-3 bg-white focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
                     value={selectedGroup}
                     onChange={(e) => {
                       setSelectedGroup(e.target.value);
@@ -261,6 +261,14 @@ const JobList = () => {
   const detailsRef = useRef(null);
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
   const [iconSize, setIconSize] = useState("2x");
+  
+  // NEW CODE
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const pageSize = 10; // Set the number of jobs you want to show on one page
+  const handleShowMoreJobs = () => {setCurrentIndex((prevIndex) => prevIndex + pageSize);};
+  //const currentJobsToShow = filteredJobs.slice(currentIndex, currentIndex + pageSize);
+//NEW CODE END 
+
 
   useEffect(() => {
     const fetchRecommendedJobs = async () => {
@@ -396,6 +404,15 @@ const JobList = () => {
                 </option>
               ))}
             </select>
+            
+            {currentIndex + pageSize < filteredJobs.length && (
+  <button
+    onClick={handleShowMoreJobs}
+    className="my-4 mx-auto py-2 px-4 bg-primary text-white font-semibold rounded-md hover:bg-primary-dark transition-colors"
+  >
+    Show More
+  </button>
+)}
 
             <button
               className={`py-2 px-4 ${
@@ -430,7 +447,7 @@ const JobList = () => {
                 </h2>
                 {recommendedJobs.map((job) => (
                   <JobListing
-                    key={job.id}
+                    key={job.title}
                     job={job}
                     onJobClick={handleJobClick}
                     isRecommended={true}
@@ -460,7 +477,7 @@ const JobList = () => {
               }`}
             >
               <h3 className="text-4xl rounded-tl-lg font-semibold mt-2.5 text-white mb-4 px-3 py-2 pt-3 bg-primary w-full ">
-                {selectedJob.id}
+                {selectedJob.title}
               </h3>
               <div className="flex flex-col space-y-3 px-4">
                 <p className="text-md">
@@ -470,32 +487,41 @@ const JobList = () => {
                 </p>
                 <p className="text-md">
                   <strong className="text-secondary text-xl">
-                    Requirements:
+                  Company Name:
                   </strong>{" "}
                   <span className="text-lg font-medium text-primary">
-                    {selectedJob.Requirements}
+                    {selectedJob.company}
                   </span>
                 </p>
                 <p className="text-md">
                   <strong className="text-secondary text-xl">Salary:</strong>{" "}
                   <span className="text-lg font-medium text-primary">
-                    {selectedJob.Salary}
+                    {selectedJob.pay_range}
                   </span>
                 </p>
                 <p className="text-md">
                   <strong className="text-secondary text-xl">Location:</strong>{" "}
                   <span className="text-lg font-medium text-primary">
-                    {selectedJob.Location}
+                    {selectedJob.location}
                   </span>
                 </p>
                 <p className="text-md">
                   <strong className="text-secondary text-xl">
-                    Availability:
+                    Link to Application:
                   </strong>{" "}
                   <span className="text-xl font-medium text-primary">
-                    {selectedJob.Availability}
+                    {selectedJob.url}
                   </span>
                 </p>
+                <p className="text-md">
+                  <strong className="text-secondary text-xl">
+                  Position Summary:
+                  </strong>{" "}
+                  <span className="text-xl font-medium text-primary">
+                    {selectedJob.position_summary}
+                  </span>
+                </p>
+                
                 <button
                   className="mt-5 py-2 px-4 bg-secondary text-white font-semibold rounded-md hover:bg-secondary-dark transition-colors"
                   onClick={() => setSelectedJob(null)}
