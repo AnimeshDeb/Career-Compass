@@ -14,9 +14,10 @@ from datetime import datetime
 import json
 from dotenv import load_dotenv
 import os
-load_dotenv("./env")
+load_dotenv()
 DATABASE_URL = os.environ.get("VITE_REACT_APP_DATABASE_URL")
 API_KEY = os.environ.get("VITE_REACT_APP_FIREBASE_API_KEY")
+
 def get_main_page_content(url):
     service = Service(ChromeDriverManager().install())
     options = webdriver.ChromeOptions()
@@ -96,7 +97,6 @@ def extract_job_info(html_content):
     if req_qual_heading:
         parent = req_qual_heading.find_parent()
         qualifications_list = parent.find_next_sibling(['ul', 'ol'])
-        print(qualifications_list)
         if qualifications_list:
             list_items = qualifications_list.find_all('li')
             job_info["required_qualifications"] = [li.get_text(strip=True) for li in list_items if li.text.strip()]
@@ -177,7 +177,6 @@ def fetch_job_postings():
     
     while page_number < 5:
         page_url = base_url.format(page_number)
-        print(f"Accessing page: {page_url}")
         content = get_main_page_content(page_url)
         
         if not content or "no jobs found" in content.lower():
