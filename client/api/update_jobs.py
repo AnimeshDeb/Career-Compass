@@ -15,7 +15,7 @@ import json
 from dotenv import load_dotenv
 import os
 
-ATABASE_URL = os.environ['DATABASE_URL']
+DATABASE_URL = os.environ['DATABASE_URL']
 API_KEY = os.environ['FIREBASE_API_KEY']
 def get_main_page_content(url):
     service = Service(ChromeDriverManager().install())
