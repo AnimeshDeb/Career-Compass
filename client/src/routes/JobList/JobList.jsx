@@ -273,6 +273,7 @@ const JobList = () => {
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
   const [iconSize, setIconSize] = useState("2x");
   const [openDropdownId, setOpenDropdownId] = useState(null);
+
   const [currentIndex, setCurrentIndex] = useState(0);
   const pageSize = 10;
   const handleShowMoreJobs = () => {
