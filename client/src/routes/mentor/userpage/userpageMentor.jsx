@@ -1,27 +1,21 @@
-import Navbar from "../../../components/navbar/version1/navbar.jsx";
 import { useEffect, useState } from "react";
-import { getMentorById } from "../../../functions/mentorFunctions.js";
+import { useLocation } from "react-router-dom";
+import Navbar from "../../../components/navbar/version1/navbar.jsx";
 import Footer from "../../../components/footer/footer.jsx";
-import "react-multi-carousel/lib/styles.css";
 import UserBanner from "../../../components/UserBanner/UserBanner.jsx";
 import UserMode from "./userMode/userMode.jsx";
 import EditMode from "./editMode/editMode.jsx";
-import { useLocation } from "react-router-dom";
+import { getMentorById } from "../../../functions/mentorFunctions.js";
 
 export default function UserpageMentor() {
-  const location = useLocation();
-  const mentorId = location.state?.userId;
-  const [windowWidth, setWindowWidth] = useState(window.innerWidth);
-  const [iconSize, setIconSize] = useState("2x");
-  const [editMode, setEditMode] = useState(false);
   const [userData, setUserData] = useState(null);
+  const [editMode, setEditMode] = useState(false);
   const [pendingChanges, setPendingChanges] = useState({});
   const [isLoading, setIsLoading] = useState(true);
-  const [refreshUserData, setRefreshUserData] = useState(false);
+  const [iconSize, setIconSize] = useState("2x");
+  const location = useLocation();
+  const mentorId = location.state?.userId;
 
-  const triggerUserDataRefresh = () => {
-    setRefreshUserData((prev) => !prev);
-  };
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -39,23 +33,19 @@ export default function UserpageMentor() {
     };
 
     fetchData();
-  }, [mentorId, refreshUserData]);
-
-  const handlePendingChange = (field, value, type) => {
-    setPendingChanges((prev) => ({
-      ...prev,
-      [field]: { value, type },
-    }));
-  };
-  //Edit Mode
-  const toggleEditMode = () => {
-    setEditMode(!editMode);
-  };
+  }, [mentorId]);
 
   useEffect(() => {
-    function handleResize() {
-      setWindowWidth(window.innerWidth);
-    }
+    const handleResize = () => {
+      const width = window.innerWidth;
+      if (width < 400) {
+        setIconSize("xs");
+      } else if (width < 769) {
+        setIconSize("lg");
+      } else {
+        setIconSize("2x");
+      }
+    };
 
     window.addEventListener("resize", handleResize);
     handleResize();
@@ -63,60 +53,63 @@ export default function UserpageMentor() {
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
-  useEffect(() => {
-    if (windowWidth < 400) {
-      setIconSize("xs");
-    } else if (windowWidth < 769) {
-      setIconSize("lg");
-    } else {
-      setIconSize("2x");
-    }
-  }, [windowWidth]);
+  const toggleEditMode = () => {
+    setEditMode((prev) => !prev);
+  };
+
+  const handlePendingChange = (field, value, type) => {
+    setPendingChanges((prev) => ({
+      ...prev,
+      [field]: { value, type },
+    }));
+  };
+
+  const triggerUserDataRefresh = () => {
+    setIsLoading(true);
+    setTimeout(() => {
+      setIsLoading(false);
+    }, 750);
+  };
 
   return (
-    <div className="bg-primary-dark">
-      <div className="w-full bg-white max-w-[100%] mx-auto xl:max-w-[75%] shadow-md">
-        <Navbar
-          className="nav"
-          userType={"mentor"}
-          iconSize={iconSize}
-          userId={mentorId}
-          currentPage={"userpage"}
-        />
-
-        {userData && (
-          <UserBanner
-            editMode={editMode}
-            onEdit={toggleEditMode}
-            banner={userData.banner}
+    <div className="bg-primary-dark min-h-screen">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        <div className="bg-white rounded-lg shadow-lg overflow-hidden">
+          <Navbar
+            className="nav"
+            userType="mentor"
             iconSize={iconSize}
-            picture={userData.pictureURL}
-            name={userData.displayName}
-            handlePendingChange={handlePendingChange}
-            pendingChanges={pendingChanges}
-            isLoading={isLoading}
+            userId={mentorId}
+            currentPage="userpage"
           />
-        )}
-        {editMode ? (
-          // Edit Mode
-          <>
-            <EditMode
-              pendingChanges={pendingChanges}
-              setPendingChanges={setPendingChanges}
-              userId={mentorId}
+          {userData && (
+            <UserBanner
               iconSize={iconSize}
-              userData={userData}
-              triggerUserDataRefresh={triggerUserDataRefresh}
+              banner={userData.banner}
+              picture={userData.pictureURL}
+              name={userData.displayName}
+              onEdit={toggleEditMode}
+              editMode={editMode}
+              handlePendingChange={handlePendingChange}
+              pendingChanges={pendingChanges}
+              isLoading={isLoading}
             />
-          </>
-        ) : (
-          // Normal page
-          <>
-            <UserMode iconSize={iconSize} userData={userData} />
-          </>
-        )}
-        <div className="bg-secondary">
-          <Footer mentorType={"Mentor"} />
+          )}
+          <div className="p-8">
+            {editMode ? (
+              <EditMode
+                pendingChanges={pendingChanges}
+                setPendingChanges={setPendingChanges}
+                userId={mentorId}
+                iconSize={iconSize}
+                userData={userData}
+                triggerUserDataRefresh={triggerUserDataRefresh}
+              />
+            ) : (
+              <UserMode iconSize={iconSize} userData={userData} isLoading={isLoading} />
+            )}
+          </div>
+          <Footer userType="Mentor" />
         </div>
       </div>
     </div>

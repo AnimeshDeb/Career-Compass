@@ -1,65 +1,27 @@
-import Navbar from "../../../components/navbar/version1/navbar.jsx";
 import { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
-import { getSeekerById } from "../../../functions/seekerFunctions.js";
+import Navbar from "../../../components/navbar/version1/navbar.jsx";
 import Footer from "../../../components/footer/footer.jsx";
 import UserBanner from "../../../components/UserBanner/UserBanner.jsx";
 import UserMode from "./userMode/userMode.jsx";
 import EditMode from "./editMode/editMode.jsx";
 import ChatBox from "../../../components/Chat/ChatBox.jsx";
+import { getSeekerById } from "../../../functions/seekerFunctions.js";
+
 export default function UserpageSeeker() {
-  const [windowWidth, setWindowWidth] = useState(window.innerWidth);
-  const [iconSize, setIconSize] = useState("2x");
-  const [editMode, setEditMode] = useState(false);
   const [userData, setUserData] = useState(null);
+  const [editMode, setEditMode] = useState(false);
   const [pendingChanges, setPendingChanges] = useState({});
   const [isLoading, setIsLoading] = useState(true);
+  const [iconSize, setIconSize] = useState("2x");
   const location = useLocation();
   const name = location.state?.name;
-  const [refreshUserData, setRefreshUserData] = useState(false);
-
-  const triggerUserDataRefresh = () => {
-    setRefreshUserData((prev) => !prev);
-  };
-  const handlePendingChange = (field, value, type, section) => {
-    setPendingChanges((prev) => ({
-      ...prev,
-      [field]: { value, type, section },
-    }));
-  };
-  //Edit Mode
-  const toggleEditMode = () => {
-    setEditMode(!editMode);
-  };
-
-  //Icon Size
-  useEffect(() => {
-    function handleResize() {
-      setWindowWidth(window.innerWidth);
-    }
-
-    window.addEventListener("resize", handleResize);
-    handleResize();
-
-    return () => window.removeEventListener("resize", handleResize);
-  }, []);
-
-  useEffect(() => {
-    if (windowWidth < 400) {
-      setIconSize("xs");
-    } else if (windowWidth < 769) {
-      setIconSize("lg");
-    } else {
-      setIconSize("2x");
-    }
-  }, [windowWidth]);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         setIsLoading(true);
-        const userId = name;
-        const fetchedUserData = await getSeekerById(userId);
+        const fetchedUserData = await getSeekerById(name);
         setUserData(fetchedUserData);
       } catch (error) {
         console.error("Error fetching user by ID:", error.message);
@@ -71,55 +33,84 @@ export default function UserpageSeeker() {
     };
 
     fetchData();
-  }, [name, refreshUserData]);
+  }, [name]);
+
+  useEffect(() => {
+    const handleResize = () => {
+      const width = window.innerWidth;
+      if (width < 400) {
+        setIconSize("xs");
+      } else if (width < 769) {
+        setIconSize("lg");
+      } else {
+        setIconSize("2x");
+      }
+    };
+
+    window.addEventListener("resize", handleResize);
+    handleResize();
+
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
+  const toggleEditMode = () => {
+    setEditMode((prev) => !prev);
+  };
+
+  const handlePendingChange = (field, value, type, section) => {
+    setPendingChanges((prev) => ({
+      ...prev,
+      [field]: { value, type, section },
+    }));
+  };
+
+  const triggerUserDataRefresh = () => {
+    setIsLoading(true);
+    setTimeout(() => {
+      setIsLoading(false);
+    }, 750);
+  };
 
   return (
-    <div className="bg-primary-dark">
-      <div className="w-full bg-white max-w-[100%] mx-auto xl:max-w-[75%] shadow-md">
-        <Navbar
-          className="nav"
-          userId={name}
-          userType={"seeker"}
-          iconSize={iconSize}
-          currentPage={"userpage"}
-        />
-        {userData && (
-          <UserBanner
+    <div className="bg-primary-dark min-h-screen">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        <div className="bg-white rounded-lg shadow-lg overflow-hidden">
+          <Navbar
+            className="nav"
+            userId={name}
+            userType="seeker"
             iconSize={iconSize}
-            banner={userData.banner}
-            picture={userData.pictureURL}
-            name={userData.displayName}
-            onEdit={toggleEditMode}
-            editMode={editMode}
-            handlePendingChange={handlePendingChange}
-            pendingChanges={pendingChanges}
-            isLoading={isLoading}
+            currentPage="userpage"
           />
-        )}
-        {editMode ? (
-          // Edit Mode
-          <>
-            <EditMode
+          {userData && (
+            <UserBanner
+              iconSize={iconSize}
+              banner={userData.banner}
+              picture={userData.pictureURL}
+              name={userData.displayName}
+              onEdit={toggleEditMode}
+              editMode={editMode}
+              handlePendingChange={handlePendingChange}
               pendingChanges={pendingChanges}
-              setPendingChanges={setPendingChanges}
-              userId={name}
-              iconSize={iconSize}
-              userData={userData}
-              triggerUserDataRefresh={triggerUserDataRefresh}
-            />
-          </>
-        ) : (
-          // Normal page
-          <>
-            <UserMode
-              iconSize={iconSize}
-              userData={userData}
               isLoading={isLoading}
             />
-          </>
-        )}
-
-        <Footer userType="Seeker" />
+          )}
+          <div className="p-8">
+            {editMode ? (
+              <EditMode
+                pendingChanges={pendingChanges}
+                setPendingChanges={setPendingChanges}
+                userId={name}
+                iconSize={iconSize}
+                userData={userData}
+                triggerUserDataRefresh={triggerUserDataRefresh}
+              />
+            ) : (
+              <UserMode iconSize={iconSize} userData={userData} isLoading={isLoading} />
+            )}
+          </div>
+          <Footer userType="Seeker" />
+        </div>
       </div>
       <ChatBox />
     </div>

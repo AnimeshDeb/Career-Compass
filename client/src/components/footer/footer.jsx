@@ -5,7 +5,7 @@ export default function Footer({ userType = "Seeker" }) {
     <footer
       className={`${color} text-white flex flex-col items-center mt-0 p-2`}
     >
-      <p>© 2023 Career Compass. All Rights Reserved</p>
+      <p>© 2024 Career Compass. All Rights Reserved</p>
     </footer>
   );
 }
