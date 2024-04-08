@@ -6,6 +6,7 @@ import UserBanner from "../../../components/UserBanner/UserBanner.jsx";
 import UserMode from "./userMode/userMode.jsx";
 import EditMode from "./editMode/editMode.jsx";
 import { getMentorById } from "../../../functions/mentorFunctions.js";
+import ChatBox from "../../../components/Chat/ChatBox.jsx";
 
 export default function UserpageMentor() {
   const [userData, setUserData] = useState(null);
@@ -109,6 +110,7 @@ export default function UserpageMentor() {
               <UserMode iconSize={iconSize} userData={userData} isLoading={isLoading} />
             )}
           </div>
+          <ChatBox />
           <Footer userType="Mentor" />
         </div>
       </div>
