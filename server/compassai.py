@@ -3,6 +3,12 @@ import os
 import time
 from typing import List
 
+# serverless imports ?from fastapi import FastAPI, Request
+from fastapi.responses import JSONResponse
+from modal import asgi_app
+
+app = FastAPI()
+
 from modal import Image, Secret, Stub, enter, exit, gpu, method
 
 MODEL_DIR = "/model"
@@ -133,6 +139,7 @@ def main(test_queries=[]):
             print(f"Response: {compass.generate(query)}\n")
     else:
         print("CompassAI deployed. Ready to handle queries.")
+        stub.serve()
 
         # testing in terminal
 
@@ -149,3 +156,25 @@ def main(test_queries=[]):
 
         #     print(f"Response: {response}")
         #     print(f"Execution Time: {execution_time:.2f} seconds\n")
+
+# # api endpoint in backend for chats
+# @stub.function(method="POST", path="/api/chat")
+# def chat(message: str) -> dict:
+#     compass = Model()
+#     response = compass.generate(message)
+#     return {"text": response}
+
+
+@app.post("/api/chat")
+async def chat(request: Request):
+    data = await request.json()
+    message = data["message"]
+
+    compass = Model()
+    response = compass.generate(message)
+
+    return JSONResponse(content={"text": response})
+
+@stub.asgi_app()
+def fastapi_app():
+    return app

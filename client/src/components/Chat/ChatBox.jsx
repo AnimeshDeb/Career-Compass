@@ -27,10 +27,17 @@ const ChatBox = () => {
 
     const handleInput = (e) => setInputMessage(e.target.value);
 
-    const sendMessage = () => {
+    const sendMessage = async () => {
         if (!inputMessage.trim()) return;
         setMessages(msgs => [...msgs, { type: 'outgoing', text: inputMessage }]);
         setInputMessage('');
+    
+        try {
+            const response = await axios.post('/api/chat', { message: inputMessage });
+            setMessages(msgs => [...msgs, { type: 'incoming', text: response.data.text }]);
+        } catch (error) {
+            console.error('Error sending message:', error);
+        }
     };
 
     const createThread = async () => {
@@ -167,11 +174,12 @@ const ChatBox = () => {
         }
     };
 
-    const handleMicrophoneClick = () => {
-        setTimeout(() => {
-            setInputMessage("How do I navigate to the jobs page?");
-        }, 1000);
-    };
+    // add logic for microphone button here
+    // const handleMicrophoneClick = () => {
+    //     setTimeout(() => {
+    //         setInputMessage("How do I navigate to the jobs page?");
+    //     }, 1000);
+    // };
 
 
     return (
@@ -196,7 +204,7 @@ const ChatBox = () => {
             ))}
         </ul>
         <div className="flex gap-1 absolute bottom-0 w-full bg-white p-1 px-5 border-t border-gray-200">
-            <FontAwesomeIcon icon={faMicrophone} className="self-end text-primary cursor-pointer flex items-center text-3xl" onClick={handleMicrophoneClick} /> {/* Adjusted icon size to text-xl */}
+            {/* <FontAwesomeIcon icon={faMicrophone} className="self-end text-primary cursor-pointer flex items-center text-3xl" onClick={handleMicrophoneClick} /> */}
             <textarea
                 className="h-14 w-full border-none outline-none resize-none max-h-[11.25rem] p-4 text-sm rounded-full bg-gray-100"
                 placeholder="Enter a message..."
