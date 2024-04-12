@@ -304,7 +304,7 @@ const GroupPage = () => {
                   className="text-2xl text-secondary-dark px-4 m-0 rounded"
                   onClick={() => openAddMenteeDialog(group.id)}
                 >
-                  + Add Mentor
+                  + Add Mentee
                 </button>
               </div>
               {Object.keys(group.mentees).length > 0 ? (
