@@ -11,7 +11,7 @@ import {
   onSnapshot,
 } from "firebase/firestore";
 
-const ChatBox = ({
+const ChatGroup = ({
   userId,
   group,
   userType,
@@ -184,7 +184,7 @@ const ChatBox = ({
   );
 };
 
-ChatBox.propTypes = {
+ChatGroup.propTypes = {
   userId: PropTypes.string.isRequired,
   group: PropTypes.shape({
     mentees: PropTypes.object,
@@ -197,4 +197,4 @@ ChatBox.propTypes = {
   onMenteeClick: PropTypes.func.isRequired,
 };
 
-export default ChatBox;
+export default ChatGroup;

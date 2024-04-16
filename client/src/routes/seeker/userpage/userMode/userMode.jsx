@@ -49,7 +49,7 @@ export default function UserMode({ userData, iconSize, isLoading }) {
   };
 
   return (
-    <>
+    <div className="w-full">
       {userData && (
         <>
           <section className="flex flex-wrap justify-center pb-0">
@@ -181,7 +181,8 @@ export default function UserMode({ userData, iconSize, isLoading }) {
               </div>
               <div className="flex-1 bg-blue-100 px-2 py-2 ml-0 mr-4 shadow-lg relative text-left mx-5 my-5 rounded-tr-lg rounded-bl-lg rounded-br-lg ">
                 <p className={`${textSize} text-primary`}>
-                  Keep on <span className="text-secondary">looking</span>. You will find it!{" "}
+                  Keep on <span className="text-secondary">looking</span>. You
+                  will find it!{" "}
                 </p>
                 <div className="absolute top-0 -left-2 w-10 h-0 border-l-transparent border-b-[10px] border-b-primary"></div>
                 <div className="flex justify-end mt-0"></div>
@@ -352,7 +353,7 @@ export default function UserMode({ userData, iconSize, isLoading }) {
           </section>
         </>
       )}
-    </>
+    </div>
   );
 }
 

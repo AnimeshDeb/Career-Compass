@@ -1,64 +1,64 @@
-import { useEffect, useState, useRef } from 'react';
-import { getJobListings } from '../../functions/jobFunctions';
-import Navbar from '../../components/navbar/version1/navbar';
-import { useLocation } from 'react-router-dom';
-import PropTypes from 'prop-types';
-import Footer from '../../components/footer/footer';
-import anime from 'animejs';
-import { doc, getDoc, runTransaction, arrayUnion } from 'firebase/firestore';
-import { db } from '../../firebase';
-
+import { useEffect, useState, useRef } from "react";
+import { getJobListings } from "../../functions/jobFunctions";
+import Navbar from "../../components/navbar/version1/navbar";
+import { useLocation } from "react-router-dom";
+import PropTypes from "prop-types";
+import Footer from "../../components/footer/footer";
+import anime from "animejs";
+import { doc, getDoc, runTransaction, arrayUnion } from "firebase/firestore";
+import { db } from "../../firebase";
+import ChatBox from "../../components/Chat/ChatBox";
 const states = [
-  'Alabama',
-  'Alaska',
-  'Arizona',
-  'Arkansas',
-  'California',
-  'Colorado',
-  'Connecticut',
-  'Delaware',
-  'Florida',
-  'Georgia',
-  'Hawaii',
-  'Idaho',
-  'Illinois',
-  'Indiana',
-  'Iowa',
-  'Kansas',
-  'Kentucky',
-  'Louisiana',
-  'Maine',
-  'Maryland',
-  'Massachusetts',
-  'Michigan',
-  'Minnesota',
-  'Mississippi',
-  'Missouri',
-  'Montana',
-  'Nebraska',
-  'Nevada',
-  'New Hampshire',
-  'New Jersey',
-  'New Mexico',
-  'New York',
-  'North Carolina',
-  'North Dakota',
-  'Ohio',
-  'Oklahoma',
-  'Oregon',
-  'Pennsylvania',
-  'Rhode Island',
-  'South Carolina',
-  'South Dakota',
-  'Tennessee',
-  'Texas',
-  'Utah',
-  'Vermont',
-  'Virginia',
-  'Washington',
-  'West Virginia',
-  'Wisconsin',
-  'Wyoming',
+  "Alabama",
+  "Alaska",
+  "Arizona",
+  "Arkansas",
+  "California",
+  "Colorado",
+  "Connecticut",
+  "Delaware",
+  "Florida",
+  "Georgia",
+  "Hawaii",
+  "Idaho",
+  "Illinois",
+  "Indiana",
+  "Iowa",
+  "Kansas",
+  "Kentucky",
+  "Louisiana",
+  "Maine",
+  "Maryland",
+  "Massachusetts",
+  "Michigan",
+  "Minnesota",
+  "Mississippi",
+  "Missouri",
+  "Montana",
+  "Nebraska",
+  "Nevada",
+  "New Hampshire",
+  "New Jersey",
+  "New Mexico",
+  "New York",
+  "North Carolina",
+  "North Dakota",
+  "Ohio",
+  "Oklahoma",
+  "Oregon",
+  "Pennsylvania",
+  "Rhode Island",
+  "South Carolina",
+  "South Dakota",
+  "Tennessee",
+  "Texas",
+  "Utah",
+  "Vermont",
+  "Virginia",
+  "Washington",
+  "West Virginia",
+  "Wisconsin",
+  "Wyoming",
 ];
 
 const JobListing = ({
@@ -77,15 +77,15 @@ const JobListing = ({
   const [selectedMentee, setSelectedMentee] = useState(null);
   const [groups, setGroups] = useState([]);
   const [mentees, setMentees] = useState([]);
-  const bgColorClass = isRecommended ? 'bg-secondary' : 'bg-primary';
+  const bgColorClass = isRecommended ? "bg-secondary" : "bg-primary";
   const btnColor = isRecommended
-    ? 'bg-primary hover:bg-primary-light'
-    : 'bg-secondary hover:bg-secondary-light';
+    ? "bg-primary hover:bg-primary-light"
+    : "bg-secondary hover:bg-secondary-light";
 
   useEffect(() => {
     if (selectedGroup) {
       const currentGroup = groups.find((group) => group.id === selectedGroup);
-      console.log('Current', selectedGroup, currentGroup);
+      console.log("Current", selectedGroup, currentGroup);
       if (currentGroup && currentGroup.mentees) {
         const menteesArray = Object.entries(currentGroup.mentees).map(
           ([id, mentee]) => ({
@@ -103,19 +103,19 @@ const JobListing = ({
     const fetchUserGroups = async () => {
       if (!userId) return;
 
-      const userRef = doc(db, 'Mentors', userId);
+      const userRef = doc(db, "Mentors", userId);
       const userSnap = await getDoc(userRef);
 
       if (userSnap.exists()) {
         const userData = userSnap.data();
         const groupIds = userData.groups || [];
         const groupsDetailsPromise = groupIds.map(async (groupId) => {
-          const groupRef = doc(db, 'Groups', groupId);
+          const groupRef = doc(db, "Groups", groupId);
           const groupSnap = await getDoc(groupRef);
           if (groupSnap.exists()) {
             return { id: groupId, ...groupSnap.data() };
           } else {
-            console.log('No such group!');
+            console.log("No such group!");
             return null;
           }
         });
@@ -123,7 +123,7 @@ const JobListing = ({
         const groupsDetails = await Promise.all(groupsDetailsPromise);
         setGroups(groupsDetails.filter((group) => group));
       } else {
-        console.log('No such user!');
+        console.log("No such user!");
       }
     };
 
@@ -132,16 +132,16 @@ const JobListing = ({
 
   const recommendJob = async (groupId, menteeId, jobId) => {
     if (!groupId || !menteeId || !jobId) {
-      console.error('Missing groupId, menteeId, or jobId');
+      console.error("Missing groupId, menteeId, or jobId");
       return;
     }
 
     try {
-      const menteeRef = doc(db, 'Seekers', menteeId);
+      const menteeRef = doc(db, "Seekers", menteeId);
       await runTransaction(db, async (transaction) => {
         const menteeDoc = await transaction.get(menteeRef);
         if (!menteeDoc.exists()) {
-          console.error('Document does not exist!');
+          console.error("Document does not exist!");
           return;
         }
         const currentRecommendations = menteeDoc.data().recommended || [];
@@ -152,9 +152,9 @@ const JobListing = ({
         }
       });
 
-      alert('Job recommended successfully!');
+      alert("Job recommended successfully!");
     } catch (error) {
-      console.error('Failed to recommend job:', error);
+      console.error("Failed to recommend job:", error);
     }
   };
   return (
@@ -169,8 +169,8 @@ const JobListing = ({
             <>
               <span className="text-lg pt-1">&#8226;</span>
               <h2 className="pl-2 text-lg">
-                {job.position_summary?.split('.')[0] + '.' ||
-                  'No summary available.'}
+                {job.position_summary?.split(".")[0] + "." ||
+                  "No summary available."}
               </h2>
             </>
           </div>
@@ -182,14 +182,14 @@ const JobListing = ({
           >
             Details
           </div>
-          {lowerCaseUserType === 'seeker' && (
+          {lowerCaseUserType === "seeker" && (
             <button
               className={`${btnColor} text-white px-10 py-2 rounded-full cursor-pointer`}
             >
               Apply
             </button>
           )}
-          {lowerCaseUserType === 'mentor' && (
+          {lowerCaseUserType === "mentor" && (
             <div>
               <button
                 className={`${btnColor} text-white px-10 py-2 rounded-full cursor-pointer`}
@@ -211,7 +211,7 @@ const JobListing = ({
                     value={selectedGroup}
                     onChange={(e) => {
                       setSelectedGroup(e.target.value);
-                      setSelectedMentee('');
+                      setSelectedMentee("");
                     }}
                   >
                     <option disabled value="">
@@ -261,15 +261,15 @@ const JobList = () => {
   const location = useLocation();
   const userType = location.state?.userType;
   const userId = location.state?.userId;
-  const [searchTerm, setSearchTerm] = useState('');
+  const [searchTerm, setSearchTerm] = useState("");
   const [jobs, setJobs] = useState([]);
   const [recommendedJobs, setRecommendedJobs] = useState([]);
   const [selectedJob, setSelectedJob] = useState(null);
-  const [locationFilter, setLocationFilter] = useState('');
+  const [locationFilter, setLocationFilter] = useState("");
   const [isPartTime, setIsPartTime] = useState(false);
   const detailsRef = useRef(null);
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
-  const [iconSize, setIconSize] = useState('2x');
+  const [iconSize, setIconSize] = useState("2x");
   const [openDropdownId, setOpenDropdownId] = useState(null);
 
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -286,14 +286,14 @@ const JobList = () => {
   };
   useEffect(() => {
     const fetchRecommendedJobs = async () => {
-      const menteeRef = doc(db, 'Seekers', userId);
+      const menteeRef = doc(db, "Seekers", userId);
       const docSnap = await getDoc(menteeRef);
       if (docSnap.exists() && docSnap.data().recommended) {
         const recommendedIds = docSnap.data().recommended;
 
         const recommendedJobDetails = await Promise.all(
           recommendedIds.map(async (id) => {
-            const jobRef = doc(db, 'Jobs', id);
+            const jobRef = doc(db, "Jobs", id);
             const jobSnap = await getDoc(jobRef);
             return jobSnap.exists()
               ? { id: jobSnap.id, ...jobSnap.data() }
@@ -305,17 +305,17 @@ const JobList = () => {
       }
     };
 
-    if (userId && userType === 'seeker') {
+    if (userId && userType === "seeker") {
       fetchRecommendedJobs();
     }
   }, [userId, userType]);
   useEffect(() => {
     if (windowWidth < 400) {
-      setIconSize('xs');
+      setIconSize("xs");
     } else if (windowWidth < 769) {
-      setIconSize('lg');
+      setIconSize("lg");
     } else {
-      setIconSize('2x');
+      setIconSize("2x");
     }
   }, [windowWidth]);
   useEffect(() => {
@@ -323,10 +323,10 @@ const JobList = () => {
       setWindowWidth(window.innerWidth);
     }
 
-    window.addEventListener('resize', handleResize);
+    window.addEventListener("resize", handleResize);
     handleResize();
 
-    return () => window.removeEventListener('resize', handleResize);
+    return () => window.removeEventListener("resize", handleResize);
   }, []);
   useEffect(() => {
     const fetchData = async () => {
@@ -334,7 +334,7 @@ const JobList = () => {
         const fetchedJobs = await getJobListings();
         setJobs(fetchedJobs);
       } catch (error) {
-        console.error('Error fetching jobs:', error);
+        console.error("Error fetching jobs:", error);
       }
     };
 
@@ -344,9 +344,9 @@ const JobList = () => {
     if (selectedJob && detailsRef.current) {
       anime({
         targets: detailsRef.current,
-        translateX: ['100%', '0%'],
+        translateX: ["100%", "0%"],
         opacity: [0, 1],
-        easing: 'easeOutQuad',
+        easing: "easeOutQuad",
         duration: 700,
       });
     }
@@ -356,17 +356,17 @@ const JobList = () => {
   };
 
   const clearFilters = () => {
-    setSearchTerm('');
-    setLocationFilter('');
+    setSearchTerm("");
+    setLocationFilter("");
     setIsPartTime(false);
   };
 
   const filterJobs = (jobs, searchTerm, locationFilter, isPartTime) => {
     return jobs.filter((job) => {
-      const idString = job.id ? job.id.toString().toLowerCase() : '';
+      const idString = job.id ? job.id.toString().toLowerCase() : "";
       const descriptionString = job.Description
         ? job.Description.toLowerCase()
-        : '';
+        : "";
       const matchesIdOrDescription =
         idString.includes(searchTerm.toLowerCase()) ||
         descriptionString.includes(searchTerm.toLowerCase());
@@ -374,7 +374,7 @@ const JobList = () => {
         ? job.Location === locationFilter
         : true;
       const matchesPartTime = isPartTime
-        ? job.Availability === 'Part Time'
+        ? job.Availability === "Part Time"
         : true;
       return (
         !recommendedJobs.some((rJob) => rJob.id === job.id) &&
@@ -389,171 +389,182 @@ const JobList = () => {
 
   return (
     <>
-      <div className="flex flex-col min-h-screen">
-        <Navbar
-          userType={userType}
-          iconSize={iconSize}
-          currentPage={'joblist'}
-          userId={userId}
-        />
-        <div className="px-3">
-          <h1 className="text-7xl pt-2 font-bold text-primary">Jobs</h1>
-          <div className="md:flex items-center mb-4">
-            <input
-              type="text"
-              placeholder="Search for jobs"
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              className="mr-2 w-full px-4 py-2 mt-2 border border-gray-300 rounded-md shadow-sm"
-            />
-            <select
-              value={locationFilter}
-              onChange={(e) => setLocationFilter(e.target.value)}
-              className="mr-2 px-4 py-2 border mt-2 border-gray-300 rounded-md shadow-sm"
-            >
-              <option value="">All Locations</option>
-              {states.map((state) => (
-                <option value={state} key={state}>
-                  {state}
-                </option>
-              ))}
-            </select>
-
-            {currentIndex + pageSize < filteredJobs.length && (
-              <button
-                onClick={handleShowMoreJobs}
-                className="my-4 mx-auto py-2 px-4 bg-primary text-white font-semibold rounded-md hover:bg-primary-dark transition-colors"
-              >
-                Show More
-              </button>
-            )}
-
-            <button
-              className={`py-2 px-4 ${
-                isPartTime ? 'bg-primary' : 'bg-secondary'
-              } text-white rounded-md mr-2`}
-              onClick={() => setIsPartTime(!isPartTime)}
-            >
-              {isPartTime ? 'Part-Time Only' : 'All Jobs'}
-            </button>
-            <button
-              className="py-2 px-4 bg-secondary text-white rounded-md"
-              onClick={clearFilters}
-            >
-              Clear
-            </button>
-          </div>
-        </div>
-        <div
-          className={`flex-grow relative ${
-            selectedJob ? 'md:flex md:flex-row' : ''
-          }`}
-        >
-          <div
-            className={`px-2 overflow-auto transition-all duration-500 ease-in-out ${
-              selectedJob ? 'w-full md:w-1/2' : 'w-full'
-            }`}
-          >
-            {recommendedJobs.length > 0 && (
-              <div>
-                <h2 className="px-3 text-xl font-semibold text-secondary">
-                  Recommended for You
-                </h2>
-                {recommendedJobs.map((job) => (
-                  <JobListing
-                    key={job.title}
-                    job={job}
-                    selectedJob={selectedJob}
-                    onJobClick={handleJobClick}
-                    isRecommended={true}
-                    showDropdown={openDropdownId === job.id}
-                    toggleDropdown={toggleDropdown}
+      <div className="bg-primary-dark min-h-screen">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+          <div className="bg-white rounded-lg shadow-lg w-full overflow-hidden">
+            <div className="flex flex-col min-h-screen">
+              <Navbar
+                userType={userType}
+                iconSize={iconSize}
+                currentPage={"joblist"}
+                userId={userId}
+              />
+              <div className="px-3">
+                <h1 className="text-7xl pt-2 font-bold text-primary">Jobs</h1>
+                <div className="md:flex items-center mb-4">
+                  <input
+                    type="text"
+                    placeholder="Search for jobs"
+                    value={searchTerm}
+                    onChange={(e) => setSearchTerm(e.target.value)}
+                    className="mr-2 w-full px-4 py-2 mt-2 border border-gray-300 rounded-md shadow-sm"
                   />
-                ))}
+                  <select
+                    value={locationFilter}
+                    onChange={(e) => setLocationFilter(e.target.value)}
+                    className="mr-2 px-4 py-2 border mt-2 border-gray-300 rounded-md shadow-sm"
+                  >
+                    <option value="">All Locations</option>
+                    {states.map((state) => (
+                      <option value={state} key={state}>
+                        {state}
+                      </option>
+                    ))}
+                  </select>
+
+                  {currentIndex + pageSize < filteredJobs.length && (
+                    <button
+                      onClick={handleShowMoreJobs}
+                      className="my-4 mx-auto py-2 px-4 bg-primary text-white font-semibold rounded-md hover:bg-primary-dark transition-colors"
+                    >
+                      Show More
+                    </button>
+                  )}
+
+                  <button
+                    className={`py-2 px-4 ${
+                      isPartTime ? "bg-primary" : "bg-secondary"
+                    } text-white rounded-md mr-2`}
+                    onClick={() => setIsPartTime(!isPartTime)}
+                  >
+                    {isPartTime ? "Part-Time Only" : "All Jobs"}
+                  </button>
+                  <button
+                    className="py-2 px-4 bg-secondary text-white rounded-md"
+                    onClick={clearFilters}
+                  >
+                    Clear
+                  </button>
+                </div>
               </div>
-            )}
-            {filteredJobs.length > 0 ? (
-              filteredJobs.map((job) => (
-                <JobListing
-                  key={job.id}
-                  job={job}
-                  selectedJob={selectedJob}
-                  onJobClick={handleJobClick}
-                  isRecommended={false}
-                  showDropdown={openDropdownId === job.id}
-                  toggleDropdown={toggleDropdown}
-                />
-              ))
-            ) : (
-              <p>No jobs found.</p>
-            )}
-          </div>
-
-          {selectedJob && (
-            <div
-              ref={detailsRef}
-              className={`absolute top-0 left-0 w-full h-full overflow-auto shadow-lg rounded-lg bg-white md:relative md:w-1/2 transition-all duration-500 ease-in-out z-10 ${
-                selectedJob ? 'block' : 'hidden'
-              }`}
-            >
-              <h3 className="text-4xl rounded-tl-lg font-semibold mt-2.5 text-white mb-4 px-3 py-2 pt-3 bg-primary w-full ">
-                {selectedJob.title}
-              </h3>
-              <div className="flex flex-col space-y-3 px-4">
-                <p className="text-md">
-                  <span className="text-2xl font-medium text-primary">
-                    {selectedJob.Description}
-                  </span>
-                </p>
-                <p className="text-md">
-                  <strong className="text-secondary text-xl">
-                    Company Name:
-                  </strong>{' '}
-                  <span className="text-lg font-medium text-primary">
-                    {selectedJob.company}
-                  </span>
-                </p>
-                <p className="text-md">
-                  <strong className="text-secondary text-xl">Salary:</strong>{' '}
-                  <span className="text-lg font-medium text-primary">
-                    {selectedJob.pay_range}
-                  </span>
-                </p>
-                <p className="text-md">
-                  <strong className="text-secondary text-xl">Location:</strong>{' '}
-                  <span className="text-lg font-medium text-primary">
-                    {selectedJob.location}
-                  </span>
-                </p>
-                <p className="text-md">
-                  <strong className="text-secondary text-xl">
-                    Position Summary:
-                  </strong>{' '}
-                  <span className="text-xl font-medium text-primary">
-                    {selectedJob.position_summary}
-                  </span>
-                </p>
-                <button
-                  className="mt-5 py-2 px-4 bg-secondary text-white font-semibold rounded-md hover:bg-secondary-dark transition-colors"
-                  onClick={() => {
-                    window.location.href = selectedJob.url;
-                  }}
+              <div
+                className={`flex-grow relative ${
+                  selectedJob ? "md:flex md:flex-row" : ""
+                }`}
+              >
+                <div
+                  className={`px-2 overflow-auto transition-all duration-500 ease-in-out ${
+                    selectedJob ? "w-full md:w-1/2" : "w-full"
+                  }`}
                 >
-                  Apply
-                </button>
+                  {recommendedJobs.length > 0 && (
+                    <div>
+                      <h2 className="px-3 text-xl font-semibold text-secondary">
+                        Recommended for You
+                      </h2>
+                      {recommendedJobs.map((job) => (
+                        <JobListing
+                          key={job.title}
+                          job={job}
+                          selectedJob={selectedJob}
+                          onJobClick={handleJobClick}
+                          isRecommended={true}
+                          showDropdown={openDropdownId === job.id}
+                          toggleDropdown={toggleDropdown}
+                        />
+                      ))}
+                    </div>
+                  )}
+                  {filteredJobs.length > 0 ? (
+                    filteredJobs.map((job) => (
+                      <JobListing
+                        key={job.id}
+                        job={job}
+                        selectedJob={selectedJob}
+                        onJobClick={handleJobClick}
+                        isRecommended={false}
+                        showDropdown={openDropdownId === job.id}
+                        toggleDropdown={toggleDropdown}
+                      />
+                    ))
+                  ) : (
+                    <p>No jobs found.</p>
+                  )}
+                </div>
 
-                <button
-                  className="mt-5 py-2 px-4 bg-secondary text-white font-semibold rounded-md hover:bg-secondary-dark transition-colors"
-                  onClick={() => setSelectedJob(null)}
-                >
-                  Close
-                </button>
+                {selectedJob && (
+                  <div
+                    ref={detailsRef}
+                    className={`absolute top-0 left-0 w-full h-full overflow-auto shadow-lg rounded-lg bg-white md:relative md:w-1/2 transition-all duration-500 ease-in-out z-10 ${
+                      selectedJob ? "block" : "hidden"
+                    }`}
+                  >
+                    <h3 className="text-4xl rounded-tl-lg font-semibold mt-2.5 text-white mb-4 px-3 py-2 pt-3 bg-primary w-full ">
+                      {selectedJob.title}
+                    </h3>
+                    <div className="flex flex-col space-y-3 px-4">
+                      <p className="text-md">
+                        <span className="text-2xl font-medium text-primary">
+                          {selectedJob.Description}
+                        </span>
+                      </p>
+                      <p className="text-md">
+                        <strong className="text-secondary text-xl">
+                          Company Name:
+                        </strong>{" "}
+                        <span className="text-lg font-medium text-primary">
+                          {selectedJob.company}
+                        </span>
+                      </p>
+                      <p className="text-md">
+                        <strong className="text-secondary text-xl">
+                          Salary:
+                        </strong>{" "}
+                        <span className="text-lg font-medium text-primary">
+                          {selectedJob.pay_range}
+                        </span>
+                      </p>
+                      <p className="text-md">
+                        <strong className="text-secondary text-xl">
+                          Location:
+                        </strong>{" "}
+                        <span className="text-lg font-medium text-primary">
+                          {selectedJob.location}
+                        </span>
+                      </p>
+                      <p className="text-md">
+                        <strong className="text-secondary text-xl">
+                          Position Summary:
+                        </strong>{" "}
+                        <span className="text-xl font-medium text-primary">
+                          {selectedJob.position_summary}
+                        </span>
+                      </p>
+                      <button
+                        className="mt-5 py-2 px-4 bg-secondary text-white font-semibold rounded-md hover:bg-secondary-dark transition-colors"
+                        onClick={() => {
+                          window.location.href = selectedJob.url;
+                        }}
+                      >
+                        Apply
+                      </button>
+
+                      <button
+                        className="mt-5 py-2 px-4 bg-secondary text-white font-semibold rounded-md hover:bg-secondary-dark transition-colors"
+                        onClick={() => setSelectedJob(null)}
+                      >
+                        Close
+                      </button>
+                    </div>
+                  </div>
+                )}
               </div>
             </div>
-          )}
+            <ChatBox currentPage="jobs" />
+            <Footer />
+          </div>
         </div>
       </div>
-      <Footer />
     </>
   );
 };

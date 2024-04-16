@@ -75,7 +75,7 @@ export default function UserpageMentor() {
   return (
     <div className="bg-primary-dark min-h-screen">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        <div className="bg-white rounded-lg shadow-lg overflow-hidden">
+        <div className="bg-white rounded-lg shadow-lg w-full overflow-hidden">
           <Navbar
             className="nav"
             userType="mentor"
@@ -96,20 +96,22 @@ export default function UserpageMentor() {
               isLoading={isLoading}
             />
           )}
-          <div className="p-8">
-            {editMode ? (
-              <EditMode
-                pendingChanges={pendingChanges}
-                setPendingChanges={setPendingChanges}
-                userId={mentorId}
-                iconSize={iconSize}
-                userData={userData}
-                triggerUserDataRefresh={triggerUserDataRefresh}
-              />
-            ) : (
-              <UserMode iconSize={iconSize} userData={userData} isLoading={isLoading} />
-            )}
-          </div>
+          {editMode ? (
+            <EditMode
+              pendingChanges={pendingChanges}
+              setPendingChanges={setPendingChanges}
+              userId={mentorId}
+              iconSize={iconSize}
+              userData={userData}
+              triggerUserDataRefresh={triggerUserDataRefresh}
+            />
+          ) : (
+            <UserMode
+              iconSize={iconSize}
+              userData={userData}
+              isLoading={isLoading}
+            />
+          )}
           <ChatBox />
           <Footer userType="Mentor" />
         </div>

@@ -33,7 +33,7 @@ export default function UserBanner({
 
   return (
     <>
-      <div className="relative text-center">
+      <div className="relative text-center z-20">
         <Edit_Btn onEdit={onEdit} iconSize={iconSize} />
         <div className="w-full block object-cover">
           {isLoading ? (
@@ -72,26 +72,27 @@ export default function UserBanner({
           </h3>
         </div>
       </div>
-      {editMode && (<>
-        <h2
-                className={`${textSize} bg-primary text-white px-8 py-6 w-full text-center`}
-              ></h2>
-        <div className="flex justify-center items-center pt-3  mt-8 space-x-10">
-          {/* <DropFile
+      {editMode && (
+        <>
+          <h2
+            className={`${textSize} bg-primary text-white px-8 py-6 w-full text-center`}
+          ></h2>
+          <div className="flex justify-center items-center pt-3  mt-8 space-x-10">
+            {/* <DropFile
             onFileChange={(file) => handleFileChange(file, "banner", "Banner")}
             maxFiles={1}
             acceptedFileTypes={{ "image/*": [] }}
             label="Update Banner"
           /> */}
-          <DropFile
-            onFileChange={(file) =>
-              handleFileChange(file, "pictureURL", "Profile Picture")
-            }
-            maxFiles={1}
-            acceptedFileTypes={{ "image/*": [] }}
-            label="Update Profile Picture"
-          />
-        </div>
+            <DropFile
+              onFileChange={(file) =>
+                handleFileChange(file, "pictureURL", "Profile Picture")
+              }
+              maxFiles={1}
+              acceptedFileTypes={{ "image/*": [] }}
+              label="Update Profile Picture"
+            />
+          </div>
         </>
       )}
     </>

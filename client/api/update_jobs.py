@@ -14,9 +14,21 @@ from datetime import datetime
 import json
 from dotenv import load_dotenv
 import os
+import nltk
+from nltk.corpus import stopwords
+from nltk.tokenize import word_tokenize, sent_tokenize
+from transformers import pipeline
 
-DATABASE_URL = os.environ['DATABASE_URL']
-API_KEY = os.environ['FIREBASE_API_KEY']
+summarizer = pipeline("summarization")
+nltk.download('stopwords')
+nltk.download('punkt')
+
+# DATABASE_URL = os.environ['DATABASE_URL']
+# API_KEY = os.environ['FIREBASE_API_KEY']
+
+def summarize_text(text):
+    return summarizer(text, max_length=130, min_length=30, do_sample=False)
+
 def get_main_page_content(url):
     service = Service(ChromeDriverManager().install())
     options = webdriver.ChromeOptions()
@@ -90,7 +102,7 @@ def extract_job_info(html_content):
     if pos_summary_heading:
         pos_summary_text = pos_summary_heading.find_next('p')
         pos_summary_text = pos_summary_text.find_next('p')
-        job_info["position_summary"] = pos_summary_text.get_text(strip=True) if pos_summary_text else ""
+        job_info["position_summary"] = summarize_text(pos_summary_text.get_text(strip=True) if pos_summary_text else "")
 
     req_qual_heading = soup.find(string="Required Qualifications")
     if req_qual_heading:
@@ -98,7 +110,7 @@ def extract_job_info(html_content):
         qualifications_list = parent.find_next_sibling(['ul', 'ol'])
         if qualifications_list:
             list_items = qualifications_list.find_all('li')
-            job_info["required_qualifications"] = [li.get_text(strip=True) for li in list_items if li.text.strip()]
+            job_info["required_qualifications"] = [summarize_text(li.get_text(strip=True)) for li in list_items if li.text.strip()]
 
     pref_qual_heading = soup.find(string="Preferred Qualifications")
     if pref_qual_heading:
@@ -106,7 +118,7 @@ def extract_job_info(html_content):
         pref_qualifications_list = parent.find_next_sibling(['ul', 'ol'])
         if pref_qualifications_list:
             list_items = pref_qualifications_list.find_all('li')
-            job_info["preferred_qualifications"] = [li.get_text(strip=True) for li in list_items if li.text.strip()]
+            job_info["preferred_qualifications"] = [summarize_text(li.get_text(strip=True)) for li in list_items if li.text.strip()]
 
     edu_heading = soup.find(string="Education")
     if edu_heading:
@@ -153,32 +165,36 @@ def job_exists(url):
 
 def store_job_posting(job, url):
     if not job_exists(url):
-            print("Storing Jobs...")
-            data = {
-                "fields": {
-                        "title": {"stringValue": job["title"]},
-                        "company": {"stringValue": job["company"]},
-                        "location": {"stringValue": job["location"]},
-                        "position_summary": {"stringValue": job["position_summary"]},
-                        "required_qualifications": {
-                            "arrayValue": {
-                                "values": [{"stringValue": qual} for qual in job["required_qualifications"]]
-                            }
-                        },
-                        "preferred_qualifications": {
-                            "arrayValue": {
-                                "values": [{"stringValue": qual} for qual in job["preferred_qualifications"]]
-                            }
-                        },
-                        "education": {"stringValue": job["education"]},
-                        "pay_range": {"stringValue": job["pay_range"]},
-                        "url": {"stringValue": url},
-                    }
-            }
-            
-            response = requests.post(f"{DATABASE_URL}?key={API_KEY}", json=data)
-            return response.json()
-       
+        print("Storing Jobs...")
+        data = {
+            "fields": {
+                    "title": {"stringValue": job["title"]},
+                    "company": {"stringValue": job["company"]},
+                    "location": {"stringValue": job["location"]},
+                    "position_summary": {"stringValue": job["position_summary"]},
+                    "required_qualifications": {
+                        "arrayValue": {
+                            "values": [{"stringValue": qual} for qual in job["required_qualifications"]]
+                        }
+                    },
+                    "preferred_qualifications": {
+                        "arrayValue": {
+                            "values": [{"stringValue": qual} for qual in job["preferred_qualifications"]]
+                        }
+                    },
+                    "education": {"stringValue": job["education"]},
+                    "pay_range": {"stringValue": job["pay_range"]},
+                    "url": {"stringValue": url},
+                }
+        }
+        
+        response = requests.post(f"{DATABASE_URL}?key={API_KEY}", json=data)
+        return response.json()
+def localTest(info):
+    with open('./soup_content.txt', 'a', encoding='utf-8') as file:
+        file.write(json.dumps(info, ensure_ascii=False, indent=2))
+        file.write("\n\n")
+
 def fetch_job_postings():
     print("Fetching job postings...")
     page_number = 1
@@ -203,7 +219,8 @@ def fetch_job_postings():
             full_url = base_job_url + link
             job_page_content = get_job_page_content(full_url)
             job_data = extract_job_info(job_page_content)
-            store_job_posting(job_data, full_url)
+            localTest(job_data)
+            # store_job_posting(job_data, full_url)
         
         page_number += 1
 
@@ -229,10 +246,6 @@ class handler(BaseHTTPRequestHandler):
             self.end_headers()
             self.wfile.write(str(e).encode())
 
-def localTest(info):
-    with open('./soup_content.txt', 'a', encoding='utf-8') as file:
-        file.write(json.dumps(info, ensure_ascii=False, indent=2))
-        file.write("\n\n")
 
 if __name__ == "__main__":
     print("Starting job scraping...")

@@ -73,8 +73,8 @@ export default function UserpageSeeker() {
 
   return (
     <div className="bg-primary-dark min-h-screen">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        <div className="bg-white rounded-lg shadow-lg overflow-hidden">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <div className="bg-white rounded-lg shadow-lg w-full overflow-hidden">
           <Navbar
             className="nav"
             userId={name}
@@ -95,20 +95,22 @@ export default function UserpageSeeker() {
               isLoading={isLoading}
             />
           )}
-          <div className="p-8">
-            {editMode ? (
-              <EditMode
-                pendingChanges={pendingChanges}
-                setPendingChanges={setPendingChanges}
-                userId={name}
-                iconSize={iconSize}
-                userData={userData}
-                triggerUserDataRefresh={triggerUserDataRefresh}
-              />
-            ) : (
-              <UserMode iconSize={iconSize} userData={userData} isLoading={isLoading} />
-            )}
-          </div>
+          {editMode ? (
+            <EditMode
+              pendingChanges={pendingChanges}
+              setPendingChanges={setPendingChanges}
+              userId={name}
+              iconSize={iconSize}
+              userData={userData}
+              triggerUserDataRefresh={triggerUserDataRefresh}
+            />
+          ) : (
+            <UserMode
+              iconSize={iconSize}
+              userData={userData}
+              isLoading={isLoading}
+            />
+          )}
           <Footer userType="Seeker" />
         </div>
       </div>

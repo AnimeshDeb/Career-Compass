@@ -2,7 +2,6 @@ import UserpageSeeker from "./src/routes/seeker/userpage/userpageSeeker.jsx";
 import UserpageMentor from "./src/routes/mentor/userpage/userpageMentor.jsx";
 import UserpageCompany from "./src/routes/company/userpage/userpageCompany.jsx";
 import { createBrowserRouter } from "react-router-dom";
-import JobsApplied from "./src/routes/seeker/jobsApplied/jobsApplied.jsx";
 import SearchUser from "./src/routes/onboard/searchUsers/searchUsers.jsx";
 import Onboard from "./src/routes/onboard/Onboard.jsx";
 import { AuthProvider } from "./src/Contexts/AuthContext.jsx";
@@ -191,16 +190,6 @@ export const router = createBrowserRouter([
       <AuthProvider>
         <SeekerAuthProvider>
           <UserpageCompany />{" "}
-        </SeekerAuthProvider>
-      </AuthProvider>
-    ),
-  },
-  {
-    path: "/myjobs",
-    element: (
-      <AuthProvider>
-        <SeekerAuthProvider>
-          <JobsApplied />{" "}
         </SeekerAuthProvider>
       </AuthProvider>
     ),
