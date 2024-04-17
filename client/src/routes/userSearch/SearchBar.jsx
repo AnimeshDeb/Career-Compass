@@ -40,7 +40,6 @@ const SearchBar = () => {
     const mentorQuerySnapshot = await getDocs(
       query(mentorCollection, where("displayName", "==", value))
     );
-
     const seekerData = seekerQuerySnapshot.docs.map((doc) => ({
       ...doc.data(),
       id: doc.id,

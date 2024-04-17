@@ -40,13 +40,12 @@ export default function PublicUserPage() {
       setIconSize("2x");
     }
   }, [windowWidth]);
-
   useEffect(() => {
     const fetchData = async () => {
       try {
         setIsLoading(true);
         let fetchedUserData;
-        if (userType === "seeker") {
+        if (userType === "Seeker") {
           fetchedUserData = await getSeekerById(userId);
         } else {
           fetchedUserData = await getMentorById(userId);
@@ -76,7 +75,7 @@ export default function PublicUserPage() {
             isLoading={isLoading}
           />
         )}
-        {userType === "mentor" && (
+        {userType === "Mentor" && (
           <PublicMentor
             userData={userData}
             textSize={textSize}
@@ -84,7 +83,7 @@ export default function PublicUserPage() {
             iconSize={iconSize}
           />
         )}
-        {userType === "seeker" && (
+        {userType === "Seeker" && (
           <PublicSeeker
             userData={userData}
             textSize={textSize}

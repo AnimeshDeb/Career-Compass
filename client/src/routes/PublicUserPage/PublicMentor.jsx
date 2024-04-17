@@ -32,6 +32,7 @@ export default function PublicMentor({
   const introAudio = userData?.intro_audio;
   const introVideo = userData?.intro_video;
   const galleryItems = userData?.gallery;
+  console.log(userData)
   return (
     <>
       <section className="flex flex-col justify-center items-center pb-0">
