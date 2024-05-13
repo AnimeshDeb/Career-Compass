@@ -3,6 +3,8 @@ import animationAI from "../../images/animatedAI.json";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Skeleton, { SkeletonTheme } from "react-loading-skeleton";
 import ReactPlayer from "react-player";
+
+import AIface from "../../images/flat_illustrations/AIface.png";
 import "react-loading-skeleton/dist/skeleton.css";
 import {
   faSchool,
@@ -164,9 +166,10 @@ export default function PublicSeeker({
               className={`flex w-full m-0 p-0 md:w-3/5 xl:w-1/2 flex items-center justify-center sm:px-10 lg:px-0 md:px-0 bg-white text-white rounded-bl-lg ${textSize}`}
             >
               <div className="w-auto flex-shrink-0">
-                <Lottie
-                  animationData={animationAI}
-                  className="sm:w-32 w-32 md:w-60 lg:w-76  max-w-sm sm:p-0 sm:m-0"
+                <img
+                  src={AIface}
+                  alt="Maybolin"
+                  className="sm:w-24 w-24 md:w-36 lg:w-56 max-w-sm sm:p-0 sm:m-0"
                 />
               </div>
               <div className="flex-1 bg-blue-100 px-2 py-2 ml-0 mr-4 shadow-lg relative text-left mx-5 my-5 rounded-tr-lg rounded-bl-lg rounded-br-lg ">

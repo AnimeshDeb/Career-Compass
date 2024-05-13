@@ -77,13 +77,13 @@
 
 //   const handleStateChange = (selectedOption, actionMeta) => {
 //     if(actionMeta.action==='select-option'){
-     
+
 //       setJobLocation((prevState) => ({
 //         ...prevState,
 //         state: selectedOption.value,
 //       }));
 //     }
-    
+
 //   };
 
 //   const handleCityChange = (e) => {
@@ -142,7 +142,7 @@
 //               placeholder="Job name"
 //               value={jobName}
 //               onChange={(e) => setJobName(e.target.value)}
-              
+
 //             />
 
 //             <input
@@ -151,7 +151,7 @@
 //               placeholder="City"
 //               value={jobLocation.city}
 //               onChange={handleCityChange}
-              
+
 //             />
 //             <Select
 //               options={stateOptions}
@@ -193,7 +193,6 @@
 // };
 // export default SeekerJobs;
 
-
 import React, { useState } from "react";
 import { collection, addDoc, doc, setDoc } from "firebase/firestore";
 import { db } from "../../../../firebase";
@@ -201,6 +200,7 @@ import PropTypes from "prop-types";
 import Audio_Btn from "../../../../components/Buttons/audio__btn/audio_btn";
 import Select from "react-select";
 import Lottie from "lottie-react";
+import AIface from "../../../../images/flat_illustrations/AIface.png";
 import animationData from "../../../../images/animatedAI.json";
 
 const stateOptions = [
@@ -263,7 +263,7 @@ const stateOptions = [
   { value: "PW", label: "Palau" },
   { value: "PR", label: "Puerto Rico" },
   { value: "VI", label: "Virgin Islands" },
-  
+
   // Add the rest of the state options...
 ];
 
@@ -296,15 +296,14 @@ function SeekerJobs({ handleNextStep, handlePrevStep, name }) {
     e.preventDefault();
     try {
       const docRef = doc(collection(db, "Seekers"), name);
-      const jobsSubcollection=collection(docRef,"jobs");
-      const jobData={
+      const jobsSubcollection = collection(docRef, "jobs");
+      const jobData = {
         Job_Name: jobName,
         Job_Location: `${jobLocation.city}, ${jobLocation.state}, ${jobLocation.country}`,
-
       };
-      const jobDocRef=doc(jobsSubcollection, name);
-      await setDoc(jobDocRef, jobData, {merge:true});
-      
+      const jobDocRef = doc(jobsSubcollection, name);
+      await setDoc(jobDocRef, jobData, { merge: true });
+
       handleNextStep();
     } catch (error) {
       console.error("ERROR: ", error);
@@ -320,8 +319,9 @@ function SeekerJobs({ handleNextStep, handlePrevStep, name }) {
       </div>
       <div className="maybolin-talk flex flex-col md:flex-row items-center justify-center m-4 mx-auto max-w-4xl">
         <div className="flex-1 flex-shrink-0 max-w-60 w-1/2 mr-0 ml-5 sm:p-0 sm:m-0">
-          <Lottie
-            animationData={animationData}
+          <img
+            src={AIface}
+            alt="Description of Image"
             className="w-48 md:w-60 lg:w-full max-w-sm sm:p-0 sm:m-0"
           />
         </div>

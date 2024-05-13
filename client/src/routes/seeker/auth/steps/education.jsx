@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { db } from "../../../../firebase";
-import { collection, addDoc,setDoc, doc } from "firebase/firestore";
+import { collection, addDoc, setDoc, doc } from "firebase/firestore";
 import PropTypes from "prop-types";
 import Audio_Btn from "../../../../components/Buttons/audio__btn/audio_btn";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -12,6 +12,7 @@ import {
   faBrain,
 } from "@fortawesome/free-solid-svg-icons";
 import Lottie from "lottie-react";
+import AIface from "../../../../images/flat_illustrations/AIface.png";
 import animationData from "../../../../images/animatedAI.json";
 function SeekerEducation({ handleNextStep, handlePrevStep, name }) {
   const [seekerSchoolNameTxt, setSeekerSchoolNameTxt] = useState("");
@@ -55,16 +56,16 @@ function SeekerEducation({ handleNextStep, handlePrevStep, name }) {
       const usersCollection = collection(db, "Seekers");
       const docRef = doc(usersCollection, name);
       const educationSubcollectionRef = collection(docRef, "Education");
-  
-      const educationData={ 
+
+      const educationData = {
         University: seekerSchoolNameTxt,
         DegreeType: seekerEducationTypeTxt,
         ClassOf: seekerGraduating,
         Major: seekerMajor,
       };
       // await setDoc(doc(educationSubcollectionRef), educationData)
-      const educationDocRef=doc(educationSubcollectionRef, name);
-      await setDoc(educationDocRef, educationData, {merge:true});
+      const educationDocRef = doc(educationSubcollectionRef, name);
+      await setDoc(educationDocRef, educationData, { merge: true });
       handleNextStep();
     } catch (error) {
       console.log("The error is: " + error);
@@ -80,15 +81,17 @@ function SeekerEducation({ handleNextStep, handlePrevStep, name }) {
       </div>
       <div className="maybolin-talk flex flex-col md:flex-row items-center justify-center m-4 mx-auto max-w-4xl">
         <div className="flex-1 flex-shrink-0 max-w-60 w-1/2 mr-0 ml-5 sm:p-0 sm:m-0">
-          <Lottie
-            animationData={animationData}
+          <img
+            src={AIface}
+            alt="Description of Image"
             className="w-48 md:w-60 lg:w-full max-w-sm sm:p-0 sm:m-0"
           />
         </div>
         <div className="flex-1 bg-blue-100 px-6 py-4 mt-4 shadow-lg relative text-left mx-5 rounded-tr-lg rounded-bl-lg rounded-br-lg ">
           <p className="text-lg md:text-xl lg:text-2xl">
-            What was the last  {" "}
-            <span className="text-secondary font-semibold">school</span> you went to? 
+            What was the last{" "}
+            <span className="text-secondary font-semibold">school</span> you
+            went to?
           </p>
           <div className="absolute top-0 -left-2 w-10 h-0 border-l-[10px] border-l-transparent border-b-[10px] border-b-primary"></div>
           <div className="flex justify-end mt-2">
@@ -105,7 +108,6 @@ function SeekerEducation({ handleNextStep, handlePrevStep, name }) {
               placeholder="School name..."
               value={seekerSchoolNameTxt}
               onChange={handleChangeSchool}
-              
             />
 
             <div className="py-2 px-4">
@@ -131,7 +133,6 @@ function SeekerEducation({ handleNextStep, handlePrevStep, name }) {
               className="w-full p-2 border rounded-md"
               value={seekerGraduating}
               onChange={handleChangeGraduating}
-              
             >
               <option value="">Select your graduation year</option>
               {years.map((year) => (

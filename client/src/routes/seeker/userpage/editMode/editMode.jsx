@@ -26,7 +26,7 @@ import {
   faChevronLeft,
 } from "@fortawesome/free-solid-svg-icons";
 import Select from "react-select";
-
+import AIface from "../../../../images/flat_illustrations/AIface.png";
 const stateOptions = [
   { value: "AL", label: "Alabama" },
   { value: "AK", label: "Alaska" },
@@ -227,7 +227,7 @@ const VideoOrTextItem = React.memo(
       <div className="flex flex-col items-center gap-4 w-full">
         <div
           className="w-full max-w-lg px-5 pt-5 pb-0 mb-0 aspect-video "
-          style={{ minHeight: "28vh"}}
+          style={{ minHeight: "28vh" }}
         >
           {content.type === "video" ? (
             <ReactPlayer
@@ -253,10 +253,10 @@ const VideoOrTextItem = React.memo(
             seekerTxtIntro={content.type === "text" ? content.value : ""}
           />
           <div className="flex justify-center p-2 h-full items-center md:flex-col md:justify-center md:items-center space-x-2 md:space-x-0 ">
-              <div className="w-0.5 h-4 bg-gray-400 md:w-4 md:h-0.5"></div>
-              <span className="text-md font-semibold opacity-70">OR</span>
-              <div className="w-0.5 h-4 bg-gray-400 md:w-4 md:h-0.5"></div>
-            </div>
+            <div className="w-0.5 h-4 bg-gray-400 md:w-4 md:h-0.5"></div>
+            <span className="text-md font-semibold opacity-70">OR</span>
+            <div className="w-0.5 h-4 bg-gray-400 md:w-4 md:h-0.5"></div>
+          </div>
           <DropFile
             onFileChange={(downloadURL) => {
               handleChange(
@@ -473,7 +473,7 @@ export default function EditMode({
   );
   const handleChange = useCallback(
     (event, type, field, section, index) => {
-      console.log("Pending CHanges:", pendingChanges)
+      console.log("Pending CHanges:", pendingChanges);
       let newValue = event.target.value;
 
       if (pendingChanges[field] && pendingChanges[field].type !== type) {
@@ -500,7 +500,7 @@ export default function EditMode({
           index: index,
         },
       }));
-      console.log("Pending CHanges:", pendingChanges)
+      console.log("Pending CHanges:", pendingChanges);
     },
     [setPendingChanges]
   );
@@ -722,9 +722,10 @@ export default function EditMode({
               className={`flex w-full md:w-3/5 xl:w-1/2 flex items-center justify-center sm:px-10 lg:px-0 md:px-0 bg-white text-white rounded-bl-lg ${textSize}`}
             >
               <div className="w-auto flex-shrink-0">
-                <Lottie
-                  animationData={animationAI}
-                  className="sm:w-36 w-36 md:w-60 lg:w-80 max-w-sm sm:p-0 sm:m-0"
+                <img
+                  src={AIface}
+                  alt="Maybolin"
+                  className="sm:w-24 w-24 md:w-36 lg:w-56 max-w-sm sm:p-0 sm:m-0"
                 />
               </div>
               <div className="flex-1 bg-blue-100 px-2 py-2 ml-0 mr-4 shadow-lg relative text-left mx-5 my-5 rounded-tr-lg rounded-bl-lg rounded-br-lg ">

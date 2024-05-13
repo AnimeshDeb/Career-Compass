@@ -8,7 +8,7 @@ import PropTypes from "prop-types";
 import Lottie from "lottie-react";
 import animationData from "../../../../images/animatedAI.json";
 import Audio_Btn from "../../../../components/Buttons/audio__btn/audio_btn";
-
+import AIface from "../../../../images/flat_illustrations/AIface.png";
 function SeekerProfilepic({ handlePrevStep, handleNextStep, name }) {
   const [images, setImages] = useState([]);
   const [isDragging, setIsDragging] = useState(false);
@@ -117,8 +117,9 @@ function SeekerProfilepic({ handlePrevStep, handleNextStep, name }) {
       </div>
       <div className="maybolin-talk flex flex-col md:flex-row items-center justify-center m-4 mx-auto max-w-4xl">
         <div className="flex-1 flex-shrink-0 max-w-60 w-1/2 mr-0 ml-5 sm:p-0 sm:m-0">
-          <Lottie
-            animationData={animationData}
+          <img
+            src={AIface}
+            alt="Description of Image"
             className="w-48 md:w-60 lg:w-full max-w-sm sm:p-0 sm:m-0"
           />
         </div>

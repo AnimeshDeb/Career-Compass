@@ -7,7 +7,7 @@ import { v4 } from "uuid";
 import PropTypes from "prop-types";
 import Audio_Btn from "../../../../components/Buttons/audio__btn/audio_btn";
 import Lottie from "lottie-react";
-import animationAI from "../../../../images/animatedAI.json";
+import AIface from "../../../../images/flat_illustrations/AIface.png";
 import animationLoading from "../../../../images/Loading.json";
 import DropFile from "../../../../components/DropFile/DropFileAuth";
 import DOMPurify from "dompurify";
@@ -84,19 +84,20 @@ function SeekerChallenges({ handleNextStep, handlePrevStep, name }) {
       </div>
       <div className="maybolin-talk flex flex-col md:flex-row items-center justify-center m-4 mx-auto max-w-4xl">
         <div className="flex-1 flex-shrink-0 max-w-60 w-1/2 mr-0 ml-5 sm:p-0 sm:m-0">
-          <Lottie
-            animationData={animationAI}
+          <img
+            src={AIface}
+            alt="Description of Image"
             className="w-48 md:w-60 lg:w-full max-w-sm sm:p-0 sm:m-0"
           />
         </div>
         <div className="flex-1 bg-blue-100 px-6 py-4 mt-4 shadow-lg relative text-left mx-5 rounded-tr-lg rounded-bl-lg rounded-br-lg ">
           <p className="text-lg md:text-xl lg:text-2xl">
             Any <span className="text-secondary font-semibold">challenges</span>{" "}
-            you want to share? Did you need reminders to do something or help with anything?
+            you want to share? Did you need reminders to do something or help
+            with anything?
             <span className="text-secondary font-semibold"> Write </span> about
-            yourself in the box below or <span className="text-primary font-semibold">
-              record a video{" "}.
-            </span>{" "}
+            yourself in the box below or{" "}
+            <span className="text-primary font-semibold">record a video .</span>{" "}
           </p>
           <div className="absolute top-0 -left-2 w-10 h-0 border-l-[10px] border-l-transparent border-b-[10px] border-b-primary"></div>
           <div className="flex justify-end mt-0">
